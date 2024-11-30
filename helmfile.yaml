@@ -1,0 +1,58 @@
+repositories:
+- name: longhorn 
+  url: https://charts.longhorn.io
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+- name: ingress-nginx
+  url: https://kubernetes.github.io/ingress-nginx 
+- name: mojo2600
+  url: https://mojo2600.github.io/pihole-kubernetes/
+
+releases:
+- name: ingress-nginx
+  namespace: ingress-nginx
+  chart: ingress-nginx/ingress-nginx 
+
+- name: longhorn
+  namespace: longhorn-system
+  chart: longhorn/longhorn
+  createNamespace: False
+  version: "1.7.2"
+  values:
+    - longhornUI: 
+        replicas: 1
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        host: longhorn.home.lab
+
+- name: prometheus
+  namespace: monitoring
+  chart: prometheus-community/kube-prometheus-stack
+  values:
+    - grafana:
+        defaultDashboardsTimezone: Asia/Riyadh
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hosts: 
+            - grafana.home.lab
+        persistence:
+          enabled: true
+          type: sts
+          accessModes:
+            - ReadWriteOnce
+          size: 5Gi
+          finalizers:
+            - kubernetes.io/pvc-protection
+
+
+    # - alertmanager:
+    #     alertmanagerSpec:
+    #       storage: 
+    #         volumeClaimTemplate:
+    #           spec:
+    #             accessModes: ["ReadWriteOnce"]
+    #             resources:
+    #               requests:
+    #                 storage: 50Gi
