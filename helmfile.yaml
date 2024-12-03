@@ -45,8 +45,43 @@ releases:
           size: 5Gi
           finalizers:
             - kubernetes.io/pvc-protection
+      prometheus:
+        prometheusSpec:
+            storageSpec: 
+              # Using PersistentVolumeClaim
+              #
+              volumeClaimTemplate:
+                spec:
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 50Gi
 
-
+- name: pihole
+  namespace: pihole
+  chart: mojo2600/pihole
+  values: 
+    - ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts: 
+          - pi-hole.home.lab
+      serviceDns:
+        loadBalancerIP: 192.168.8.251
+        annotations:
+          metallb.universe.tf/allow-shared-ip: pihole-svc
+        type: LoadBalancer
+      resources:
+        limits:
+          cpu: 300m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      persistentVolumeClaim:
+        enabled: true
+      extraEnvVars:
+        TZ: "Asia/Riyadh"
     # - alertmanager:
     #     alertmanagerSpec:
     #       storage: 
