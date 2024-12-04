@@ -67,7 +67,7 @@ releases:
         hosts: 
           - pi-hole.home.lab
       serviceDns:
-        loadBalancerIP: 192.168.8.251
+        loadBalancerIP: 192.168.8.252
         annotations:
           metallb.universe.tf/allow-shared-ip: pihole-svc
         type: LoadBalancer
@@ -82,12 +82,3 @@ releases:
         enabled: true
       extraEnvVars:
         TZ: "Asia/Riyadh"
-    # - alertmanager:
-    #     alertmanagerSpec:
-    #       storage: 
-    #         volumeClaimTemplate:
-    #           spec:
-    #             accessModes: ["ReadWriteOnce"]
-    #             resources:
-    #               requests:
-    #                 storage: 50Gi
