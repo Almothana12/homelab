@@ -29,6 +29,7 @@ releases:
 - name: prometheus
   namespace: monitoring
   chart: prometheus-community/kube-prometheus-stack
+  version: "66.3.0"
   values:
     - grafana:
         defaultDashboardsTimezone: Asia/Riyadh
@@ -46,6 +47,11 @@ releases:
           finalizers:
             - kubernetes.io/pvc-protection
       prometheus:
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hosts:
+            - prometheus.home.lab
         prometheusSpec:
             storageSpec: 
               # Using PersistentVolumeClaim
