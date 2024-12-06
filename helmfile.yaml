@@ -7,6 +7,8 @@ repositories:
   url: https://kubernetes.github.io/ingress-nginx 
 - name: mojo2600
   url: https://mojo2600.github.io/pihole-kubernetes/
+- name: plex
+  url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
 
 releases:
 - name: ingress-nginx
@@ -87,4 +89,25 @@ releases:
       persistentVolumeClaim:
         enabled: true
       extraEnvVars:
+        TZ: "Asia/Riyadh"
+
+- name: plex
+  namespace: plex
+  chart: plex/plex-media-server
+  values: 
+    - ingress:
+        enabled: true
+        ingressClassName: nginx
+        url: "plex.home.lab"
+      pms:
+        configStorage: 10Gi
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      extraEnv:
+        PLEX_CLAIM: "claim-exDymNytFQVEzDoy758o"
         TZ: "Asia/Riyadh"
