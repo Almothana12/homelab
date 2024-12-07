@@ -145,11 +145,11 @@ releases:
         trustedDomains: ["nextcloud.home.lab"]
       persistence:
         enabled: true
-        accessMode: ReadWriteOnce
+        accessMode: ReadWriteMany
         size: 8Gi
         nextcloudData:
           enabled: true
-          accessMode: ReadWriteOnce
+          accessMode: ReadWriteMany
           size: 8Gi  
       resources:
         limits:
