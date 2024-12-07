@@ -11,6 +11,8 @@ repositories:
   url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
 - name: bitnami 
   url:  https://charts.bitnami.com/bitnami
+- name: nextcloud 
+  url:  https://nextcloud.github.io/helm/
 
 releases:
 - name: ingress-nginx
@@ -129,3 +131,30 @@ releases:
           cpu: 150m
           memory: 192Mi
           ephemeral-storage: 2Gi
+
+- name: nextcloud
+  namespace: nextcloud
+  chart: nextcloud/nextcloud
+  version: "6.3.0"
+  values:
+    - ingress:
+        enabled: true
+        className: nginx
+      nextcloud:
+        host:  nextcloud.home.lab
+        trustedDomains: ["nextcloud.home.lab"]
+      persistence:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 8Gi
+        nextcloudData:
+          enabled: true
+          accessMode: ReadWriteOnce
+          size: 8Gi  
+      resources:
+        limits:
+         cpu: 1
+         memory: 1Gi
+        requests:
+         cpu: 100m
+         memory: 256Mi
