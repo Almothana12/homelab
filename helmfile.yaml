@@ -9,6 +9,8 @@ repositories:
   url: https://mojo2600.github.io/pihole-kubernetes/
 - name: plex
   url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
+- name: bitnami 
+  url:  https://charts.bitnami.com/bitnami
 
 releases:
 - name: ingress-nginx
@@ -56,8 +58,6 @@ releases:
             - prometheus.home.lab
         prometheusSpec:
             storageSpec: 
-              # Using PersistentVolumeClaim
-              #
               volumeClaimTemplate:
                 spec:
                   accessModes: ["ReadWriteOnce"]
@@ -109,5 +109,23 @@ releases:
             cpu: 100m
             memory: 128Mi
       extraEnv:
-        PLEX_CLAIM: "claim-exDymNytFQVEzDoy758o"
         TZ: "Asia/Riyadh"
+
+- name: external-dns
+  namespace: external-dns
+  chart: bitnami/external-dns
+  version: "8.6.1"
+  values: 
+    - provider: pihole
+      pihole:
+        server: "http://pihole-web.pihole.svc.cluster.local"
+        secretName: "external-dns"
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+          ephemeral-storage: 50Mi
+        limits:
+          cpu: 150m
+          memory: 192Mi
+          ephemeral-storage: 2Gi
