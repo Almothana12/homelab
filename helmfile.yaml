@@ -70,6 +70,7 @@ releases:
 - name: pihole
   namespace: pihole
   chart: mojo2600/pihole
+  version: "2.26.2"
   values: 
     - ingress:
         enabled: true
