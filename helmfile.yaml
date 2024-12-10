@@ -78,9 +78,10 @@ releases:
         hosts: 
           - pi-hole.home.lab
       serviceDns:
-        loadBalancerIP: 192.168.8.252
+        mixedService: true
+        externalTrafficPolicy: Cluster
         annotations:
-          metallb.universe.tf/allow-shared-ip: pihole-svc
+          metallb.universe.tf/loadBalancerIPs: 192.168.8.252
         type: LoadBalancer
       resources:
         limits:
