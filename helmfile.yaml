@@ -122,7 +122,9 @@ releases:
     - ingress:
         enabled: true
         ingressClassName: nginx
-        url: "plex.home.lab"
+        url: "plex.almothana.xyz"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-staging
       pms:
         configStorage: 10Gi
         resources:
