@@ -45,7 +45,13 @@ releases:
           enabled: true
           ingressClassName: nginx
           hosts: 
-            - grafana.home.lab
+            - grafana.almothana.xyz
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-staging
+          tls:
+            - secretName: grafana-tls
+              hosts:
+              - grafana.almothana.xyz
         persistence:
           enabled: true
           type: sts
@@ -59,7 +65,13 @@ releases:
           enabled: true
           ingressClassName: nginx
           hosts:
-            - prometheus.home.lab
+            - prometheus.almothana.xyz
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-staging
+          tls:
+            - secretName: prometheus-tls
+              hosts:
+              - prometheus.almothana.xyz
         prometheusSpec:
             storageSpec: 
               volumeClaimTemplate:
