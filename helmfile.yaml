@@ -164,9 +164,15 @@ releases:
     - ingress:
         enabled: true
         className: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        tls:
+          - secretName: nextcloud-tls
+            hosts:
+            - nextcloud.almothana.xyz
       nextcloud:
-        host:  nextcloud.home.lab
-        trustedDomains: ["nextcloud.home.lab"]
+        host:  nextcloud.almothana.xyz
+        trustedDomains: ["nextcloud.almothana.xyz"]
       persistence:
         enabled: true
         accessMode: ReadWriteMany
