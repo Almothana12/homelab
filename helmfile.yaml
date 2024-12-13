@@ -153,6 +153,8 @@ releases:
           enabled: true
           accessMode: ReadWriteMany
           size: 8Gi  
+      livenessProbe:
+        initialDelaySeconds: 1800
       resources:
         limits:
          cpu: 1
@@ -160,3 +162,11 @@ releases:
         requests:
          cpu: 100m
          memory: 256Mi
+
+- name: cert-manager 
+  namespace: cert-manager
+  chart: jetstack/cert-manager
+  version: "v1.16.2"
+  values:
+    - crds:
+        enabled: true
