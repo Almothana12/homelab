@@ -30,7 +30,9 @@ releases:
       ingress:
         enabled: true
         ingressClassName: nginx
-        host: longhorn.home.lab
+        host: longhorn.almothana.xyz
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-staging
 
 - name: prometheus
   namespace: monitoring
