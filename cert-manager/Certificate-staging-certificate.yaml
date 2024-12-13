@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: staging-certificate
+  namespace: default
+spec:
+  secretName: almothana-xyz-staging-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  commonName: "*.almothana.xyz"
+  dnsNames:
+  - "almothana.xyz"
+  - "*.almothana.xyz"
