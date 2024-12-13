@@ -90,7 +90,13 @@ releases:
         enabled: true
         ingressClassName: nginx
         hosts: 
-          - pi-hole.home.lab
+          - pi-hole.almothana.xyz
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        tls:
+          - secretName: pi-hole-tls
+            hosts:
+            - pi-hole.almothana.xyz
       serviceDns:
         mixedService: true
         externalTrafficPolicy: Cluster
