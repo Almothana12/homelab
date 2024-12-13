@@ -13,3 +13,8 @@ spec:
   dnsNames:
   - "almothana.xyz"
   - "*.almothana.xyz"
+  secretTemplate:
+    annotations:
+      # Auto create reflection for all namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" 

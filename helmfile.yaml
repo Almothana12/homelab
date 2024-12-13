@@ -13,6 +13,8 @@ repositories:
   url:  https://charts.bitnami.com/bitnami
 - name: nextcloud 
   url:  https://nextcloud.github.io/helm/
+- name: emberstack 
+  url: https://emberstack.github.io/helm-charts
 
 releases:
 - name: ingress-nginx
@@ -29,6 +31,8 @@ releases:
         replicas: 1
       ingress:
         enabled: true
+        tls: true
+        tlsSecret: almothana-xyz-staging-tls
         ingressClassName: nginx
         host: longhorn.almothana.xyz
         annotations:
@@ -44,12 +48,12 @@ releases:
         ingress:
           enabled: true
           ingressClassName: nginx
-          hosts: 
+          hosts:
             - grafana.almothana.xyz
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-staging
           tls:
-            - secretName: grafana-tls
+            - secretName: almothana-xyz-staging-tls
               hosts:
               - grafana.almothana.xyz
         persistence:
@@ -69,7 +73,7 @@ releases:
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-staging
           tls:
-            - secretName: prometheus-tls
+            - secretName: almothana-xyz-staging-tls
               hosts:
               - prometheus.almothana.xyz
         prometheusSpec:
@@ -94,7 +98,7 @@ releases:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-staging
         tls:
-          - secretName: pi-hole-tls
+          - secretName: almothana-xyz-staging-tls
             hosts:
             - pi-hole.almothana.xyz
       serviceDns:
@@ -167,7 +171,7 @@ releases:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-staging
         tls:
-          - secretName: nextcloud-tls
+          - secretName: almothana-xyz-staging-tls
             hosts:
             - nextcloud.almothana.xyz
       nextcloud:
@@ -206,3 +210,7 @@ releases:
         nameservers:
           - 1.1.1.1
           - 9.9.9.9
+
+- name: reflector
+  chart: emberstack/reflector
+  namespace: kube-system
