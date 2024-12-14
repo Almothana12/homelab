@@ -32,11 +32,9 @@ releases:
       ingress:
         enabled: true
         tls: true
-        tlsSecret: almothana-xyz-staging-tls
+        tlsSecret: almothana-xyz-tls
         ingressClassName: nginx
         host: longhorn.almothana.xyz
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-staging
 
 - name: prometheus
   namespace: monitoring
@@ -50,10 +48,8 @@ releases:
           ingressClassName: nginx
           hosts:
             - grafana.almothana.xyz
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-staging
           tls:
-            - secretName: almothana-xyz-staging-tls
+            - secretName: almothana-xyz-tls
               hosts:
               - grafana.almothana.xyz
         persistence:
@@ -70,10 +66,8 @@ releases:
           ingressClassName: nginx
           hosts:
             - prometheus.almothana.xyz
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-staging
           tls:
-            - secretName: almothana-xyz-staging-tls
+            - secretName: almothana-xyz-tls
               hosts:
               - prometheus.almothana.xyz
         prometheusSpec:
@@ -95,10 +89,8 @@ releases:
         ingressClassName: nginx
         hosts: 
           - pi-hole.almothana.xyz
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-staging
         tls:
-          - secretName: almothana-xyz-staging-tls
+          - secretName: almothana-xyz-tls
             hosts:
             - pi-hole.almothana.xyz
       serviceDns:
@@ -128,7 +120,7 @@ releases:
         ingressClassName: nginx
         url: "plex.almothana.xyz"
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-staging
+          cert-manager.io/cluster-issuer: letsencrypt-production
       pms:
         configStorage: 10Gi
         resources:
@@ -168,10 +160,8 @@ releases:
     - ingress:
         enabled: true
         className: nginx
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-staging
         tls:
-          - secretName: almothana-xyz-staging-tls
+          - secretName: almothana-xyz-tls
             hosts:
             - nextcloud.almothana.xyz
       nextcloud:

@@ -1,0 +1,20 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: production-certificate
+  namespace: default
+spec:
+  secretName: almothana-xyz-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.almothana.xyz"
+  dnsNames:
+  - "almothana.xyz"
+  - "*.almothana.xyz"
+  secretTemplate:
+    annotations:
+      # Auto create reflection for all namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" 
