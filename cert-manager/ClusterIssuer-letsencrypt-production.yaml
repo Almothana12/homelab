@@ -17,4 +17,4 @@ spec:
             email: almothana12@gmail.com
             apiTokenSecretRef:
               name: cloudflare-token-secret
-              key: cloudflare-token
+              key: token

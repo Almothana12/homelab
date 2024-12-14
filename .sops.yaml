@@ -1,0 +1,12 @@
+---
+creation_rules:
+  - encrypted_regex: "^(id|secret|bootstraptoken|secretboxencryptionsecret|token|ca|crt|key|JWT_SECRET)$"
+    key_groups:
+      - age:
+          - age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+
+  - path_regex: .*\.secret(\.sops)?\.yaml
+    encrypted_regex: "^(data|stringData)$"
+    key_groups:
+      - age:
+          - age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
