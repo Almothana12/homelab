@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: speedtest-tracker
+  namespace: speedtest-tracker
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - speedtest-tracker.almothana.xyz
+      secretName: almothana-xyz-tls
+  rules:
+    - host: speedtest-tracker.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: speedtest-tracker
+                port:
+                  number: 80

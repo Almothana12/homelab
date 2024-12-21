@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtest-tracker
+  namespace: speedtest-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedtest-tracker
+  template:
+    metadata:
+      labels:
+        app: speedtest-tracker
+    spec:
+      containers:
+        - name: speedtest-tracker
+          image: lscr.io/linuxserver/speedtest-tracker:latest
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 20m
+              memory: 64Mi
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: APP_KEY
+              value: "base64:ND8qua9ecURB8zUAT5vKPg+HxcEG71Qeqmz35ruPbdM="
+            - name: DISPLAY_TIMEZONE
+              value: "Asia/Riyadh"
+            - name: DB_CONNECTION
+              value: pgsql
+            - name: DB_HOST
+              value: postgres.speedtest-tracker.svc.cluster.local
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_DATABASE
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_PASSWORD
+            - name: ADMIN_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: initial-admin
+                  key: ADMIN_NAME
+            - name: ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: initial-admin
+                  key: ADMIN_EMAIL
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: initial-admin
+                  key: ADMIN_PASSWORD
+            - name: PUBLIC_DASHBOARD
+              value: "true"
+          volumeMounts:
+            - mountPath: /config
+              name: speedtest-tracker
+
+      volumes:
+        - name: speedtest-tracker
+          persistentVolumeClaim:
+            claimName: speedtest-tracker
