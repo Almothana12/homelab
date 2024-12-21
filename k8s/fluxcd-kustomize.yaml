@@ -1,0 +1,58 @@
+---
+  apiVersion: kustomize.toolkit.fluxcd.io/v1
+  kind: Kustomization
+  metadata:
+    creationTimestamp: "2024-12-21T15:14:49Z"
+    finalizers:
+    - finalizers.fluxcd.io
+    generation: 1
+    name: metallb
+    namespace: flux-system
+    resourceVersion: "4074302"
+    uid: fcfce487-2d5c-4d77-8a97-eaf94f71b7b5
+  spec:
+    force: false
+    interval: 5m0s
+    path: ./infrastructure/metallb-system
+    prune: true
+    sourceRef:
+      kind: GitRepository
+      name: flux-system
+    targetNamespace: metallb-system
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  generation: 1
+  name: nextcloud
+  namespace: flux-system
+spec:
+  force: false
+  interval: 1m0s
+  path: ./apps/nextcloud
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: nextcloud
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: speedtest-tracker
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./apps/speedtest-tracker
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: speedtest-tracker
