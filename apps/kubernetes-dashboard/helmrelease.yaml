@@ -7,10 +7,10 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: <name|path>
-      version: '4.0.x'
+      chart: kubernetes-dashboard
+      version: '7.10.0'
       sourceRef:
         kind: HelmRepository
         name: kubernetes-dashboard
-        namespace: flux-system
+        namespace: kubernetes-dashboard
       interval: 5m
