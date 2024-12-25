@@ -20,6 +20,6 @@ spec:
       hosts:
         - kdashboard.almothana.xyz
       ingressClassName: nginx
-      tls:
-        enabled: true
-        secretName: almothana-xyz-tls
+      # tls:
+      #   enabled: true
+      #   secretName: almothana-xyz-tls
