@@ -14,3 +14,12 @@ spec:
         name: kubernetes-dashboard
         namespace: kubernetes-dashboard
       interval: 5m
+  values:
+    ingress:
+      enabled: true
+      hosts:
+        - kdashboard.almothana.xyz
+      ingressClassName: nginx
+      tls:
+        enabled: true
+        secretName: almothana-xyz-tls
