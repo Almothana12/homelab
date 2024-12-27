@@ -21,6 +21,10 @@ metadata:
   name: nextcloud
   namespace: flux-system
 spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   force: false
   interval: 1m0s
   path: ./apps/nextcloud
