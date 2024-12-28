@@ -13,6 +13,8 @@ repositories:
   url:  https://charts.bitnami.com/bitnami
 - name: nextcloud 
   url:  https://nextcloud.github.io/helm/
+- name: jetstack
+  url: https://charts.jetstack.io
 - name: emberstack 
   url: https://emberstack.github.io/helm-charts
 - name: kubecost 
