@@ -5,14 +5,11 @@ metadata:
   namespace: nextcloud
 spec:
   ingressClassName: tailscale
-  rules:
-    - host: nextcloud.cloudforest-sargas.ts.net
-      http:
-        paths:
-          - backend:
-              service:
-                name: tailscale
-                port:
-                  number: 8080
-            path: /
-            pathType: Prefix
+  defaultBackend:
+    service:
+      name: nextcloud
+      port:
+        number: 8080
+  tls:
+    - hosts:
+        - nextcloud
