@@ -168,7 +168,7 @@ releases:
             - nextcloud.almothana.xyz
       nextcloud:
         host:  nextcloud.almothana.xyz
-        trustedDomains: ["nextcloud.almothana.xyz"]
+        trustedDomains: ["nextcloud.almothana.xyz", "nextcloud.cloudforest-sargas.ts.net"]
       persistence:
         enabled: true
         accessMode: ReadWriteMany
