@@ -6,3 +6,4 @@ resources:
   - secret-operator-oauth.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - connector-exit-node.yaml
