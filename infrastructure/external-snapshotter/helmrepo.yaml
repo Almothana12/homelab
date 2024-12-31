@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: external-snapshotter 
+  namespace: external-snapshotter
+spec:
+  interval: 1h
+  url: https://piraeus.io/helm-charts
