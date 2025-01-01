@@ -15,7 +15,7 @@ spec:
         namespace: plex
       interval: 5m
   values: 
-    - ingress:
+      ingress:
         enabled: true
         ingressClassName: nginx
         url: "plex.almothana.xyz"
