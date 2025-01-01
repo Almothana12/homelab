@@ -126,3 +126,19 @@ spec:
     name: flux-system
   targetNamespace: kubernetes-dashboard
 
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  force: false
+  interval: 5m0s
+  path: ./apps/plex
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: plex
+
