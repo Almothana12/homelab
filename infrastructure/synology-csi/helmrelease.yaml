@@ -13,3 +13,22 @@ spec:
         name: synology-csi
         namespace: synology-csi
       interval: 24h
+  values:
+    storageClasses:
+      synology-iscsi:
+        disabled: false
+        isDefault: false
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        parameters:
+          dsm: "192.168.8.109"
+          fsType: ext4
+          location: /volume1
+    volumeSnapshotClasses:
+      synology-snapshotclass:
+        disabled: false
+        deletionPolicy: Delete
+        isDefault: false
+        parameters:
+          description: "Kubernetes CSI"
+          is_locked: "false"
