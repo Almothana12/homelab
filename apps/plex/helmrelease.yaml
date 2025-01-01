@@ -15,27 +15,27 @@ spec:
         namespace: plex
       interval: 5m
   values: 
-      ingress:
-        enabled: true
-        ingressClassName: nginx
-        url: "plex.almothana.xyz"
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
-      pms:
-        configStorage: 10Gi
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-      extraEnv:
-        TZ: "Asia/Riyadh"
-      extraVolumeMounts:
-        - name: plex-library
-          mountPath: /library
-      extraVolumes:
-        - name: plex-library
-          persistentVolumeClaim:
-            claimName: plex-library
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      url: "plex.almothana.xyz"
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+    pms:
+      configStorage: 10Gi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+    extraEnv:
+      TZ: "Asia/Riyadh"
+    extraVolumeMounts:
+      - name: plex-library
+        mountPath: /library
+    extraVolumes:
+      - name: plex-library
+        persistentVolumeClaim:
+          claimName: plex-library
