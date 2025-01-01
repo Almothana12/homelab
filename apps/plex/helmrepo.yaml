@@ -5,4 +5,4 @@ metadata:
   namespace: plex
 spec:
   interval: 5m
-  url: https://kubernetes.github.io/dashboard/
+  url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
