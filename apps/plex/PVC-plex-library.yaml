@@ -4,7 +4,7 @@ metadata:
   name: plex-library
   namespace: plex
 spec:
-  volumeName: nfs-pv
+  volumeName: nfs-library
   storageClassName: nfs
   accessModes:
     - ReadWriteMany
