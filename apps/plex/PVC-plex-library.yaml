@@ -4,9 +4,10 @@ metadata:
   name: plex-library
   namespace: plex
 spec:
-  storageClassName: synology-iscsi
+  volumeName: nfs-pv
+  storageClassName: nfs
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 800Gi
+      storage: 1Ti

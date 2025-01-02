@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: plex
 resources:
   - namespace.yaml
+  - PV-nfs-library.yaml
   - PVC-plex-library.yaml
   - helmrepo.yaml
   - helmrelease.yaml
