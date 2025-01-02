@@ -32,6 +32,7 @@ spec:
           memory: 128Mi
     extraEnv:
       TZ: "Asia/Riyadh"
+      PLEX_CLAIM: "claim-sufL9x_UfUbbzbk3GquU"
     extraVolumeMounts:
       - name: plex-library
         mountPath: /library
