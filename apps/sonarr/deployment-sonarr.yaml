@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sonarr
+  name: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - image: linuxserver/sonarr:4.0.11
+          name: sonarr
+          resources: {}
+          ports:
+            - containerPort: 8989
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          volumeMounts:
+            - mountPath: /config
+              name: sonarr
+            - mountPath: /data/Backup
+              name: library
+              subPath: "arr/sonarr/backup"
+            - mountPath: /data/tvshows
+              name: library
+              subPath: "tv-shows"
+            - mountPath: /downloads
+              name: library
+              subPath: "donwloads"
+      hostname: sonarr
+      restartPolicy: Always
+      volumes:
+        - name: sonarr
+          persistentVolumeClaim:
+            claimName: sonarr
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
