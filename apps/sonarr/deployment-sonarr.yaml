@@ -35,6 +35,9 @@ spec:
             - mountPath: /data/tvshows
               name: library
               subPath: "tv-shows"
+            - mountPath: /data/anime
+              name: library
+              subPath: "anime"
             - mountPath: /downloads
               name: library
               subPath: "donwloads"
