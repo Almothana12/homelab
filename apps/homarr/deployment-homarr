@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: homarr
+  name: homarr
+  namespace: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: homarr
+    spec:
+      containers:
+        - image: ghcr.io/ajnart/homarr:0.15.10
+          name: homarr
+          ports:
+            - containerPort: 7575
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          volumeMounts:
+            - mountPath: /app
+              name: homarr
+            - mountPath: /data
+              name: library
+              subPath: "/arr/homarr/data"
+      restartPolicy: Always
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
+        - name: homarr
+          persistentVolumeClaim:
+            claimName: homarr
