@@ -29,7 +29,7 @@ spec:
             value: Asia/Riyadh
           volumeMounts:
             - mountPath: /config
-              name: prowlarr-claim0
+              name: prowlarr
             - mountPath: /data/Backup
               name: library
               subPath: "arr/prowlarr/backup"
