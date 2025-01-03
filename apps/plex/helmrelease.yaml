@@ -25,11 +25,11 @@ spec:
       configStorage: 10Gi
       resources:
         limits:
-          cpu: 3
-          memory: 1Gi
+          cpu: 3500m
+          memory: 3Gi
         requests:
-          cpu: 1
-          memory: 256Mi
+          cpu: 1000m
+          memory: 512Mi
     extraEnv:
       TZ: "Asia/Riyadh"
       PLEX_CLAIM: "claim-sufL9x_UfUbbzbk3GquU"
