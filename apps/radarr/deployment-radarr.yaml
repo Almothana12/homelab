@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: radarr
+  name: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - image: linuxserver/radarr:5.16.3
+          name: radarr
+          resources: {}
+          ports:
+            - containerPort: 7878
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          volumeMounts:
+            - mountPath: /config
+              name: radarr
+            - mountPath: /data/movies
+              name: library
+              subPath: "movies"
+            - mountPath: /data/Backup
+              name: library
+              subPath: "arr/radarr/backup"
+            - mountPath: /downloads
+              name: library
+              subPath: "downloads"
+      hostname: radarr
+      restartPolicy: Always
+      volumes:
+        - name: radarr
+          persistentVolumeClaim:
+            claimName: radarr
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
