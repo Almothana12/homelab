@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jellyfin
+  name: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      containers:
+        - image: linuxserver/jellyfin:10.10.3
+          name: jellyfin
+          resources: {}
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 8096
+              protocol: TCP
+            - containerPort: 7359
+              protocol: UDP
+            - containerPort: 1900
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /config
+              name: jellyfin
+            - mountPath: /data/Movies
+              name: library
+              subPath: movies
+            - mountPath: /data/TVShows
+              name: library
+              subPath: tv-shows
+            - mountPath: /data/Anime
+              name: library
+              subPath: anime
+            - mountPath: /data/Music
+              name: library
+              subPath: music
+            - mountPath: /data/Books
+              name: library
+              subPath: books
+      restartPolicy: Always
+      volumes:
+        - name: jellyfin
+          persistentVolumeClaim:
+            claimName: jellyfin
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
