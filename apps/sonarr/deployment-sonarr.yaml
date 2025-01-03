@@ -40,7 +40,7 @@ spec:
               subPath: "anime"
             - mountPath: /downloads
               name: library
-              subPath: "donwloads"
+              subPath: "downloads"
       hostname: sonarr
       restartPolicy: Always
       volumes:
