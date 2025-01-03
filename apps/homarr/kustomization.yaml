@@ -5,3 +5,4 @@ resources:
   - PVC-homarr.yaml
   - deployment-homarr.yaml
   - service-homarr.yaml
+  - ingress-homarr.yaml
