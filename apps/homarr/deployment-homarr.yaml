@@ -20,6 +20,7 @@ spec:
       containers:
         - image: ghcr.io/ajnart/homarr:0.15.10
           name: homarr
+          resources: {}
           ports:
             - containerPort: 7575
               protocol: TCP
@@ -32,8 +33,8 @@ spec:
               subPath: configs
 
             - mountPath: /app/data/icons
-              name: homarr
-              subPath: icons
+              name: library
+              subPath: "arr/homarr/icons"
 
             - mountPath: /data
               name: library
