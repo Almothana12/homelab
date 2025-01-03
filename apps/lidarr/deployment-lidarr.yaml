@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lidarr
+  name: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: lidarr
+    spec:
+      containers:
+        - image: linuxserver/lidarr:latest
+          name: lidarr
+          resources: {}
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 8686
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: lidarr
+            - mountPath: /data/musicfolder
+              name: library
+              subPath: "music"
+            - mountPath: /downloads
+              name: library
+              subPath: "downloads"
+      hostname: lidarr
+      restartPolicy: Always
+      volumes:
+        - name: lidarr
+          persistentVolumeClaim:
+            claimName: lidarr
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
