@@ -146,7 +146,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: plex
+  name: homarr
   namespace: flux-system
 spec:
   force: false
