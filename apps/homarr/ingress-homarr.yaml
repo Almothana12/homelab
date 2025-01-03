@@ -15,3 +15,4 @@ spec:
             port:
               number: 7575
         path: /
+        pathType: ImplementationSpecific
