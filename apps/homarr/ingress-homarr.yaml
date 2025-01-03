@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: homarr.home.lab
+  - host: homarr.almothana.xyz
     http:
       paths:
       - backend:
