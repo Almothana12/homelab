@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prowlarr
+  name: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      containers:
+        - image: linuxserver/prowlarr:1.28.2
+          name: prowlarr
+          resources: {}
+          ports:
+            - containerPort: 9696
+              protocol: TCP
+          env:
+          - name: TZ
+            value: Asia/Riyadh
+          volumeMounts:
+            - mountPath: /config
+              name: prowlarr-claim0
+            - mountPath: /data/Backup
+              name: library
+              subPath: "arr/prowlarr/backup"
+            - mountPath: /downloads
+              name: library
+              subPath: "downloads"
+      hostname: prowlarr
+      restartPolicy: Always
+      volumes:
+        - name: prowlarr
+          persistentVolumeClaim:
+            claimName: prowlarr
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
