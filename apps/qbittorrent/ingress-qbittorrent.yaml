@@ -16,3 +16,7 @@ spec:
               number: 8080
         path: /
         pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - qbittorrent.almothana.xyz
+      secretName: almothana-xyz-tls
