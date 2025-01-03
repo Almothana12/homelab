@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: qbittorrent
+  name: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      containers:
+        - image: linuxserver/qbittorrent:5.0.3
+          name: qbittorrent
+          resources: {}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 6881
+              protocol: TCP
+            - containerPort: 6881
+              protocol: UDP
+          env:
+          - name: TORRENTING_PORT
+            value: "6881"
+          - name: TZ
+            value: Asia/Riyadh
+          - name: WEBUI_PORT
+            value: "8080"
+          volumeMounts:
+            - mountPath: /config
+              name: qbittorrent
+            - mountPath: /downloads
+              name: library
+              subPath: "downloads"
+      hostname: qbittorrent
+      restartPolicy: Always
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
+        - name: qbittorrent
+          persistentVolumeClaim:
+            claimName: qbittorrent
