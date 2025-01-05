@@ -1,0 +1,43 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  interval: 24h
+  chart:
+    spec:
+      chart: pihole
+      version: "2.26.2"
+      sourceRef:
+        kind: HelmRepository
+        name: mojo2600
+        namespace: pihole
+      interval: 24h
+  values: 
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      hosts: 
+        - pi-hole.almothana.xyz
+      tls:
+        - secretName: almothana-xyz-tls
+          hosts:
+          - pi-hole.almothana.xyz
+    serviceDns:
+      mixedService: true
+      externalTrafficPolicy: Cluster
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: 192.168.8.252
+      type: LoadBalancer
+    resources:
+      limits:
+        cpu: 300m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    persistentVolumeClaim:
+      enabled: true
+    extraEnvVars:
+      TZ: "Asia/Riyadh"
