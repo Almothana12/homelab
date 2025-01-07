@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: overseerr
+  name: overseerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overseerr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: overseerr
+    spec:
+      containers:
+        - image: lscr.io/linuxserver/overseerr:1.33.2
+          name: overseerr
+          requests: {}
+          env:
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 5055
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: overseerr
+      restartPolicy: Always
+      volumes:
+        - name: overseerr
+          persistentVolumeClaim:
+            claimName: overseerr
