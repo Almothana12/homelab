@@ -332,4 +332,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace: plex
+  targetNamespace: immich
