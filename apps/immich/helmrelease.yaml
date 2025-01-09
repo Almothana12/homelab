@@ -16,7 +16,7 @@ spec:
     immich:
       persistence:
         library:
-          existingClaim: 
+          existingClaim: immich-library
     machine-learning:
       persistence:
         cache:
