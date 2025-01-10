@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: clipper
+  name: clipper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clipper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: clipper
+    spec:
+      restartPolicy: Always
+      containers:
+        - image: paveyry/mediaserver-clipper:latest
+          name: clipper
+          resources: {}
+          env:
+            - name: SEARCH_DIRS
+              value: /library
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /library
+              name: library
+            - mountPath: /app/output
+              name: clipper
+      volumes:
+        - name: clipper
+          persistentVolumeClaim:
+            claimName: clipper
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library

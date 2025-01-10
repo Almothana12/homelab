@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clipper
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: clipper.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: clipper
+            port:
+              number: 8000
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - clipper.almothana.xyz
+      secretName: almothana-xyz-tls
