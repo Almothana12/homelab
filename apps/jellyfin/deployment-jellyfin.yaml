@@ -51,6 +51,9 @@ spec:
             - mountPath: /data/Pictures
               name: library
               subPath: pictures
+            - mountPath: /data/PS4
+              name: library
+              subPath: PS4
       restartPolicy: Always
       volumes:
         - name: jellyfin
