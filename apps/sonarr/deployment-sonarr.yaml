@@ -32,7 +32,7 @@ spec:
             - mountPath: /data/Backup
               name: library
               subPath: "arr/sonarr/backup"
-            - mountPath: /data/tvshows
+            - mountPath: /data/tv-shows
               name: library
               subPath: "tv-shows"
             - mountPath: /data/anime
