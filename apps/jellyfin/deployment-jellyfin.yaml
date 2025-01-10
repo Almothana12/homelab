@@ -42,6 +42,9 @@ spec:
             - mountPath: /data/Anime
               name: library
               subPath: anime
+            - mountPath: /data/MyAnime
+              name: library
+              subPath: myanime
             - mountPath: /data/Music
               name: library
               subPath: music
