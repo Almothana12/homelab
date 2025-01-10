@@ -38,6 +38,9 @@ spec:
             - mountPath: /data/anime
               name: library
               subPath: "anime"
+            - mountPath: /data/myanime
+              name: library
+              subPath: "myanime"
             - mountPath: /downloads
               name: library
               subPath: "downloads"
