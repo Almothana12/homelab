@@ -48,6 +48,9 @@ spec:
             - mountPath: /data/Books
               name: library
               subPath: books
+            - mountPath: /data/Pictures
+              name: library
+              subPath: pictures
       restartPolicy: Always
       volumes:
         - name: jellyfin
