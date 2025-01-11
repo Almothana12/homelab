@@ -3,5 +3,5 @@ kind: HelmRepository
 metadata:
   name: cnpg
 spec:
-  interval: 5m
-  url: <CHANGE>
+  interval: 24h
+  url: https://cloudnative-pg.github.io/charts
