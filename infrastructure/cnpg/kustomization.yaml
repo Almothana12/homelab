@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helmrepo.yaml
-  - helmrelease.yaml
-  # - Cluster-cnpg.yaml
+  - helmrelease-cloudnative-pg.yaml
+  - helmrelease-cluster.yaml
