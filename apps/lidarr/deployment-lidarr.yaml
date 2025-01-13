@@ -32,7 +32,7 @@ spec:
             - mountPath: /data/musicfolder
               name: library
               subPath: "music"
-            - mountPath: /downloads
+            - mountPath: /data/downloads
               name: library
               subPath: "downloads"
       hostname: lidarr

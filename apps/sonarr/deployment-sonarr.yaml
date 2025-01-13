@@ -41,7 +41,7 @@ spec:
             - mountPath: /data/myanime
               name: library
               subPath: "myanime"
-            - mountPath: /downloads
+            - mountPath: /data/downloads
               name: library
               subPath: "downloads"
       hostname: sonarr

@@ -35,7 +35,7 @@ spec:
             - mountPath: /data/Backup
               name: library
               subPath: "arr/radarr/backup"
-            - mountPath: /downloads
+            - mountPath: /data/downloads
               name: library
               subPath: "downloads"
       hostname: radarr
