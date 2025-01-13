@@ -8,7 +8,7 @@
     force: false
     interval: 5m0s
     path: ./infrastructure/metallb-system
-    prune: true
+    prune: false
     sourceRef:
       kind: GitRepository
       name: flux-system
@@ -44,7 +44,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./infrastructure/external-snapshotter
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -64,7 +64,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./infrastructure/synology-csi
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -80,7 +80,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./infrastructure/pihole
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -96,7 +96,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./infrastructure/longhorn
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -112,7 +112,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./infrastructure/cnpg
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -132,7 +132,7 @@ spec:
   force: false
   interval: 1m0s
   path: ./apps/nextcloud
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -184,7 +184,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/plex
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -200,7 +200,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/homarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -232,7 +232,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/lidarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -248,7 +248,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/prowlarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -264,7 +264,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/radarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -280,7 +280,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/sonarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -296,7 +296,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/bazarr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -312,7 +312,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/overseerr
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -328,7 +328,7 @@ spec:
   force: false
   interval: 5m0s
   path: ./apps/jellyfin
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
