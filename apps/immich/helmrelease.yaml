@@ -13,10 +13,17 @@ spec:
         name: immich
       interval: 5m
   values: 
+    env:
+      DB_HOSTNAME: "cluster-rw.cnpg-system"
     immich:
       persistence:
         library:
           existingClaim: immich-library
+    postgresql:
+      global:
+        postgresql:
+          auth:
+            existingSecret: postgres-auth
     machine-learning:
       persistence:
         cache:
