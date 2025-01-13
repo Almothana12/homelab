@@ -12,6 +12,8 @@ spec:
       labels:
         app: pgadmin
     spec:
+      securityContext:
+        fsGroup: 5050
       containers:
         - name: pgadmin
           image: dpage/pgadmin4:8.14.0
