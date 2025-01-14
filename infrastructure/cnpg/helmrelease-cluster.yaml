@@ -25,7 +25,10 @@ spec:
       primaryUpdateStrategy: unsupervised
       storage:
         size: 10Gi
+      postgresql:
+        shared_preload_libraries:
+          - "vectors.so"
+      monitoring:
+        enabled: true
     backups:
       enabled: false
-    monitoring:
-      enabled: true
