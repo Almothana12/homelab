@@ -42,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: qbittorrent
-            - mountPath: /downloads
+            - mountPath: /data/downloads
               name: library
               subPath: "downloads"
       hostname: qbittorrent
