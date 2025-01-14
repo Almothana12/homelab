@@ -19,7 +19,7 @@ spec:
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
-          - 192.168.8.1  
+          - 79.170.51.61
           - 8.8.8.8
       containers:
         - image: linuxserver/qbittorrent:5.0.3
