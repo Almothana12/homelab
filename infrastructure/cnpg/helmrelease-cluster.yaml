@@ -21,7 +21,7 @@ spec:
       postgresql: "16"
     cluster:
       instances: 2
-      imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.6
+      imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1
       primaryUpdateStrategy: unsupervised
       storage:
         size: 10Gi
