@@ -41,6 +41,16 @@ spec:
             existingSecret: postgres-auth
     redis:
       enabled: true
+    server:
+      ingress:
+        main:
+          enabled: true
+          hosts:
+            - host: immich.almothana.xyz
+          tls:
+            - secretName: almothana-xyz-tls
+              hosts:
+              - immich.almothana.xyz
     machine-learning:
       persistence:
         cache:
