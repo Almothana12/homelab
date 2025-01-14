@@ -47,6 +47,8 @@ spec:
           enabled: true
           hosts:
             - host: immich.almothana.xyz
+              paths:
+                - path: "/"
           tls:
             - secretName: almothana-xyz-tls
               hosts:
