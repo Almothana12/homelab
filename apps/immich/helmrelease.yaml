@@ -18,17 +18,17 @@ spec:
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: immich-library
+            name: postgres-auth
             key: password
       DB_DATABASE_NAME:
         valueFrom:
           secretKeyRef:
-            name: immich-library
+            name: postgres-auth
             key: database
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-library
+            name: postgres-auth
             key: username
     immich:
       persistence:
@@ -39,6 +39,8 @@ spec:
         postgresql:
           auth:
             existingSecret: postgres-auth
+    redis:
+      enabled: false
     machine-learning:
       persistence:
         cache:
