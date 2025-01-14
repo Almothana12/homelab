@@ -15,6 +15,21 @@ spec:
   values: 
     env:
       DB_HOSTNAME: "cluster-rw.cnpg-system"
+      DB_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: immich-library
+            key: password
+      DB_DATABASE_NAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-library
+            key: database
+      DB_USERNAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-library
+            key: username
     immich:
       persistence:
         library:
