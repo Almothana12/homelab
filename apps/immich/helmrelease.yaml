@@ -40,7 +40,7 @@ spec:
           auth:
             existingSecret: postgres-auth
     redis:
-      enabled: false
+      enabled: true
     machine-learning:
       persistence:
         cache:
