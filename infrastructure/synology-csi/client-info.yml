@@ -1,5 +1,5 @@
 clients:
-    - host: ENC[AES256_GCM,data:abXIZCHUjgordlBE3Q==,iv:E4Dc72V0s/Ph21b5Dh9Il99M6mf6VVtNCWsyODTcNOM=,tag:r1Q4DRKHW4pkBYvlj1ZiBA==,type:str]
+    - host: ENC[AES256_GCM,data:NJMj0tNMn5n9TQP/aA==,iv:YKLkAhZpjOGUQ59aSeh3ouY3OyckvkRwDTpQnv0bQe0=,tag:d2G2L2+Ckq8Km16yoqjrxg==,type:str]
       port: ENC[AES256_GCM,data:fvktdQ==,iv:VdNuLeKipucSjhDzvZOcvcg4f0Hv9oROJ6aELOJCSVE=,tag:a9ZTnou9e4Njjga5OOHCjA==,type:int]
       https: ENC[AES256_GCM,data:wC9vjWs=,iv:bQU35r3O2w2Bjjqb5lm88RMJs1k3z5WzJ8uLPrZZjFA=,tag:EEW8EBEnuhmWCUsdSq/AWA==,type:bool]
       username: ENC[AES256_GCM,data:P9WV3j26xAd9UlzOmH2u,iv:3+bZawwUJ2VaCDyFowgowTEiMRw7pCZrmwxPk0UT71w=,tag:uq1sXUoabKcnEkpVTOik4g==,type:str]
@@ -19,8 +19,8 @@ sops:
             ZzhrZjh3U3A1NksxNnZWK24yTVovdzAKLMxeLYeCR6pE/vpnlx8HXl0DfshJynp1
             Jtr8EoH3OTsbzG1ATKMQnOzKv4lUzpNT7//ZK2OAEwcxfFgt3o9bew==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-01-01T03:46:23Z"
-    mac: ENC[AES256_GCM,data:301+6nV9wyjzDzBfiE9LPsawSoWcSnNUdTo+MKt1eJUHfqLz3mMjZ57VhfwXVrZ79+pKFn36AcLngDw3OGrjvTS3JlTs5CAdz8IkLnNRKGB23MYTUzRlXSx+wevy/e6f9iIpe0Hn6nSOB1i7KOoHuRmfD38c7dMV73PEHI4EelE=,iv:xgUtyBWO+XnR8kuuVVh8lw5t0fdKgAi1JuO0brKbyhk=,tag:hDx8eD7u1nYX85Alp5k06w==,type:str]
+    lastmodified: "2025-01-16T17:26:00Z"
+    mac: ENC[AES256_GCM,data:0FYg6zGtb+c6BkL8gtaZh9SodFmocygRvDvVB/TINe73ws5t7yRVp2rQZlR4nGEFqXgH4TXWSjKWAy/9ztxqn5pUJVI6vyBK7ZCP1w+mYJJqmhk7ylhp2cY9zIYG8lFhJnHGVo51/vdiEHW+PpoqheSLFO0us1vrRQlaleUamJQ=,iv:6/WruSPsDx7I+mq7G1z/xUvTMSmUeLvKP5Nu/wKVl+8=,tag:39UxSNgf+8UeXejot9sWEA==,type:str]
     pgp: []
     encrypted_regex: clients
     version: 3.9.1

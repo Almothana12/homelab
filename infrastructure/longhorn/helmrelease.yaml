@@ -23,4 +23,4 @@ spec:
         ingressClassName: nginx
         host: longhorn.almothana.xyz
       defaultSettings:
-        backupTarget: 'nfs://192.168.8.109:/volume1/longhorn-backup'
+        backupTarget: 'nfs://192.168.0.109:/volume1/longhorn-backup'

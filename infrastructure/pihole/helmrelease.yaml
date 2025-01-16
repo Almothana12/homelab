@@ -28,7 +28,7 @@ spec:
       mixedService: true
       externalTrafficPolicy: Cluster
       annotations:
-        metallb.universe.tf/loadBalancerIPs: 192.168.8.252
+        metallb.universe.tf/loadBalancerIPs: 192.168.0.252
       type: LoadBalancer
     resources:
       limits:

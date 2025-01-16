@@ -9,5 +9,5 @@ spec:
     storage: 300Ti
   storageClassName: nfs
   nfs:
-    server: 192.168.8.109
+    server: 192.168.0.109
     path: "/volume1/pic-library"

@@ -22,7 +22,7 @@ spec:
         volumeBindingMode: Immediate
         allowVolumeExpansion: true
         parameters:
-          dsm: "192.168.8.109"
+          dsm: "192.168.0.109"
           fsType: ext4
           location: /volume1
           formatOptions: '-E nodiscard'
