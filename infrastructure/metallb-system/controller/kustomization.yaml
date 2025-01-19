@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - MetalLB-IPAddressPool.yaml
-  - MetalLB-L2Advertisement.yaml
+  - namespace.yaml
+  - helmrepo.yaml
+  - helmrelease.yaml
