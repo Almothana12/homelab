@@ -159,7 +159,7 @@ releases:
 - name: nextcloud
   namespace: nextcloud
   chart: nextcloud/nextcloud
-  version: "6.3.0"
+  version: "6.6.3"
   values:
     - ingress:
         enabled: true
