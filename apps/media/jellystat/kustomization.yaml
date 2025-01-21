@@ -5,5 +5,5 @@ resources:
   - deployment-jellystat.yaml
   - service-jellystat.yaml
   - ingress-jellystat.yaml
-  - secret-db-info.yaml
+  - secret-jellystat-db-info.yaml
   - secret-jellystat-jwt.yaml
