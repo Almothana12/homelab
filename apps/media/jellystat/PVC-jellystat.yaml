@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: jellystat
-  name: jellystat
+  name: jellystat-backup
 spec:
   accessModes:
     - ReadWriteOnce
