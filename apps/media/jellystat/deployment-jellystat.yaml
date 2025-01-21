@@ -25,7 +25,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: db-info
-                  key: DB_USER
+                  key: DB_USERNAME
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
