@@ -56,7 +56,8 @@ spec:
             - name: MINIMUM_SECONDS_TO_INCLUDE_PLAYBACK
               value: "5"
           ports:
-            - 3000
+            - containerPort: 3000
+              protocol: TCP
           volumeMounts:
             - mountPath: /app/backend/backup-data
               name: jellystat
