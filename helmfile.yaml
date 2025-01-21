@@ -44,7 +44,7 @@ releases:
 - name: prometheus
   namespace: monitoring
   chart: prometheus-community/kube-prometheus-stack
-  version: "68.2.1"
+  version: "68.3.0"
   values:
     - grafana:
         defaultDashboardsTimezone: Asia/Riyadh
