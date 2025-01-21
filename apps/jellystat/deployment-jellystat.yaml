@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jellystat
+  name: jellystat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellystat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jellystat
+    spec:
+      containers:
+        - image: cyfershepard/jellystat:1.1.2
+          name: jellystat
+          resources: {}
+          env:
+            - name: POSTGRES_USER 
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_PASSWORD
+            - name: POSTGRES_IP
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-info
+                  key: DB_DATABASE
+            - name: JWT_SECRET 
+              valueFrom:
+                secretKeyRef:
+                  name: jellystat-jwt
+                  key: JWT
+            - name: TZ
+              value: "Asia/Riyadh"
+            - name: MINIMUM_SECONDS_TO_INCLUDE_PLAYBACK
+              value: "5"
+          ports:
+            - 3000
+          volumeMounts:
+            - mountPath: /app/backend/backup-data
+              name: jellystat
+      restartPolicy: Always
+      volumes:
+        - name: jellystat-backup
+          persistentVolumeClaim:
+            claimName: jellystat-backup
