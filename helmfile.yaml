@@ -141,7 +141,7 @@ releases:
 - name: external-dns
   namespace: external-dns
   chart: bitnami/external-dns
-  version: "8.6.1"
+  version: "8.7.2"
   values: 
     - provider: pihole
       pihole:
