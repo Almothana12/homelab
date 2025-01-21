@@ -60,7 +60,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /app/backend/backup-data
-              name: jellystat
+              name: jellystat-backup
       restartPolicy: Always
       volumes:
         - name: jellystat-backup
