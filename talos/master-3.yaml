@@ -1,0 +1,15 @@
+machine:
+  network:
+    hostname: master-3
+    interfaces:
+      - interface: enp1s0
+        addresses:
+          - 192.168.0.63/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.0.1
+        dhcp: true
+    nameservers:
+      - 192.168.0.252
+      - 192.168.0.1
+      - 1.1.1.1
