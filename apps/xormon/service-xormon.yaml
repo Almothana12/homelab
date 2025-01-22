@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xormon
+  name: xormon
+spec:
+  ports:
+    - name: "8443"
+      port: 8443
+      targetPort: 8443
+    - name: "8162"
+      port: 8162
+      targetPort: 8162
+  selector:
+    app: xormon

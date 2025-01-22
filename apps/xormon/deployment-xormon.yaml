@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xormon
+  name: xormon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xormon
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: xormon
+    spec:
+      containers:
+        - image: xorux/xormon-ng:1.7.0
+          name: xormon
+          resources: {}
+          env:
+            - name: APP_DEBUG
+              value: "false"
+            - name: APP_PORT
+              value: "8443"
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: app
+                  name: xormon
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database
+                  name: timescaledb
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: timescaledb
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: timescaledb
+            - name: DB_HOST
+              value: timescaledb
+            - name: DB_PORT
+              value: "5432"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8162
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/src/app/server-nest/files
+              name: xormon
+      restartPolicy: Always
+      volumes:
+        - name: xormon
+          persistentVolumeClaim:
+            claimName: xormon

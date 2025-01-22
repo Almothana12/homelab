@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: timescaledb
+  name: timescaledb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+    spec:
+      containers:
+        - image: timescale/timescaledb:latest-pg16
+          name: timescaledb
+          resources: {}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: timescaledb
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: timescaledb
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: timescaledb
+      restartPolicy: Always
+      volumes:
+        - name: timescaledb
+          persistentVolumeClaim:
+            claimName: timescaledb
