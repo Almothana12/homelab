@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: xormon
+rules:
+- apiGroups: ["","metrics.k8s.io"]
+  resources: ["pods","nodes","services","nodes/proxy", "endpoints", "namespaces"]
+  verbs: ["get", "watch", "list"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]

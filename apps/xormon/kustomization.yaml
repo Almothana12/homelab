@@ -12,3 +12,7 @@ resources:
   - service-timescaledb.yaml
   - service-xormon.yaml
   - ingress-xormon.yaml
+  - sa-xormon.yaml
+  - ClusterRole-xormon.yaml
+  - ClusterRoleBinding-xormon.yaml
+  - secret-xormon-token.yaml
