@@ -143,6 +143,10 @@ metadata:
   name: cnpg
   namespace: flux-system
 spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   force: false
   interval: 5m0s
   path: ./infrastructure/cnpg

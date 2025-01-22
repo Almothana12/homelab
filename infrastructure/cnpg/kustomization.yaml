@@ -5,3 +5,4 @@ resources:
   - helmrepo.yaml
   - helmrelease-cloudnative-pg.yaml
   - helmrelease-cluster.yaml
+  - secret-xormon-auth.yaml
