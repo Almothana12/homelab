@@ -160,6 +160,22 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: reflector
+  namespace: flux-system
+spec:
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/reflector
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace:  kube-system
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: nextcloud
   namespace: flux-system
 spec:
