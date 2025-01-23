@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - secret-cf-token.yaml
+  - Certificate-production-certificate.yaml
+  - Certificate-staging-certificate.yaml
+  - ClusterIssuer-letsencrypt-production.yaml
+  - ClusterIssuer-letsencrypt-staging.yaml
