@@ -26,6 +26,10 @@ spec:
       storage:
         size: 10Gi
       postgresql:
+        postInitApplicationSQLRefs:
+          configMapRefs:
+          - name: xormon-privileges
+            key: xormon.sql
         shared_preload_libraries:
           - "vectors.so"
       pg_hba:
@@ -37,15 +41,6 @@ spec:
           ensure: present
           comment: XORMON Monitoring
           superuser: false
-          inRoles:
-            - pg_stat_bgwriter 
-            - pg_stat_database 
-            - pg_stat_activity 
-            - pg_locks 
-            - pg_cursors 
-            - pg_stat_progress_vacuum 
-            - pg_stat_replication 
-            - pg_stat_wal_receiver 
           passwordSecret:
             name: xormon-auth
     backups:
