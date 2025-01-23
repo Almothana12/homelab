@@ -11,8 +11,6 @@ repositories:
   url:  https://charts.bitnami.com/bitnami
 - name: nextcloud 
   url:  https://nextcloud.github.io/helm/
-- name: jetstack
-  url: https://charts.jetstack.io
 
 - name: longhorn
   namespace: longhorn-system
@@ -180,19 +178,3 @@ repositories:
         requests:
          cpu: 100m
          memory: 256Mi
-
-- name: cert-manager 
-  namespace: cert-manager
-  chart: jetstack/cert-manager
-  version: "v1.16.2"
-  values:
-    - crds:
-        enabled: true
-      extraArgs:
-        - --dns01-recursive-nameservers=1.1.1.1:53,9.9.9.9:53
-        - --dns01-recursive-nameservers-only
-      podDnsPolicy: None
-      podDnsConfig:
-        nameservers:
-          - 1.1.1.1
-          - 9.9.9.9
