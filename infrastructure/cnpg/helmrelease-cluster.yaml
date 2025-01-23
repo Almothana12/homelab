@@ -40,6 +40,7 @@ spec:
         - name: xormon
           ensure: present
           comment: XORMON monitoring
+          login: true
           superuser: false
           passwordSecret:
             name: xormon-auth
