@@ -39,7 +39,7 @@ spec:
       roles:
         - name: xormon
           ensure: present
-          comment: XORMON Monitoring
+          comment: XORMON monitoring
           superuser: false
           passwordSecret:
             name: xormon-auth
