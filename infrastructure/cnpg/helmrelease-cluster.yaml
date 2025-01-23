@@ -25,7 +25,7 @@ spec:
       primaryUpdateStrategy: unsupervised
       storage:
         size: 10Gi
-      postgresql:
+      initdb:
         postInitApplicationSQLRefs:
           configMapRefs:
           - name: xormon-privileges
@@ -38,7 +38,7 @@ spec:
         enabled: true
       roles:
         - name: xormon
-          ensure: absent
+          ensure: present
           comment: XORMON monitoring
           superuser: false
           passwordSecret:
