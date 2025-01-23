@@ -9,8 +9,6 @@ repositories:
   url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
 - name: bitnami 
   url:  https://charts.bitnami.com/bitnami
-- name: nextcloud 
-  url:  https://nextcloud.github.io/helm/
 
 - name: longhorn
   namespace: longhorn-system
@@ -142,39 +140,3 @@ repositories:
           cpu: 150m
           memory: 192Mi
           ephemeral-storage: 2Gi
-
-- name: nextcloud
-  namespace: nextcloud
-  chart: nextcloud/nextcloud
-  version: "6.6.3"
-  values:
-    - ingress:
-        enabled: true
-        className: nginx
-        tls:
-          - secretName: almothana-xyz-tls
-            hosts:
-            - nextcloud.almothana.xyz
-      nextcloud:
-        host:  nextcloud.almothana.xyz
-        trustedDomains: 
-        - "nextcloud.almothana.xyz"
-        - "nextcloud.cloudforest-sargas.ts.net"
-        - "nextcloud"
-      persistence:
-        enabled: true
-        accessMode: ReadWriteMany
-        size: 8Gi
-        nextcloudData:
-          enabled: true
-          accessMode: ReadWriteMany
-          size: 8Gi  
-      livenessProbe:
-        initialDelaySeconds: 1800
-      resources:
-        limits:
-         cpu: 1
-         memory: 1Gi
-        requests:
-         cpu: 100m
-         memory: 256Mi
