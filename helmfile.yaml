@@ -1,8 +1,6 @@
 repositories:
 - name: longhorn 
   url: https://charts.longhorn.io
-- name: prometheus-community
-  url: https://prometheus-community.github.io/helm-charts
 - name: mojo2600
   url: https://mojo2600.github.io/pihole-kubernetes/
 - name: plex
@@ -24,49 +22,6 @@ repositories:
         tlsSecret: almothana-xyz-tls
         ingressClassName: nginx
         host: longhorn.almothana.xyz
-
-- name: prometheus
-  namespace: monitoring
-  chart: prometheus-community/kube-prometheus-stack
-  version: "68.2.1"
-  values:
-    - grafana:
-        defaultDashboardsTimezone: Asia/Riyadh
-        ingress:
-          enabled: true
-          ingressClassName: nginx
-          hosts:
-            - grafana.almothana.xyz
-          tls:
-            - secretName: almothana-xyz-tls
-              hosts:
-              - grafana.almothana.xyz
-        persistence:
-          enabled: true
-          type: sts
-          accessModes:
-            - ReadWriteOnce
-          size: 5Gi
-          finalizers:
-            - kubernetes.io/pvc-protection
-      prometheus:
-        ingress:
-          enabled: true
-          ingressClassName: nginx
-          hosts:
-            - prometheus.almothana.xyz
-          tls:
-            - secretName: almothana-xyz-tls
-              hosts:
-              - prometheus.almothana.xyz
-        prometheusSpec:
-            storageSpec: 
-              volumeClaimTemplate:
-                spec:
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 50Gi
 
 - name: pihole
   namespace: pihole
