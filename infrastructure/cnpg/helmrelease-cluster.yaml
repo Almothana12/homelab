@@ -36,6 +36,8 @@ spec:
         - host all xormon 10.244.0.0/16 md5
       monitoring:
         enabled: true
+        podMonitor:
+          enabled: true
       roles:
         - name: xormon
           ensure: present
