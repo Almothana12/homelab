@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tautulli
+  name: tautulli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      containers:
+        - image: tautulli/tautulli:v2.15.1
+          name: tautulli
+          resources: {}
+          env:
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 8181
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: tautulli
+      restartPolicy: Always
+      volumes:
+        - name: tautulli
+          persistentVolumeClaim:
+            claimName: tautulli

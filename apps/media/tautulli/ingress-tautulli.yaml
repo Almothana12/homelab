@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tautulli
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: tautulli.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: tautulli
+            port:
+              number: 8181
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - tautulli.almothana.xyz
+      secretName: almothana-xyz-tls
