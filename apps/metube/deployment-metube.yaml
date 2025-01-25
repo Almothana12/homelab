@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metube
+  name: metube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: metube
+    spec:
+      containers:
+        - image: ghcr.io/alexta69/metube:2024-11-19
+          name: metube
+          resources: {}
+          env: []
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: metube
+
+      restartPolicy: Always
+      volumes:
+        - name: metube
+          persistentVolumeClaim:
+            claimName: metube
