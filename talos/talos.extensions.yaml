@@ -1,8 +1,8 @@
 customization:
     systemExtensions:
         officialExtensions:
-            - siderolabs/i915-ucode
-            - siderolabs/mei
+            - siderolabs/i915
             - siderolabs/iscsi-tools
+            - siderolabs/mei
             - siderolabs/util-linux-tools
-            # Your image schematic ID is: 8a774b9b47f8b4c0c49ee7a7c7a6052fc5d661a93f3f72f418c7b0ba58143a7e
+            # Your image schematic ID is: da47cde9af5de5969d56bb68e6777ee02b9fc16401f0d4a7de5a4f734891712b
