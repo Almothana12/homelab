@@ -201,6 +201,10 @@ metadata:
 spec:
   dependsOn:
   - name: cert-manager-operator
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   force: false
   interval: 5m0s
   path: ./infrastructure/cert-manager
