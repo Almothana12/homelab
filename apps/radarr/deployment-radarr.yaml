@@ -17,7 +17,7 @@ spec:
         app: radarr
     spec:
       containers:
-        - image: linuxserver/radarr:5.16.3
+        - image: linuxserver/radarr:5.18.4
           name: radarr
           resources: {}
           ports:
