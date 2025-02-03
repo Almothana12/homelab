@@ -32,6 +32,9 @@ spec:
             key: xormon.sql
         shared_preload_libraries:
           - "vectors.so"
+      postgresql:
+        shared_preload_libraries:
+          - "vectors.so"
       pg_hba:
         - host all xormon 10.244.0.0/16 md5
       monitoring:
