@@ -33,6 +33,8 @@ spec:
                   name: timescaledb
             - name: TZ
               value: Asia/Riyadh
+            - name: PGDATA
+              value: /var/lib/postgresql/data/xormon
           ports:
             - containerPort: 5432
               protocol: TCP
