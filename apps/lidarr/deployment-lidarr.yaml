@@ -29,12 +29,9 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: lidarr
-            - mountPath: /data/musicfolder
+            - mountPath: /data/music
               name: library
               subPath: "music"
-            - mountPath: /data/downloads
-              name: library
-              subPath: "downloads"
       hostname: lidarr
       restartPolicy: Always
       volumes:

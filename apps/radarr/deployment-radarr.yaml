@@ -29,15 +29,11 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: radarr
-            - mountPath: /data/movies
+            - mountPath: /data
               name: library
-              subPath: "movies"
             - mountPath: /data/Backup
               name: library
               subPath: "arr/radarr/backup"
-            - mountPath: /data/downloads
-              name: library
-              subPath: "downloads"
       hostname: radarr
       restartPolicy: Always
       volumes:

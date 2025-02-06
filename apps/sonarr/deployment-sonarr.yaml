@@ -32,18 +32,8 @@ spec:
             - mountPath: /data/Backup
               name: library
               subPath: "arr/sonarr/backup"
-            - mountPath: /data/tv-shows
+            - mountPath: /data
               name: library
-              subPath: "tv-shows"
-            - mountPath: /data/anime
-              name: library
-              subPath: "anime"
-            - mountPath: /data/myanime
-              name: library
-              subPath: "myanime"
-            - mountPath: /data/downloads
-              name: library
-              subPath: "downloads"
       hostname: sonarr
       restartPolicy: Always
       volumes:
