@@ -26,7 +26,7 @@ spec:
           - pi-hole.almothana.xyz
     serviceDns:
       mixedService: true
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
       annotations:
         metallb.universe.tf/loadBalancerIPs: 192.168.0.252
       type: LoadBalancer
