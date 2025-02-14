@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: pihole
 resources:
   - namespace.yaml
+  - secret-admin.yaml
   - helmrepo.yaml
   - helmrelease.yaml
