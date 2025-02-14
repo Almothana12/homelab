@@ -44,4 +44,4 @@ spec:
     admin:
       enabled: true
       existingSecret: "admin"
-      passwordKey: "password"
+      passwordKey: "pihole_password"
