@@ -57,6 +57,9 @@ spec:
             - mountPath: /data/PS4
               name: library
               subPath: PS4
+            - mountPath: /data/VHS
+              name: library
+              subPath: video
       restartPolicy: Always
       volumes:
         - name: jellyfin
