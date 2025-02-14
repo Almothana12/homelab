@@ -1,42 +1,9 @@
 repositories:
-- name: mojo2600
-  url: https://mojo2600.github.io/pihole-kubernetes/
 - name: plex
   url: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
 - name: bitnami 
   url:  https://charts.bitnami.com/bitnami
 
-- name: pihole
-  namespace: pihole
-  chart: mojo2600/pihole
-  version: "2.27.0"
-  values: 
-    - ingress:
-        enabled: true
-        ingressClassName: nginx
-        hosts: 
-          - pi-hole.almothana.xyz
-        tls:
-          - secretName: almothana-xyz-tls
-            hosts:
-            - pi-hole.almothana.xyz
-      serviceDns:
-        mixedService: true
-        externalTrafficPolicy: Cluster
-        annotations:
-          metallb.universe.tf/loadBalancerIPs: 192.168.8.252
-        type: LoadBalancer
-      resources:
-        limits:
-          cpu: 300m
-          memory: 256Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
-      persistentVolumeClaim:
-        enabled: true
-      extraEnvVars:
-        TZ: "Asia/Riyadh"
 
 - name: plex
   namespace: plex
