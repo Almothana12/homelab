@@ -41,3 +41,7 @@ spec:
       enabled: true
     extraEnvVars:
       TZ: "Asia/Riyadh"
+    admin:
+      enabled: true
+      existingSecret: "admin"
+      passwordKey: "password"
