@@ -16,7 +16,7 @@ spec:
         app: onlyoffice
     spec:
       containers:
-        - image: onlyoffice/documentserver:8.2.2
+        - image: onlyoffice/documentserver:8.3.0
           imagePullPolicy: IfNotPresent
           name: documentserver
           ports:
