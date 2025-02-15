@@ -27,7 +27,10 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: metube
-
+              subPath: config
+            - mountPath: /downloads
+              name: metube
+              subPath: downloads
       restartPolicy: Always
       volumes:
         - name: metube
