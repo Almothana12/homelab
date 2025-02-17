@@ -17,7 +17,7 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: linuxserver/jellyfin:10.10.5
+        - image: linuxserver/jellyfin:10.10.6
           name: jellyfin
           resources: {}
           env:
