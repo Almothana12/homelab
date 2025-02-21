@@ -13,6 +13,14 @@ spec:
         name: grafana
       interval: 5m
   values: 
+    alloy:
+      configMap:
+        content: |-
+          loki.write "default" {
+            endpoint {
+              url = "http://loki-gateway.logging.svc.cluster.local/loki/api/v1/push"
+            }
+          }
     ingress:
       enabled: true
       ingressClassName: nginx
