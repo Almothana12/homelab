@@ -43,10 +43,12 @@ spec:
             hosts:
             - prometheus.almothana.xyz
       prometheusSpec:
-          storageSpec: 
-            volumeClaimTemplate:
-              spec:
-                accessModes: ["ReadWriteOnce"]
-                resources:
-                  requests:
-                    storage: 50Gi
+        # set as false to use the rules in the PrometheusRule resources (https://github.com/onzack/grafana-dashboards/tree/main?tab=readme-ov-file#troubleshooting)
+        ruleSelectorNilUsesHelmValues: false
+        storageSpec: 
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 50Gi
