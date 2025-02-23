@@ -24,7 +24,13 @@ spec:
       containers:
         - image: linuxserver/qbittorrent:5.0.3
           name: qbittorrent
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 6Gi
+            limits:
+              cpu: 400m
+              memory: 6Gi
           ports:
             - containerPort: 8080
               protocol: TCP
