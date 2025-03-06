@@ -43,3 +43,6 @@ spec:
       requests:
         cpu: 100m
         memory: 256Mi
+    dnsConfig:
+      nameservers:
+        - 192.168.0.252
