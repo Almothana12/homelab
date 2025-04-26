@@ -647,3 +647,19 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: metube
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: omni-tools
+  namespace: flux-system
+spec:
+  force: false
+  interval: 5m0s
+  path: ./apps/omni-tools
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: omni-tools

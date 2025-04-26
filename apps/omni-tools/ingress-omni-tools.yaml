@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: omni-tools
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: omni-tools.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: omni-tools
+            port:
+              number: 8080
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - omni-tools.almothana.xyz
+      secretName: almothana-xyz-tls

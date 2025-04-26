@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: omni-tools
+  name: omni-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omni-tools
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: omni-tools
+    spec:
+      restartPolicy: Always
+      containers:
+        - image: iib0011/omni-tools:0.3.0
+          name: omni-tools
+          resources: {}
+          env: []
+          ports: []
