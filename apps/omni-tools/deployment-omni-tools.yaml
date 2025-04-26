@@ -22,4 +22,3 @@ spec:
           name: omni-tools
           resources: {}
           env: []
-          ports: []
