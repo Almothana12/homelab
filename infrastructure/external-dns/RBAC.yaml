@@ -30,5 +30,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: external-dns
-  namespace: default
+  namespace: external-dns
 ---
