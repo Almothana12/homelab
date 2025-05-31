@@ -17,6 +17,13 @@ spec:
       containers:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.17.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 150m
+            memory: 192Mi
         # If authentication is disabled and/or you didn't create
         # a secret, you can remove this block.
         envFrom:
