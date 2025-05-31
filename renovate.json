@@ -8,5 +8,12 @@
   },
   "kubernetes": {
     "fileMatch": ["k8s/.+\\.yaml$", "apps/.+\\.yaml$", "infrastructure/.+\\.yaml$"]
-  }
+  },
+    "packageRules": [
+      {
+        "matchUpdateTypes": ["minor", "patch"],
+        "matchCurrentVersion": "!/^0/",
+        "automerge": true
+      }
+    ]
 }
