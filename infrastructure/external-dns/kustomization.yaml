@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret-external-dns.yaml
-  - helmrepo.yaml
-  - helmrelease.yaml
+  - RBAC.yaml
+  - deployment-external-dns.yaml
