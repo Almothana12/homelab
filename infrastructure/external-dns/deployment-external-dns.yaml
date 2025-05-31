@@ -29,7 +29,7 @@ spec:
         envFrom:
         - secretRef:
             # Change this if you gave the secret a different name
-            name: secret-external-dns.yaml
+            name: external-dns
         args:
         - --source=service
         - --source=ingress
