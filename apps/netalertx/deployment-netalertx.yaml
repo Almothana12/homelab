@@ -39,9 +39,6 @@ spec:
           mountPath: /app/db
         - name: api-tmpfs
           mountPath: /app/api
-        securityContext:
-          runAsUser: 200
-          runAsGroup: 300
       volumes:
       - name: config
         persistentVolumeClaim:
