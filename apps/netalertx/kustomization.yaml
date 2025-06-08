@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - namespace-netalertx.yaml
   - PVC-netalertx.yaml
   - deployment-netalertx.yaml
   - service-netalertx.yaml
