@@ -7,8 +7,7 @@
     "fileMatch": ["k8s/.+\\.yaml$", "apps/.+\\.yaml$", "infrastructure/.+\\.yaml$"]
   },
   "kubernetes": {
-    "fileMatch": ["k8s/.+\\.yaml$", "apps/.+\\.yaml$", "infrastructure/.+\\.yaml$"]
-  },
+    "fileMatch": ["k8s/.+\\.yaml$", "apps/.+\\.yaml$", "infrastructure/.+\\.yaml$"],
     "packageRules": [
       {
         "matchUpdateTypes": ["minor", "patch"],
@@ -16,4 +15,5 @@
         "automerge": true
       }
     ]
+  }
 }
