@@ -39,6 +39,7 @@ spec:
         memory: 128Mi
     persistentVolumeClaim:
       enabled: true
+      size: "2Gi"
     extraEnvVars:
       TZ: "Asia/Riyadh"
     admin:
