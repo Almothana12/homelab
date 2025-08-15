@@ -45,4 +45,4 @@ spec:
         memory: 256Mi
     dnsConfig:
       nameservers:
-        - 192.168.0.252
+        - 192.168.0.2
