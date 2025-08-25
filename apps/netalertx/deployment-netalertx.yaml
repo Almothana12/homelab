@@ -15,7 +15,7 @@ spec:
       hostNetwork: true
       containers:
       - name: netalertx
-        image: ghcr.io/jokob-sk/netalertx:25.7
+        image: ghcr.io/jokob-sk/netalertx:25.8
         resources:
           requests:
             cpu: 100m
