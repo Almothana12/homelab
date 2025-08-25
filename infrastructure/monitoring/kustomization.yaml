@@ -4,3 +4,4 @@ resources:
   - PodMonitor-flux-system.yaml
   - PrometheusRule-standard-cluster-monitoring.yaml
   - PrometheusRule-standard-namespace-monitoring.yaml
+  - PrometheusRule-pvc-usage.yaml
