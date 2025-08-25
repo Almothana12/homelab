@@ -69,6 +69,13 @@ spec:
           group_interval: 10m
           repeat_interval: 48h
           receiver: 'slack'
+          routes:
+            - receiver: 'null'
+              matchers:
+                - alertname = "Watchdog"
+            - receiver: 'slack'
+              matchers:
+                - severity = 'critical'
         receivers:
         - name: "null"
         - name: 'slack'
