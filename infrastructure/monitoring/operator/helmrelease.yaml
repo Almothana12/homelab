@@ -45,6 +45,10 @@ spec:
       prometheusSpec:
         # set as false to use the rules in the PrometheusRule resources (https://github.com/onzack/grafana-dashboards/tree/main?tab=readme-ov-file#troubleshooting)
         ruleSelectorNilUsesHelmValues: false
+        # testing for CNPG issues: https://github.com/cloudnative-pg/charts/issues/279#issuecomment-2130308807
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
         storageSpec: 
           volumeClaimTemplate:
             spec:
