@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tracktor-1
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: tracktor-1.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: tracktor-1
+            port:
+              number: 3000
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - tracktor-1.almothana.xyz
+      secretName: almothana-xyz-tls

@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - PVC-tracktor-1.yaml
+  - deployment-tracktor-1.yaml
+  - service-tracktor-1.yaml
+  - ingress-tracktor-1.yaml

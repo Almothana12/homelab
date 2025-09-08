@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tracktor-1
+  name: tracktor-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracktor-1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tracktor-1
+    spec:
+      containers:
+        - image: ghcr.io/javedh-dev/tracktor:0.2.2
+          name: tracktor-1
+          resources: {}
+          env: []
+          ports: []
+          volumeMounts:
+            - mountPath: /data
+              name: tracktor-1
+
+      restartPolicy: Always
+      volumes:
+        - name: tracktor-1
+          persistentVolumeClaim:
+            claimName: tracktor-1
