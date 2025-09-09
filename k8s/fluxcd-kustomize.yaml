@@ -149,7 +149,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: longhorn-contoller
+  - name: longhorn-controller
   force: false
   interval: 5m0s
   path: ./infrastructure/longhorn
