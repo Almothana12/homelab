@@ -1,0 +1,5 @@
+machine:
+  install:
+    image: factory.talos.dev/metal-installer/da47cde9af5de5969d56bb68e6777ee02b9fc16401f0d4a7de5a4f734891712b:v1.11.1
+    diskSelector:
+      size: '>= 500GB' # Disk size to select 

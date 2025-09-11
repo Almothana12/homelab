@@ -1,0 +1,11 @@
+machine:
+  kubelet:
+    extraMounts:
+      - destination: /var/lib/longhorn # Destination is the absolute path where the mount will be placed in the container.
+        type: bind # Type specifies the mount kind.
+        source: /var/lib/longhorn # Source specifies the source path of the mount.
+        # Options are fstab style mount options.
+        options:
+          - bind
+          - rshared
+          - rw

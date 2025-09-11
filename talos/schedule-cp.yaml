@@ -1,0 +1,9 @@
+# https://www.talos.dev/v1.11/talos-guides/howto/workers-on-controlplane/
+cluster:
+    # Allows running workload on control-plane nodes.
+    allowSchedulingOnControlPlanes: true
+# machine:
+#   nodeLabels:
+#     # delete the label that prevents LoadBalancer svc to work on control-plane nodes
+#     node.kubernetes.io/exclude-from-external-load-balancers:
+#       $patch: delete
