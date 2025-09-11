@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - PVC-tracktor-1.yaml
+  - configmap-tracktor-1-config.yaml
   - deployment-tracktor-1.yaml
   - service-tracktor-1.yaml
   - ingress-tracktor-1.yaml
