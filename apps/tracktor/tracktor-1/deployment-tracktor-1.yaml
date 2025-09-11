@@ -20,8 +20,12 @@ spec:
         - image: ghcr.io/javedh-dev/tracktor:0.2.2
           name: tracktor-1
           resources: {}
-          env: []
-          ports: []
+          envFrom:
+          - configMapRef:
+              name: tracktor-1-config
+          ports:
+            - containerPort: 3000
+              protocol: TCP
           volumeMounts:
             - mountPath: /data
               name: tracktor-1
