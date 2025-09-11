@@ -108,27 +108,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: pihole
-  namespace: flux-system
-spec:
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
-  force: false
-  interval: 5m0s
-  path: ./infrastructure/pihole
-  prune: false
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  targetNamespace: pihole
-
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: longhorn-controller
   namespace: flux-system
 spec:
