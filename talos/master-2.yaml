@@ -5,6 +5,8 @@ machine:
       - interface: enp1s0
         addresses:
           - 192.168.0.62/24
+        vip:
+          ip: 192.168.0.60
         routes:
           - network: 0.0.0.0/0
             gateway: 192.168.0.1
