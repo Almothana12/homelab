@@ -36,7 +36,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: tailscale
+  name: tailscale-controller
   namespace: flux-system
 spec:
   decryption:
@@ -45,12 +45,31 @@ spec:
       name: sops-age
   force: false
   interval: 5m0s
+  path: ./infrastructure/tailscale/controller
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: tailscale
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tailscale
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: tailscale-controller
+  force: false
+  interval: 5m0s
   path: ./infrastructure/tailscale
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
   targetNamespace: tailscale
+
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
