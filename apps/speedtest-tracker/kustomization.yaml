@@ -3,13 +3,9 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helmrelease-speedtest-cluster.yaml
-  - PVC-postgres.yaml
   - PVC-speedtest-tracker.yaml
   - Secret-app-key.yaml
-  - secret-db-info.yaml
   - secret-initial-admin.yaml
-  - Deployment-postgres.yaml
   - Deployment-speedtest-tracker.yaml
-  - Service-postgres.yaml
   - Service-speedtest-tracker.yaml
   - Ingress-speedtest-tracker.yaml
