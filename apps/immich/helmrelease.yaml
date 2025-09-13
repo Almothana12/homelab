@@ -28,7 +28,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: immich-cluster-app
-            key: database
+            key: dbname
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
