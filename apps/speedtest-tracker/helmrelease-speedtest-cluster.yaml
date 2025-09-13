@@ -43,4 +43,17 @@ spec:
           inRoles:
             - pg_monitor
     backups:
-      enabled: false
+      enabled: true
+      provider: s3
+      endpointURL: "http://192.168.0.109:9001"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "db-backups"
+        path: "/speedtest-tracker"
+      scheduledBackups:
+        - name: daily-backup
+          schedule: "0 0 0 * * *" # Daily at midnight
+          backupOwnerReference: self
+      retentionPolicy: "5d"  
