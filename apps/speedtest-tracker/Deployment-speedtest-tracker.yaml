@@ -46,22 +46,25 @@ spec:
             - name: DB_HOST
               value: postgres.speedtest-tracker.svc.cluster.local
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                secretKeyRef:
+                  name: speedtest-cluster-app
+                  key: port
             - name: DB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: db-info
-                  key: DB_DATABASE
+                  name: speedtest-cluster-app
+                  key: dbname
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: db-info
-                  key: DB_USERNAME
+                  name: speedtest-cluster-app
+                  key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-info
-                  key: DB_PASSWORD
+                  name: speedtest-cluster-app
+                  key: password
             - name: ADMIN_NAME
               valueFrom:
                 secretKeyRef:
@@ -81,7 +84,6 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: speedtest-tracker
-
       volumes:
         - name: speedtest-tracker
           persistentVolumeClaim:
