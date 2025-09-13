@@ -26,7 +26,6 @@ spec:
       primaryUpdateStrategy: unsupervised
       storage:
         size: 2Gi
-      initdb:
       pg_hba:
         - host all xormon 10.244.0.0/16 md5
       monitoring:
