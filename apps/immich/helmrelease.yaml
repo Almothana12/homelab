@@ -14,35 +14,27 @@ spec:
       interval: 5m
   values: 
     env:
+      DB_DATABASE_NAME:
+        value: "app"
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-app
+            name: immich-cluster-superuser
             key: host
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-app
+            name: immich-cluster-superuser
             key: password
-      DB_DATABASE_NAME:
-        valueFrom:
-          secretKeyRef:
-            name: immich-cluster-app
-            key: dbname
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-app
+            name: immich-cluster-superuser
             key: username
     immich:
       persistence:
         library:
           existingClaim: immich-library
-    postgresql:
-      global:
-        postgresql:
-          auth:
-            existingSecret: immich-cluster-app
     redis:
       enabled: true
     server:
