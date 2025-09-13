@@ -27,12 +27,12 @@ spec:
       DB_DATABASE_NAME:
         valueFrom:
           secretKeyRef:
-            name: speedtest-cluster-app
+            name: immich-cluster-app
             key: database
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: speedtest-cluster-app
+            name: immich-cluster-app
             key: username
     immich:
       persistence:
@@ -42,7 +42,7 @@ spec:
       global:
         postgresql:
           auth:
-            existingSecret: speedtest-cluster-app
+            existingSecret: immich-cluster-app
     redis:
       enabled: true
     server:
