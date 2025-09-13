@@ -14,21 +14,25 @@ spec:
       interval: 5m
   values: 
     env:
-      DB_HOSTNAME: "cluster-rw.cnpg-system"
+      DB_HOSTNAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-cluster-app
+            key: host
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: postgres-auth
+            name: immich-cluster-app
             key: password
       DB_DATABASE_NAME:
         valueFrom:
           secretKeyRef:
-            name: postgres-auth
+            name: speedtest-cluster-app
             key: database
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: postgres-auth
+            name: speedtest-cluster-app
             key: username
     immich:
       persistence:
@@ -38,7 +42,7 @@ spec:
       global:
         postgresql:
           auth:
-            existingSecret: postgres-auth
+            existingSecret: speedtest-cluster-app
     redis:
       enabled: true
     server:

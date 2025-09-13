@@ -539,6 +539,9 @@ metadata:
   name: immich
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: longhorn
+  - name: cnpg
   decryption:
     provider: sops
     secretRef:

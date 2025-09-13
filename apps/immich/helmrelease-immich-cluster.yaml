@@ -1,12 +1,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cluster
+  name: immich-cluster
 spec:
   dependsOn:
     - name: cloudnative-pg
   interval: 5m
-  chart:
+  chart: 
     spec:
       chart: cluster
       version: '0.3.1'
@@ -20,16 +20,12 @@ spec:
     version:
       postgresql: "16"
     cluster:
-      instances: 3
+      instances: 2
       imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1
       primaryUpdateStrategy: unsupervised
       storage:
-        size: 10Gi
+        size: 5Gi
       initdb:
-        postInitApplicationSQLRefs:
-          configMapRefs:
-          - name: xormon-privileges
-            key: xormon.sql
         shared_preload_libraries:
           - "vectors.so"
       postgresql:
@@ -49,5 +45,20 @@ spec:
           superuser: false
           passwordSecret:
             name: xormon-auth
+          inRoles:
+            - pg_monitor
     backups:
-      enabled: false
+      enabled: true
+      provider: s3
+      endpointURL: "http://192.168.0.109:9001"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "db-backups"
+        path: "/immich"
+      scheduledBackups:
+        - name: daily-backup
+          schedule: "0 0 0 * * *" # Daily at midnight
+          backupOwnerReference: self
+      retentionPolicy: "5d"  
