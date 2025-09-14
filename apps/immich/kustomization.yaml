@@ -6,5 +6,7 @@ resources:
   - helmrelease-immich-cluster.yaml
   - PV-immich-library.yaml
   - PVC-immich-library.yaml
+  - PV-external-library.yaml
+  - PVC-external-library.yaml
   - helmrepo.yaml
   - helmrelease.yaml

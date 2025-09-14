@@ -38,6 +38,11 @@ spec:
     redis:
       enabled: true
     server:
+      persistence:
+        extrapv:
+          enabled: true
+          type: pvc
+          existingClaim: "external-library"
       ingress:
         main:
           enabled: true
