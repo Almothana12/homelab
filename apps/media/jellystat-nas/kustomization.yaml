@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - PVC-jellystat-nas.yaml
+  - secret-jellystat-nas-db-credentials.yaml
+  - secret-jellystat-nas-jwt.yaml
+  - configmap-jellystat-nas-db-info.yaml
   - deployment-jellystat-nas.yaml
   - service-jellystat-nas.yaml
   - ingress-jellystat-nas.yaml
-  - secret-jellystat-nas-db-info.yaml
-  - secret-jellystat-nas-jwt.yaml

@@ -1,0 +1,79 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellystat-cluster
+spec:
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cnpg-system
+  interval: 5m
+  chart: 
+    spec:
+      chart: cluster
+      version: '0.3.1'
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+        namespace: cnpg-system
+      interval: 5m
+  values:
+    type: postgresql
+    mode: standalone
+    version:
+      postgresql: "16"
+    cluster:
+      initdb:
+        database: jellystat
+        owner: jellystat
+        postInitSQL:
+          - CREATE USER jellystat-nas
+          - CREATE DATABASE jellystat-nas OWNER jellystat-nas
+      instances: 2
+      primaryUpdateStrategy: unsupervised
+      storage:
+        size: 2Gi
+      pg_hba:
+        - host all xormon 10.244.0.0/16 md5
+      monitoring:
+        enabled: true
+        podMonitor:
+          enabled: true
+      roles:
+        - name: jellystat
+          ensure: present
+          comment: jellystat application user
+          login: true
+          superuser: false
+          passwordSecret:
+            name: jellystat-db-credentials
+        - name: jellystat-nas
+          ensure: present
+          comment: jellystat NAS application user
+          login: true
+          superuser: false
+          passwordSecret:
+            name: jellystat-nas-db-credentials
+        - name: xormon
+          ensure: present
+          comment: XORMON monitoring
+          login: true
+          superuser: false
+          passwordSecret:
+            name: xormon-auth
+          inRoles:
+            - pg_monitor
+    backups:
+      enabled: true
+      provider: s3
+      endpointURL: "http://192.168.0.109:9001"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "db-backups"
+        path: "/jellystat"
+      scheduledBackups:
+        - name: daily-backup
+          schedule: "0 0 0 * * *" # Daily at midnight
+          backupOwnerReference: self
+      retentionPolicy: "5d"  

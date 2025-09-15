@@ -28,26 +28,26 @@ spec:
             - name: POSTGRES_USER 
               valueFrom:
                 secretKeyRef:
-                  name: jellystat-nas-db-info
+                  name: jellystat-nas-db-credentials
                   key: DB_USERNAME
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jellystat-nas-db-info
+                  name: jellystat-nas-db-credentials
                   key: DB_PASSWORD
             - name: POSTGRES_IP
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: jellystat-nas-db-info
                   key: DB_HOST
             - name: POSTGRES_PORT
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: jellystat-nas-db-info
                   key: DB_PORT
             - name: POSTGRES_DB
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: jellystat-nas-db-info
                   key: DB_DATABASE
             - name: JWT_SECRET 
