@@ -598,6 +598,9 @@ metadata:
   name: media
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: longhorn
+  - name: cnpg
   decryption:
     provider: sops
     secretRef:
