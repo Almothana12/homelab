@@ -2,8 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: jellystat-nas-db-info
-stringData:
+data:
     DB_DATABASE: jellystat-nas
     DB_HOST: cluster-rw.cnpg-system.svc.cluster.local
     DB_PORT: "5432"
-type: Opaque
