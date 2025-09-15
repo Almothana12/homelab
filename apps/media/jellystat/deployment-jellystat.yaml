@@ -29,12 +29,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: jellystat-db-credentials
-                  key: DB_USERNAME
+                  key: username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: jellystat-db-credentials
-                  key: DB_PASSWORD
+                  key: password
             - name: POSTGRES_IP
               valueFrom:
                 configMapKeyRef:
