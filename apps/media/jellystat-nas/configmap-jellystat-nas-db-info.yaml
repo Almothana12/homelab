@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
     name: jellystat-nas-db-info
 data:
-    DB_DATABASE: jellystat-nas
+    DB_DATABASE: jellystat_nas
     DB_HOST: jellystat-cluster-rw.media.svc.cluster.local
     DB_PORT: "5432"
