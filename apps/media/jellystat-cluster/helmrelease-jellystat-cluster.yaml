@@ -27,8 +27,8 @@ spec:
           database: jellystat
           owner: jellystat
           postInitSQL:
-            - CREATE USER jellystat-nas
-            - CREATE DATABASE jellystat-nas OWNER jellystat-nas
+            - CREATE USER jellystat_nas
+            - CREATE DATABASE jellystat_nas OWNER jellystat_nas
       instances: 2
       primaryUpdateStrategy: unsupervised
       storage:
@@ -47,7 +47,7 @@ spec:
           superuser: false
           passwordSecret:
             name: jellystat-db-credentials
-        - name: jellystat-nas
+        - name: jellystat_nas
           ensure: present
           comment: jellystat NAS application user
           login: true
