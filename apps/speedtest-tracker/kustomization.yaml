@@ -6,7 +6,6 @@ resources:
   - PVC-speedtest-tracker.yaml
   - Secret-app-key.yaml
   - secret-initial-admin.yaml
-  - secret-xormon-auth.yaml
   - Deployment-speedtest-tracker.yaml
   - Service-speedtest-tracker.yaml
   - Ingress-speedtest-tracker.yaml
