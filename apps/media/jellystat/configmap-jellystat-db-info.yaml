@@ -4,5 +4,5 @@ metadata:
     name: jellystat-db-info
 data:
     DB_DATABASE: jellystat
-    DB_HOST: cluster-rw.media.svc.cluster.local
+    DB_HOST: jellystat-cluster-rw.media.svc.cluster.local
     DB_PORT: "5432"
