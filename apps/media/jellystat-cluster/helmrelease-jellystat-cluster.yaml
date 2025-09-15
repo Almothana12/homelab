@@ -22,13 +22,12 @@ spec:
     version:
       postgresql: "16"
     cluster:
-      bootstrap:
-        initdb:
-          database: jellystat
-          owner: jellystat
-          postInitSQL:
-            - CREATE USER jellystat_nas
-            - CREATE DATABASE jellystat_nas OWNER jellystat_nas
+      initdb:
+        database: jellystat
+        owner: jellystat
+        postInitSQL:
+          - CREATE USER jellystat_nas
+          - CREATE DATABASE jellystat_nas OWNER jellystat_nas
       instances: 2
       primaryUpdateStrategy: unsupervised
       storage:
