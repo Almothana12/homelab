@@ -23,6 +23,7 @@ spec:
       postgresql: "16"
     recovery:
       method: object_store
+      clusterName: jellystat-cluster-v1
       provider: s3
       endpointURL: "http://192.168.0.109:9000"
       secret:
