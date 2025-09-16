@@ -22,12 +22,22 @@ spec:
     version:
       postgresql: "16"
     cluster:
-      initdb:
-        database: jellystat
-        owner: jellystat
-        postInitSQL:
-          - CREATE USER jellystat_nas
-          - CREATE DATABASE jellystat_nas OWNER jellystat_nas
+      # initdb:
+      #   database: jellystat
+      #   owner: jellystat
+      #   postInitSQL:
+      #     - CREATE USER jellystat_nas
+      #     - CREATE DATABASE jellystat_nas OWNER jellystat_nas
+    recovery:
+      method: object_store
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "db-backups"
+        path: "/jellystat"
       instances: 2
       primaryUpdateStrategy: unsupervised
       storage:
