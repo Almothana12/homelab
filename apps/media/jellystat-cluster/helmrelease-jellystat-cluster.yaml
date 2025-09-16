@@ -65,7 +65,12 @@ spec:
     backups:
       enabled: true
       provider: s3
-      endpointURL: "http://192.168.0.109:9001"
+      endpointURL: "http://192.168.0.109:9000"
+      encryption: ""
+      compression: "gzip"
+      wal:
+        encryption: ""
+        compression: "gzip"
       secret:
         create: false
         name: backup-s3-credentials
