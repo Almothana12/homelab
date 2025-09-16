@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     type: postgresql
-    mode: standalone
+    mode: recovery
     version:
       postgresql: "16"
     recovery:
