@@ -26,6 +26,11 @@ spec:
       clusterName: speedtest-cluster
       provider: s3
       endpointURL: "http://192.168.0.109:9000"
+      import:
+        source:
+          passwordSecret:
+            create: true
+            name: test
       secret:
         create: false
         name: backup-s3-credentials
