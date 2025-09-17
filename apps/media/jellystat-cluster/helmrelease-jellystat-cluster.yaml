@@ -97,6 +97,9 @@ spec:
       wal:
         encryption: ""
         compression: "gzip"
+      data:
+        encryption: ""
+        compression: "gzip"
       secret:
         create: false
         name: backup-s3-credentials
