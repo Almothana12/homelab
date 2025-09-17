@@ -22,7 +22,7 @@ spec:
           - 79.170.51.61
           - 8.8.8.8
       containers:
-        - image: linuxserver/qbittorrent:5.1.2
+        - image: linuxserver/qbittorrent:20.04.1
           name: qbittorrent
           resources:
             requests:
