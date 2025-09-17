@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: jellystat-cluster
+  name: jellystat-cluster-v01
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -72,6 +72,21 @@ spec:
             name: xormon-auth
           inRoles:
             - pg_monitor
+      # hard-code service names to avoid it changing for different versions
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "jellystat-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "jellystat-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "jellystat-cluster-r"
     backups:
       enabled: true
       provider: s3
