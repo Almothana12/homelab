@@ -31,7 +31,7 @@ spec:
         name: backup-s3-credentials
       s3:
         bucket: "db-backups"
-        path: "/jellystat"
+        path: "/jellystat-cluster"
     cluster:
       # initdb:
       #   database: jellystat
@@ -87,7 +87,7 @@ spec:
         name: backup-s3-credentials
       s3:
         bucket: "db-backups"
-        path: "/jellystat"
+        path: "/jellystat-cluster"
       scheduledBackups:
         - name: daily-backup
           schedule: "0 0 0 * * *" # Daily at midnight
