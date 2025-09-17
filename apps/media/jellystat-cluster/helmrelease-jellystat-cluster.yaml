@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: jellystat-cluster-v01
+  name: jellystat-cluster-v02
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -18,27 +18,27 @@ spec:
       interval: 5m
   values:
     type: postgresql
-    # mode: recovery
-    mode: standalone
+    mode: recovery
+    # mode: standalone
     version:
       postgresql: "16"
-    # recovery:
-    #   method: object_store
-    #   clusterName: jellystat-cluster-v1
-    #   provider: s3
-    #   endpointURL: "http://192.168.0.109:9000"
-    #   secret:
-    #     create: false
-    #     name: backup-s3-credentials
-    #   s3:
-    #     bucket: "jellystat-backup"
+    recovery:
+      method: object_store
+      clusterName: jellystat-cluster-v01
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "jellystat-backup"
     cluster:
-      initdb:
-        database: jellystat
-        owner: jellystat
-        postInitSQL:
-          - CREATE USER jellystat_nas
-          - CREATE DATABASE jellystat_nas OWNER jellystat_nas
+      # initdb:
+      #   database: jellystat
+      #   owner: jellystat
+      #   postInitSQL:
+      #     - CREATE USER jellystat_nas
+      #     - CREATE DATABASE jellystat_nas OWNER jellystat_nas
       instances: 2
       primaryUpdateStrategy: unsupervised
       storage:
