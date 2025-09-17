@@ -21,24 +21,23 @@ spec:
     mode: recovery
     version:
       postgresql: "16"
-    recovery:
-      method: object_store
-      clusterName: jellystat-cluster-v1
-      provider: s3
-      endpointURL: "http://192.168.0.109:9000"
-      secret:
-        create: false
-        name: backup-s3-credentials
-      s3:
-        bucket: "db-backups"
-        path: "/jellystat-cluster"
+    # recovery:
+    #   method: object_store
+    #   clusterName: jellystat-cluster-v1
+    #   provider: s3
+    #   endpointURL: "http://192.168.0.109:9000"
+    #   secret:
+    #     create: false
+    #     name: backup-s3-credentials
+    #   s3:
+    #     bucket: "jellystat-backup"
     cluster:
-      # initdb:
-      #   database: jellystat
-      #   owner: jellystat
-      #   postInitSQL:
-      #     - CREATE USER jellystat_nas
-      #     - CREATE DATABASE jellystat_nas OWNER jellystat_nas
+      initdb:
+        database: jellystat
+        owner: jellystat
+        postInitSQL:
+          - CREATE USER jellystat_nas
+          - CREATE DATABASE jellystat_nas OWNER jellystat_nas
       instances: 2
       primaryUpdateStrategy: unsupervised
       storage:
@@ -86,8 +85,7 @@ spec:
         create: false
         name: backup-s3-credentials
       s3:
-        bucket: "db-backups"
-        path: "/jellystat-cluster"
+        bucket: "jellystat-backup"
       scheduledBackups:
         - name: daily-backup
           schedule: "0 0 0 * * *" # Daily at midnight
