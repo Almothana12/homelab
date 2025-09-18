@@ -65,15 +65,15 @@ spec:
           - selectorType: rw
             serviceTemplate:
               metadata:
-                name: "jellystat-cluster-rw"
+                name: "speedtest-cluster-rw"
           - selectorType: ro
             serviceTemplate:
               metadata:
-                name: "jellystat-cluster-ro"
+                name: "speedtest-cluster-ro"
           - selectorType: r
             serviceTemplate:
               metadata:
-                name: "jellystat-cluster-r"
+                name: "speedtest-cluster-r"
     backups:
       enabled: true
       provider: s3
