@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: immich-cluster
+  name: immich-cluster-v01
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -18,9 +18,20 @@ spec:
       interval: 5m
   values:
     type: postgresql
-    mode: standalone
     version:
       postgresql: "16"
+    # mode: standalone
+    mode: recovery
+    recovery:
+      method: object_store
+      clusterName: immich-cluster
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "immich-backup"
     cluster:
       instances: 2
       imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1
@@ -36,6 +47,21 @@ spec:
         enabled: true
         podMonitor:
           enabled: true
+      # hard-code service names to avoid it changing for different versions
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-r"
       roles:
         - name: xormon
           ensure: present

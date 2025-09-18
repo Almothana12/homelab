@@ -19,17 +19,17 @@ spec:
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-superuser
+            name: immich-cluster-v01-superuser
             key: host
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-superuser
+            name: immich-cluster-v01-superuser
             key: password
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-cluster-superuser
+            name: immich-cluster-v01-superuser
             key: username
     immich:
       persistence:
