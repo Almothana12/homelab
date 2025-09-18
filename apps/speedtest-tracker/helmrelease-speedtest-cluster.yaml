@@ -43,13 +43,6 @@ spec:
         podMonitor:
           enabled: true
       roles:
-        - name: speedtest-tracker
-          ensure: present
-          comment: speedtest-tracker application user
-          login: true
-          superuser: false
-          passwordSecret:
-            name: speedtest-db-credentials
         - name: xormon
           ensure: present
           comment: XORMON monitoring
