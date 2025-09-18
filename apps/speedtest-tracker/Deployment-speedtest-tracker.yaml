@@ -48,22 +48,22 @@ spec:
             - name: DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: speedtest-db-credentials
+                  name: speedtest-cluster-v01-app
                   key: port
             - name: DB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: speedtest-db-credentials
+                  name: speedtest-cluster-v01-app
                   key: dbname
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: speedtest-db-credentials
+                  name: speedtest-cluster-v01-app
                   key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: speedtest-db-credentials
+                  name: speedtest-cluster-v01-app
                   key: password
             - name: ADMIN_NAME
               valueFrom:
