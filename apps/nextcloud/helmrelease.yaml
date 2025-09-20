@@ -54,6 +54,8 @@ spec:
         enabled: true
       rules:
         enabled: true
+    internalDatabase:
+      enabled: false
     externalDatabase:
       enabled: true
       type: postgresql
