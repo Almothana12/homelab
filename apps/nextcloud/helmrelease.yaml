@@ -3,6 +3,8 @@ kind: HelmRelease
 metadata:
   name: nextcloud
 spec:
+  dependsOn:
+    - name: nextcloud-cluster-v00
   interval: 5m
   chart:
     spec:
@@ -52,3 +54,13 @@ spec:
         enabled: true
       rules:
         enabled: true
+    externalDatabase:
+      enabled: true
+      type: postgresql
+      host: "nextcloud-cluster-rw:5432"
+      database: nextcloud
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-db-credentials
+        usernameKey: username
+        passwordKey: password
