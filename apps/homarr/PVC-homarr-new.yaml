@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: homarr
-  name: homarr
+  name: homarr-new
 spec:
   accessModes:
     - ReadWriteOnce
