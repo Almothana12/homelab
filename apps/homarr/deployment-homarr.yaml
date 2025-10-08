@@ -26,6 +26,11 @@ spec:
           env:
             - name: TZ
               value: Asia/Riyadh
+            - name: SECRET_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: homarr
+                  key: SECRET_ENCRYPTION_KEY
           volumeMounts:
             - mountPath: /appdata
               name: homarr

@@ -376,6 +376,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/homarr
   prune: false
