@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: plex
 resources:
   - PVC-homarr.yaml
+  - PVC-homarr-new.yaml
   - deployment-homarr.yaml
   - service-homarr.yaml
   - ingress-homarr.yaml

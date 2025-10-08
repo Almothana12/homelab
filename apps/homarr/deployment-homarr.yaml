@@ -4,7 +4,6 @@ metadata:
   labels:
     app: homarr
   name: homarr
-  namespace: plex
 spec:
   replicas: 1
   selector:
@@ -18,7 +17,7 @@ spec:
         app: homarr
     spec:
       containers:
-        - image: ghcr.io/ajnart/homarr:0.16.0
+        - image: ghcr.io/homarr-labs/homarr:v1.40.0
           name: homarr
           resources: {}
           ports:
@@ -46,4 +45,4 @@ spec:
             claimName: plex-library
         - name: homarr
           persistentVolumeClaim:
-            claimName: homarr
+            claimName: homarr-new
