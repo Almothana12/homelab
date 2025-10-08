@@ -27,14 +27,11 @@ spec:
             - name: TZ
               value: Asia/Riyadh
           volumeMounts:
-            - mountPath: /app/data/configs
+            - mountPath: /appdata
               name: homarr
-              subPath: configs
-
             - mountPath: /app/data/icons
               name: library
               subPath: "arr/homarr/icons"
-
             - mountPath: /data
               name: library
               subPath: "arr/homarr/data"
