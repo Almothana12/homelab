@@ -4,6 +4,7 @@ namespace: plex
 resources:
   - PVC-homarr.yaml
   - PVC-homarr-new.yaml
+  - secret-homarr.yaml
   - deployment-homarr.yaml
   - service-homarr.yaml
   - ingress-homarr.yaml
