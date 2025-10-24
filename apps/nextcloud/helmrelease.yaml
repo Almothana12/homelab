@@ -49,11 +49,7 @@ spec:
       nameservers:
         - 192.168.0.2
     metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-      rules:
-        enabled: true
+      enabled: false
     internalDatabase:
       enabled: false
     externalDatabase:
