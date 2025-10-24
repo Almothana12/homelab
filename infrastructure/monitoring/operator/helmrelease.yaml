@@ -60,6 +60,14 @@ spec:
       alertmanagerSpec:
         secrets:
           - slack-secret
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 1Gi
       config:
         global:
           resolve_timeout: 5m
