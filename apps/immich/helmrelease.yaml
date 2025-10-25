@@ -14,7 +14,7 @@ spec:
       interval: 5m
   values:
     image:
-      tag: "v2.1.0"
+      tag: "v1.132.3"
     controllers:
       main:
         containers:
