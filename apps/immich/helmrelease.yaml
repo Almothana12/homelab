@@ -13,12 +13,12 @@ spec:
         name: immich
       interval: 5m
   values:
-    image:
-      tag: "v1.132.3"
     controllers:
       main:
         containers:
           main:
+            image:
+              tag: "v1.132.3"
             env:
               DB_DATABASE_NAME: "app"
               DB_HOSTNAME:
