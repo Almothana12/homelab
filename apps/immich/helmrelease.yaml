@@ -43,7 +43,7 @@ spec:
       persistence:
         extrapv:
           enabled: true
-          type: pvc
+          type: persistentVolumeClaim
           existingClaim: "external-library"
       ingress:
         main:
