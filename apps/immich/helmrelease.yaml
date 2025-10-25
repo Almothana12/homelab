@@ -61,5 +61,5 @@ spec:
         cache:
           enabled: true
           size: 10Gi
-          type: pvc
+          type: persistentVolumeClaim
           accessMode: ReadWriteMany
