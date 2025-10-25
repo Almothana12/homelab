@@ -37,7 +37,7 @@ spec:
       persistence:
         library:
           existingClaim: immich-library
-    redis:
+    valkey:
       enabled: true
     server:
       persistence:
