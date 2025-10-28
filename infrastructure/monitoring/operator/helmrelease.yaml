@@ -15,6 +15,12 @@ spec:
   values: 
     grafana:
       defaultDashboardsTimezone: Asia/Riyadh
+      # Use an existing secret for the admin user.
+      admin:
+        ## Name of the secret. Can be templated.
+        existingSecret: "grafana-admin"
+        userKey: admin-user
+        passwordKey: admin-password
       ingress:
         enabled: true
         ingressClassName: nginx
