@@ -1,0 +1,23 @@
+# use 1.33.4 tag to fix error: docker.io/bitnamilegacy/kubectl:1.34: not found
+kubectl:
+  image:
+    repository: docker.io/bitnamilegacy/kubectl
+    tag: 1.33.4
+configuration:
+  backupStorageLocation:
+  - name: "minio"
+    provider: "aws"
+    bucket: "velero"
+    # default indicates this location is the default backup storage location. Optional.
+    default: true
+    credential:
+      # name of the secret used by this backupStorageLocation.
+      name: minio-credentials
+      # name of key that contains the secret data to be used.
+      key: credentials-velero
+    # Additional provider-specific configuration. See link above
+    # for details of required/optional fields for your provider.
+    config: 
+      region: minio
+      s3ForcePathStyle: true
+      s3Url: "http://nas:9001"
