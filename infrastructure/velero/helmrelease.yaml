@@ -28,7 +28,7 @@ spec:
         # default indicates this location is the default backup storage location. Optional.
         default: true
         credential:
-          name: minio-credentials
+          name: credentials-velero
           key: credentials-velero
         config: 
          region: minio
