@@ -29,7 +29,7 @@ spec:
           # name of the secret used by this backupStorageLocation.
           name: minio-credentials
           # name of key that contains the secret data to be used.
-          key:
+          key: credentials-velero
         # Additional provider-specific configuration. See link above
         # for details of required/optional fields for your provider.
         config: 
