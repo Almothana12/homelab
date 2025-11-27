@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: [FTName]
+  name: [FTName]
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: [FTName]
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: [FTName]
+    spec:
+      containers:
+        - image: <CHANGE>
+          name: [FTName]
+          resources: {}
+          env: []
+          ports: []
+          volumeMounts:
+            - mountPath: /config
+              name: [FTName]
+
+      restartPolicy: Always
+      volumes:
+        - name: [FTName]
+          persistentVolumeClaim:
+            claimName: [FTName]

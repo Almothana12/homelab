@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: [FTName]
+  name: [FTName]
+spec:
+  ports:
+    - name: <CHANGE>
+      port: <CHANGE>
+      targetPort: <CHANGE>
+  selector:
+    app: [FTName]
