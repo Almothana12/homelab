@@ -41,4 +41,4 @@ spec:
         config: 
          region: minio
          s3ForcePathStyle: true
-         s3Url: "http://nas:9001"
+         s3Url: "http://nas:9000"
