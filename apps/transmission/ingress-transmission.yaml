@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transmission
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: transmission.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: transmission
+            port:
+              name: webui
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - transmission.almothana.xyz
+      secretName: almothana-xyz-tls

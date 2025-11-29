@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: transmission
+  name: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      containers:
+        - image: lscr.io/linuxserver/transmission:4.0.6
+          name: transmission
+          resources: {}
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - containerPort: 9091
+              protocol: TCP
+              name: webui
+            - containerPort: 51413
+              protocol: TCP
+              name: torrent
+            - containerPort: 51413
+              protocol: UDP
+              name: torrent-udp
+          volumeMounts:
+            - mountPath: /config
+              name: transmission
+            - mountPath: /downloads
+              name: library
+              subPath: "downloads"
+      restartPolicy: Always
+      volumes:
+        - name: transmission
+          persistentVolumeClaim:
+            claimName: transmission
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library

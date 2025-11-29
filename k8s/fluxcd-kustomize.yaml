@@ -702,3 +702,19 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: tracktor
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: transmission
+  namespace: flux-system
+spec:
+  force: false
+  interval: 5m0s
+  path: ./apps/transmission
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: plex
