@@ -40,7 +40,7 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: transmission
-            - mountPath: /downloads
+            - mountPath: /data/downloads
               name: library
               subPath: "downloads"
       restartPolicy: Always
