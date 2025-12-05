@@ -74,3 +74,6 @@ spec:
       - name: api-tmpfs
         emptyDir:
           medium: Memory
+      - name: netalertx-tmpfs
+        emptyDir:
+          medium: Memory
