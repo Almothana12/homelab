@@ -14,10 +14,20 @@ spec:
       labels:
         app: netalertx
     spec:
-      hostNetwork: true
       containers:
       - name: netalertx
         image: ghcr.io/jokob-sk/netalertx:25.11
+        securityContext:
+          # enable read only root filesystem
+          # https://github.com/jokob-sk/NetAlertX/blob/main/docs/docker-troubleshooting/read-only-filesystem.md
+          readOnlyRootFilesystem: true
+          # Add required capabilities for network scanning
+          # https://github.com/jokob-sk/NetAlertX/blob/main/docs/docker-troubleshooting/missing-capabilities.md
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - NET_BiND_SERVICE
         resources:
           requests:
             cpu: 100m
