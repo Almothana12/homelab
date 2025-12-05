@@ -28,13 +28,15 @@ spec:
             - NET_ADMIN
             - NET_RAW
             - NET_BiND_SERVICE
+            drop:
+            - ALL
         resources:
           requests:
             cpu: 100m
             memory: 256Mi
           limits:
             cpu: 1000m
-            memory: 1000Mi
+            memory: 1024Mi
         env:
         - name: PUID
           value: "200"
@@ -44,7 +46,15 @@ spec:
           value: "Asia/Riyadh"
         - name: PORT
           value: "20211"
+        - name: GRAPHQL_PORT
+          value: "20212"
+        - name: LISTEN_ADDR
+          value: 0.0.0.0
         volumeMounts:
+        - mountPath: /data
+          name: netalertx-data
+        - mountPath: /tmp
+          name: netalertx-tmpfs
         - name: config
           mountPath: /app/config
         - name: db
@@ -58,6 +68,9 @@ spec:
       - name: db
         persistentVolumeClaim:
           claimName: netalertx-db-pvc
+      - name: netalertx-data
+        persistentVolumeClaim:
+          claimName: netalertx-data
       - name: api-tmpfs
         emptyDir:
           medium: Memory
