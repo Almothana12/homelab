@@ -57,25 +57,10 @@ spec:
           name: netalertx-data
         - mountPath: /tmp
           name: netalertx-tmpfs
-        - name: config
-          mountPath: /app/config
-        - name: db
-          mountPath: /app/db
-        - name: api-tmpfs
-          mountPath: /app/api
       volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: netalertx-config-pvc
-      - name: db
-        persistentVolumeClaim:
-          claimName: netalertx-db-pvc
       - name: netalertx-data
         persistentVolumeClaim:
           claimName: netalertx-data
-      - name: api-tmpfs
-        emptyDir:
-          medium: Memory
       - name: netalertx-tmpfs
         emptyDir:
           medium: Memory
