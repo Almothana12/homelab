@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace-netalertx.yaml
   - PVC-netalertx.yaml
+  - PVC-netalertx-data.yaml
   - deployment-netalertx.yaml
   - service-netalertx.yaml
   - ingress-netalertx.yaml
