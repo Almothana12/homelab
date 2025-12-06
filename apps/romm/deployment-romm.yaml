@@ -57,13 +57,7 @@ spec:
               name: romm-redis-data
             - mountPath: /romm/library
               name: rom-library
-            - mountPath: /romm/config/config.yaml
-              subPath: config.yaml
-              name: romm-config
       volumes:
-        - name: romm-config
-          configMap:
-            name: romm-config
         - name: romm-data
           persistentVolumeClaim:
             claimName: romm-data
