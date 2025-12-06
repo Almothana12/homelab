@@ -6,6 +6,7 @@ metadata:
     app: romm
 spec:
   volumeName: rom-library
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
