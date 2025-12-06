@@ -51,12 +51,19 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: /romm
-              name: romm-data
             - mountPath: /redis-data
               name: romm-redis-data
             - mountPath: /romm/library
               name: rom-library
+            - mountPath: /romm/config
+              name: romm-data
+              subPath: config
+            - mountPath: /romm/resources
+              name: romm-data
+              subPath: resources
+            - mountPath: /romm/assets
+              name: romm-data
+              subPath: assets
       volumes:
         - name: romm-data
           persistentVolumeClaim:
