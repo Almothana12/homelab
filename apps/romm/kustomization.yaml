@@ -4,7 +4,7 @@ resources:
   - namespace-emulation.yaml
   - PV-rom-library.yaml
   - PVC-rom-library.yaml
-  - PVC-romm-redis copy.yaml
+  - PVC-romm-mysql.yaml
   - PVC-romm-redis.yaml
   - PVC-romm.yaml
   - secret-mariadb.yaml

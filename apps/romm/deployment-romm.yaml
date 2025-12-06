@@ -62,7 +62,7 @@ spec:
             claimName: romm-data
         - name: romm-redis-data
           persistentVolumeClaim:
-            claimName: romm-redis-data
+            claimName: romm-redis
         - name: rom-library
           persistentVolumeClaim:
             claimName: rom-library
