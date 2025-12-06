@@ -10,6 +10,7 @@ resources:
   - secret-mariadb.yaml
   - secret-romm-api.yaml
   - service-romm.yaml
+  - service-romm-mariadb.yaml
   - ingress-romm.yaml
   - deployment-mariadb.yaml
   - deployment-romm.yaml
