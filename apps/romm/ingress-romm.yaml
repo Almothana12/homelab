@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: romm
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: romm.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: romm
+            port:
+              name: http
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - romm.almothana.xyz
+      secretName: almothana-xyz-tls

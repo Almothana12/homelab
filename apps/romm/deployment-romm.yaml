@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: romm
+  name: romm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: romm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: romm
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: romm
+          image: rommapp/romm:4.4
+          envFrom:
+            - secretRef:
+                name: romm-api
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: host
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: database
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: username
+            - name: DB_PASSWD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: password
+          resources: {}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /romm
+              name: romm-data
+            - mountPath: /redis-data
+              name: romm-redis-data
+            - mountPath: /romm/library
+              name: rom-library
+      volumes:
+        - name: romm-data
+          persistentVolumeClaim:
+            claimName: romm-data
+        - name: romm-redis-data
+          persistentVolumeClaim:
+            claimName: romm-redis-data
+        - name: rom-library
+          persistentVolumeClaim:
+            claimName: rom-library

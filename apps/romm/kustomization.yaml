@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace-emulation.yaml
+  - PV-rom-library.yaml
+  - PVC-rom-library.yaml
+  - PVC-romm-redis copy.yaml
+  - PVC-romm-redis.yaml
+  - PVC-romm.yaml
+  - secret-mariadb.yaml
+  - secret-romm-api.yaml
+  - service-romm.yaml
+  - ingress-romm.yaml
+  - deployment-mariadb.yaml
+  - deployment-romm.yaml
+
