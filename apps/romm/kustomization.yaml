@@ -15,3 +15,7 @@ resources:
   - deployment-mariadb.yaml
   - deployment-romm.yaml
 
+configMapGenerator:
+- name: romm-config
+  files:
+    - config.yaml
