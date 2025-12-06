@@ -16,6 +16,7 @@ spec:
       labels:
         app: romm
     spec:
+      enableServiceLinks: false # Disables injection of environment variables for services https://docs.romm.app/4.1.6/Troubleshooting/Kubernetes-Issues/
       restartPolicy: Always
       containers:
         - name: romm
