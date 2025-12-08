@@ -14,6 +14,7 @@ spec:
       interval: 5m
   values: 
     controller:
+      allowSnippetAnnotations: true # Enable custom snippets via annotations. required by RomM PSP emulation
       ingressClassResource:
         name: nginx
         enabled: true
