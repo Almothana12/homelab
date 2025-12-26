@@ -17,7 +17,7 @@ spec:
         app: tracktor-1
     spec:
       containers:
-        - image: ghcr.io/javedh-dev/tracktor:0.5.1
+        - image: ghcr.io/javedh-dev/tracktor:1.0.2
           name: tracktor-1
           resources: {}
           envFrom:
