@@ -16,6 +16,11 @@ spec:
       labels:
         app: transmission
     spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 1.1.1.1
+          - 8.8.8.8
       containers:
         - image: lscr.io/linuxserver/transmission:4.0.6
           name: transmission
