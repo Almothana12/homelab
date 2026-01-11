@@ -20,7 +20,7 @@ spec:
         nameservers:
           - 192.168.0.2
       containers:
-        - image: onlyoffice/documentserver:9.2.0
+        - image: onlyoffice/documentserver:9.2.1
           imagePullPolicy: IfNotPresent
           name: documentserver
           ports:
