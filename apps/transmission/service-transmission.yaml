@@ -11,3 +11,21 @@ spec:
       targetPort: 9091
   selector:
     app: transmission
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-bt
+spec:
+  type: LoadBalancer
+  ports:
+  - name: bittorrent-tcp
+    port: 51413
+    targetPort: 51413
+    protocol: TCP
+  - name: bittorrent-udp
+    port: 51413
+    targetPort: 51413
+    protocol: UDP
+  selector:
+    app: transmission
