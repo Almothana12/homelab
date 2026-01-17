@@ -18,7 +18,7 @@ spec:
         fsGroup: 20211
       containers:
       - name: netalertx
-        image: ghcr.io/jokob-sk/netalertx:25.11
+        image: ghcr.io/jokob-sk/netalertx:26.1
         securityContext:
           # enable read only root filesystem
           # https://github.com/jokob-sk/NetAlertX/blob/main/docs/docker-troubleshooting/read-only-filesystem.md
