@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: romm
-          image: rommapp/romm:4.5
+          image: rommapp/romm:4.6
           envFrom:
             - secretRef:
                 name: romm-api
