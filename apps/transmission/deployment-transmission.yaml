@@ -22,7 +22,7 @@ spec:
           - 1.1.1.1
           - 8.8.8.8
       containers:
-        - image: lscr.io/linuxserver/transmission:4.0.6
+        - image: lscr.io/linuxserver/transmission:4.1.0
           name: transmission
           resources: {}
           env:
