@@ -1,0 +1,9 @@
+# Enable dual-stack support for IPv4 and IPv6 in the cluster.
+cluster:
+  network:
+    podSubnets:
+      - 10.244.0.0/16
+      - fd00:10:244::/48
+    serviceSubnets:
+      - 10.96.0.0/12
+      - fd00:10:96::/112
