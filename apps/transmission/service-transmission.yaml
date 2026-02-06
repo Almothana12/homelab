@@ -16,8 +16,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: transmission-bt
+  annotations:
+    metallb.universe.tf/address-pool: ipv6-pool
 spec:
   type: LoadBalancer
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv6
+    - IPv4
   ports:
   - name: bittorrent-tcp
     port: 51413
