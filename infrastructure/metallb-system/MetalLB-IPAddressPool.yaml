@@ -5,3 +5,13 @@ metadata:
 spec:
   addresses:
   - 192.168.0.250-192.168.0.254
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ipv6-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 2a00:5400:e051:28c4::f0-2a00:5400:e051:28c4::ff
+  autoAssign: false  # Don't auto-assign IPv6. only use when requested
