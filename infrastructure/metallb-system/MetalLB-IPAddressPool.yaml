@@ -13,5 +13,5 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - 2a00:5400:e051:28c4::f0-2a00:5400:e051:28c4::ff
+    - 2a00:5400:e051:a1f::f0-2a00:5400:e051:a1f::ff
   autoAssign: false  # Don't auto-assign IPv6. only use when requested
