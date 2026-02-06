@@ -101,3 +101,7 @@ cluster:
                   - k8sServiceHost=localhost
                   - --set
                   - k8sServicePort=7445
+                  - --set
+                  - ipv6.enabled=true
+                  - --set
+                  - enableIPv6Masquerade=true
