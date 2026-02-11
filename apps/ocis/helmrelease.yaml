@@ -45,11 +45,6 @@ spec:
           enabled: true
           storageClassName: longhorn
           size: 1Gi
-      storageshares:
-        persistence:
-          enabled: true
-          storageClassName: longhorn
-          size: 1Gi
       storagesystem:
         persistence:
           enabled: true
@@ -60,11 +55,11 @@ spec:
           enabled: true
           storageClassName: longhorn
           size: 1Gi
-      thumbnails:
-        persistence:
-          enabled: true
-          storageClassName: longhorn
-          size: 1Gi
+      # thumbnails:
+      #   persistence:
+      #     enabled: true
+      #     storageClassName: longhorn
+      #     size: 1Gi
       web:
         persistence:
           enabled: true
