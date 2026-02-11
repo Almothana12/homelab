@@ -1,0 +1,72 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ocis
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: charts/ocis
+      sourceRef:
+        kind: GitRepository
+        name: ocis-charts
+  values:
+    externalDomain: ocis.almothana.xyz
+    ingress:
+      enabled: true
+      ingressClassName: cilium
+      tls:
+        - hosts:
+            - ocis.almothana.xyz
+          secretName: almothana-xyz-tls
+    services:
+      authapp:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      idm:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      nats:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      ocm:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      search:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      storageshares:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      storagesystem:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      storageusers:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      thumbnails:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
+      web:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+          size: 1Gi
