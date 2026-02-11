@@ -32,6 +32,8 @@ spec:
               disableProof: false
               secureViewEnabled: false
               disableChat: false
+              ingress:
+                enabled: false
     services:
       authapp:
         persistence:
