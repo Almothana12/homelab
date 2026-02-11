@@ -105,3 +105,9 @@ cluster:
                   - ipv6.enabled=true
                   - --set
                   - enableIPv6Masquerade=true
+                  - --set 
+                  - ingressController.enabled=true   
+                  - --set 
+                  - ingressController.loadbalancerMode=shared  
+                  - --set 
+                  - ingressController.default=true
