@@ -53,8 +53,7 @@ spec:
       storageusers:
         persistence:
           enabled: true
-          storageClassName: longhorn
-          size: 1Gi
+          existingClaim: storageusers-nfs
       # thumbnails:
       #   persistence:
       #     enabled: true
