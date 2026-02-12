@@ -4,5 +4,6 @@ resources:
   - namespace.yaml
   - PV-storageusers-nfs.yaml
   - PVC-storageusers-nfs.yaml
+  - secret-onlyoffice-wopi-secret.yaml
   - gitrepo.yaml
   - helmrelease.yaml
