@@ -28,6 +28,13 @@ spec:
                   - -c
                   - |
                     sed -i 's,autostart=false,autostart=true,' /etc/supervisor/conf.d/ds-adminpanel.conf
+          volumeMounts:
+            - name: data
+              mountPath: /var/www/onlyoffice/Data
+            - name: lib
+              mountPath: /var/lib/onlyoffice
+            - name: db
+              mountPath: /var/lib/postgresql
           ports:
             - containerPort: 80
               protocol: TCP
@@ -46,3 +53,14 @@ spec:
             limits:
               cpu: '2'
               memory: 4Gi
+
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: onlyoffice-data
+  - name: lib
+    persistentVolumeClaim:
+      claimName: onlyoffice-lib
+  - name: db
+    persistentVolumeClaim:
+      claimName: onlyoffice-db
