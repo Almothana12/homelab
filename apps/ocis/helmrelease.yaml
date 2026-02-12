@@ -19,6 +19,13 @@ spec:
         - hosts:
             - ocis.almothana.xyz
           secretName: almothana-xyz-tls
+    secretRefs:
+      # @schema
+      # type: [string, null]
+      # required: false
+      # @schema
+      # -- Reference to an existing collaboration service WOPI secret (see ref:Secrets#secrets). Not used if `features.appsIntegration.enabled` equals `false`.
+      collaborationWopiSecret: onlyoffice-wopi-secret
     features:
       appsIntegration:
         enabled: true
