@@ -17,7 +17,7 @@ spec:
         app: homarr
     spec:
       containers:
-        - image: ghcr.io/homarr-labs/homarr:v1.52.0
+        - image: ghcr.io/homarr-labs/homarr:v1.53.0
           name: homarr
           resources: {}
           ports:
