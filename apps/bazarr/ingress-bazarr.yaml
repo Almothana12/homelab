@@ -15,7 +15,7 @@ spec:
             port:
               number: 6767
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - bazarr.almothana.xyz
