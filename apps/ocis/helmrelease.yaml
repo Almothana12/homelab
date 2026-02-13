@@ -15,6 +15,8 @@ spec:
     ingress:
       enabled: true
       ingressClassName: cilium
+      annotations:
+        ingress.cilium.io/loadbalancer-mode: shared
       tls:
         - hosts:
             - ocis.almothana.xyz
