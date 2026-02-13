@@ -4,7 +4,7 @@ metadata:
   name: bazarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: bazarr.almothana.xyz
     http:
