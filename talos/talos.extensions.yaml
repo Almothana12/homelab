@@ -6,3 +6,5 @@ customization:
             - siderolabs/mei
             - siderolabs/util-linux-tools
             # Your image schematic ID is: da47cde9af5de5969d56bb68e6777ee02b9fc16401f0d4a7de5a4f734891712b
+            # ISO: https://factory.talos.dev/image/da47cde9af5de5969d56bb68e6777ee02b9fc16401f0d4a7de5a4f734891712b/v1.12.1/metal-amd64.iso
+            # Image: factory.talos.dev/metal-installer/da47cde9af5de5969d56bb68e6777ee02b9fc16401f0d4a7de5a4f734891712b:v1.12.1
