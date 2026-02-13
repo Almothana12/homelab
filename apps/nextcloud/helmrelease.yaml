@@ -17,7 +17,7 @@ spec:
   values: 
     ingress:
       enabled: true
-      className: nginx
+      className: cilium
       tls:
         - secretName: almothana-xyz-tls
           hosts:

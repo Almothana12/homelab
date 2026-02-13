@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: tautulli-nas
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: tautulli-nas.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 8181
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - tautulli-nas.almothana.xyz

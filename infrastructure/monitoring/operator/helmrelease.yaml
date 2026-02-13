@@ -23,7 +23,7 @@ spec:
         passwordKey: admin-password
       ingress:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: cilium
         hosts:
           - grafana.almothana.xyz
         tls:
@@ -41,7 +41,7 @@ spec:
     prometheus:
       ingress:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: cilium
         hosts:
           - prometheus.almothana.xyz
         tls:

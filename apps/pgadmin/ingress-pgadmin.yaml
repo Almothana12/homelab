@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: pgadmin
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: pgadmin.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 80
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - pgadmin.almothana.xyz

@@ -4,7 +4,7 @@ metadata:
   name: radarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: radarr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 7878
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - radarr.almothana.xyz

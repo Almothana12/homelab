@@ -4,7 +4,7 @@ metadata:
   name: sonarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: sonarr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 8989
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - sonarr.almothana.xyz

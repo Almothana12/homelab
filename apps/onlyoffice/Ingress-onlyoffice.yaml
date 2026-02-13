@@ -4,7 +4,7 @@ metadata:
   name: onlyoffice
   namespace: nextcloud
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
     - host: onlyoffice.almothana.xyz
       http:

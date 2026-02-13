@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: jellystat
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: jellystat.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 3000
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - jellystat.almothana.xyz

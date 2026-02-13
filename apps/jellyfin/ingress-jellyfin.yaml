@@ -4,7 +4,7 @@ metadata:
   name: jellyfin
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: jellyfin.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 8096
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - jellyfin.almothana.xyz

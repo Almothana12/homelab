@@ -4,7 +4,7 @@ metadata:
   name: speedtest-tracker
   namespace: speedtest-tracker
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   tls:
     - hosts:
         - speedtest-tracker.almothana.xyz

@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: romm
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: romm.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               name: http
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - romm.almothana.xyz

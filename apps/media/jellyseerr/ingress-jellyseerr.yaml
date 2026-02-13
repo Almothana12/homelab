@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: jellyseerr
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: jellyseerr.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 5055
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - jellyseerr.almothana.xyz

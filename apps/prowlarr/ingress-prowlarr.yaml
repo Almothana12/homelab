@@ -4,7 +4,7 @@ metadata:
   name: prowlarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: prowlarr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 9696
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - prowlarr.almothana.xyz

@@ -4,7 +4,7 @@ metadata:
   name: homarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: homarr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 7575
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - homarr.almothana.xyz

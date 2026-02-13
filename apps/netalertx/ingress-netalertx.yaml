@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: netalertx
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: netalertx.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 20211
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - netalertx.almothana.xyz

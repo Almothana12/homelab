@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: omni-tools
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: omni-tools.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 80
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - omni-tools.almothana.xyz

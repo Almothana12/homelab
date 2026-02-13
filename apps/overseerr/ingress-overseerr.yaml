@@ -4,7 +4,7 @@ metadata:
   name: overseerr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: overseerr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 5055
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - overseerr.almothana.xyz

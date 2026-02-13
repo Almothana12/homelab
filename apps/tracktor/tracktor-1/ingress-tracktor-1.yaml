@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: tracktor-1
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: tracktor-1.almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: 3000
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - tracktor-1.almothana.xyz

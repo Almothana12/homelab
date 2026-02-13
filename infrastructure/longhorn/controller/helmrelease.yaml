@@ -20,7 +20,7 @@ spec:
         enabled: true
         tls: true
         tlsSecret: almothana-xyz-tls
-        ingressClassName: nginx
+        ingressClassName: cilium
         host: longhorn.almothana.xyz
       defaultSettings:
         backupTarget: 'nfs://192.168.0.109:/volume1/longhorn-backup'

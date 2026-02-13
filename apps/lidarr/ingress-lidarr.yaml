@@ -4,7 +4,7 @@ metadata:
   name: lidarr
   namespace: plex
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: lidarr.almothana.xyz
     http:
@@ -15,7 +15,7 @@ spec:
             port:
               number: 8686
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - lidarr.almothana.xyz
