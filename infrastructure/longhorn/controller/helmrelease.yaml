@@ -21,7 +21,7 @@ spec:
       tls: true
       tlsSecret: almothana-xyz-tls
       ingressClassName: cilium
-      host: longhorn.almothana.xy
+      host: longhorn.almothana.xyz
       pathType: Prefix
     defaultSettings:
       backupTarget: 'nfs://192.168.0.109:/volume1/longhorn-backup'
