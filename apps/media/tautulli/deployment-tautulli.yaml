@@ -17,7 +17,7 @@ spec:
         app: tautulli
     spec:
       containers:
-        - image: tautulli/tautulli:v2.16.0
+        - image: tautulli/tautulli:v2.16.1
           name: tautulli
           resources: {}
           env:
