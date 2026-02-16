@@ -42,6 +42,7 @@ spec:
       ingress:
         enabled: true
         ingressClassName: cilium
+        pathType: Prefix
         hosts:
           - prometheus.almothana.xyz
         tls:
