@@ -18,7 +18,7 @@ spec:
         app: bazarr
     spec:
       containers:
-        - image: linuxserver/bazarr:1.5.5
+        - image: linuxserver/bazarr:1.5.6
           name: bazarr
           resources: {}
           ports:
