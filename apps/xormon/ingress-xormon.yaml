@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: xormon
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.cilium.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: cilium
   rules:
