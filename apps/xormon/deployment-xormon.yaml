@@ -59,8 +59,17 @@ spec:
           volumeMounts:
             - mountPath: /usr/src/app/server-nest/files
               name: xormon
+            - mountPath: /app/server-nest/ssl/xormon.crt
+              name: xormon-ssl
+              subPath: tls.crt
+            - mountPath: /app/server-nest/ssl/xormon.key
+              name: xormon-ssl
+              subPath: tls.key
       restartPolicy: Always
       volumes:
         - name: xormon
           persistentVolumeClaim:
             claimName: xormon
+        - name: xormon-ssl
+          secret:
+            secretName: almothana-xyz-tls

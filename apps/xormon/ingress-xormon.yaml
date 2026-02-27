@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: xormon
   annotations:
-    ingress.cilium.io/backend-protocol: "HTTPS"
+    ingress.cilium.io/tls-passthrough: "enabled"
 spec:
   ingressClassName: cilium
   rules:
