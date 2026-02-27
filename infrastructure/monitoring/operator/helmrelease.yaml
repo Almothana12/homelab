@@ -18,6 +18,7 @@ spec:
       enabled: true
       upgradeJob:
         enabled: true
+        forceConflicts: true
     grafana:
       defaultDashboardsTimezone: Asia/Riyadh
       # Use an existing secret for the admin user.
