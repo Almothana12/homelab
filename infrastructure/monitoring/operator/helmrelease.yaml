@@ -13,6 +13,11 @@ spec:
         name: prometheus
       interval: 5m
   values: 
+    crds:
+      # enable installing and upgrading CRDs
+      enabled: true
+      upgradeJob:
+        enabled: true
     grafana:
       defaultDashboardsTimezone: Asia/Riyadh
       # Use an existing secret for the admin user.
