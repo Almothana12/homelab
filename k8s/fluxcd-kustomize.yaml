@@ -332,7 +332,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace: nextcloud
+  targetNamespace: onlyoffice
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

@@ -4,9 +4,7 @@ metadata:
   labels:
     app: onlyoffice
   name: onlyoffice-doc
-  namespace: nextcloud
 spec:
-
   replicas: 1
   selector:
     matchLabels:
