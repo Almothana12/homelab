@@ -6,3 +6,4 @@ resources:
   - deployment-radarr.yaml
   - service-radarr.yaml
   - ingress-radarr.yaml
+  - volsync.yaml

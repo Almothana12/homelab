@@ -9,3 +9,4 @@ resources:
   - Deployment-speedtest-tracker.yaml
   - Service-speedtest-tracker.yaml
   - Ingress-speedtest-tracker.yaml
+  - volsync.yaml

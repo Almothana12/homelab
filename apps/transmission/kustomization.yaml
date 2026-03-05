@@ -5,3 +5,4 @@ resources:
   - deployment-transmission.yaml
   - service-transmission.yaml
   - ingress-transmission.yaml
+  - volsync.yaml

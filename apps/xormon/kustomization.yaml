@@ -16,3 +16,4 @@ resources:
   - ClusterRole-xormon.yaml
   - ClusterRoleBinding-xormon.yaml
   - secret-xormon-token.yaml
+  - volsync.yaml

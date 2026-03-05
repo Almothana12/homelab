@@ -14,3 +14,4 @@ resources:
   - ingress-romm.yaml
   - deployment-mariadb.yaml
   - deployment-romm.yaml
+  - volsync.yaml

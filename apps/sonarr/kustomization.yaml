@@ -6,3 +6,4 @@ resources:
   - deployment-sonarr.yaml
   - service-sonarr.yaml
   - ingress-sonarr.yaml
+  - volsync.yaml

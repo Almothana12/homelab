@@ -6,3 +6,4 @@ resources:
   - deployment-overseerr.yaml
   - service-overseerr.yaml
   - ingress-overseerr.yaml
+  - volsync.yaml

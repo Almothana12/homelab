@@ -6,3 +6,4 @@ resources:
   - deployment-jellyfin.yaml
   - service-jellyfin.yaml
   - ingress-jellyfin.yaml
+  - volsync.yaml

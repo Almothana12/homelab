@@ -7,3 +7,4 @@ resources:
   - secret-onlyoffice-wopi-secret.yaml
   - gitrepo.yaml
   - helmrelease.yaml
+  - volsync.yaml
