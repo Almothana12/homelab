@@ -11,27 +11,3 @@ spec:
       targetPort: 9091
   selector:
     app: transmission
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: transmission-bt
-  annotations:
-    metallb.universe.tf/address-pool: ipv6-pool
-spec:
-  type: LoadBalancer
-  ipFamilyPolicy: PreferDualStack
-  ipFamilies:
-    - IPv6
-    - IPv4
-  ports:
-  - name: bittorrent-tcp
-    port: 51413
-    targetPort: 51413
-    protocol: TCP
-  - name: bittorrent-udp
-    port: 51413
-    targetPort: 51413
-    protocol: UDP
-  selector:
-    app: transmission
