@@ -127,35 +127,51 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: longhorn-controller
+  name: openebs-controller
   namespace: flux-system
 spec:
   force: false
   interval: 5m0s
-  path: ./infrastructure/longhorn/controller
+  path: ./infrastructure/openebs/controller
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace: longhorn-system
+  targetNamespace: openebs
 
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: longhorn
-  namespace: flux-system
-spec:
-  dependsOn:
-  - name: longhorn-controller
-  force: false
-  interval: 5m0s
-  path: ./infrastructure/longhorn
-  prune: false
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  targetNamespace: longhorn-system
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: longhorn-controller
+#   namespace: flux-system
+# spec:
+#   force: false
+#   interval: 5m0s
+#   path: ./infrastructure/longhorn/controller
+#   prune: false
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   targetNamespace: longhorn-system
+
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: longhorn
+#   namespace: flux-system
+# spec:
+#   dependsOn:
+#   - name: longhorn-controller
+#   force: false
+#   interval: 5m0s
+#   path: ./infrastructure/longhorn
+#   prune: false
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   targetNamespace: longhorn-system
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -342,7 +358,6 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: longhorn
   - name: cnpg
   decryption:
     provider: sops
@@ -545,7 +560,6 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: longhorn
   - name: cnpg
   decryption:
     provider: sops
@@ -604,7 +618,6 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: longhorn
   - name: cnpg
   decryption:
     provider: sops
