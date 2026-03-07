@@ -49,31 +49,43 @@ spec:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       idm:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       nats:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       ocm:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       search:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       storagesystem:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
       storageusers:
         persistence:
@@ -88,4 +100,6 @@ spec:
         persistence:
           enabled: true
           storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
           size: 1Gi
