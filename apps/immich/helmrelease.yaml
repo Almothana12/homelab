@@ -66,4 +66,4 @@ spec:
           enabled: true
           size: 10Gi
           type: persistentVolumeClaim
-          accessMode: ReadWriteMany
+          accessMode: ReadWriteOnce
