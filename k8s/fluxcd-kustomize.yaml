@@ -480,6 +480,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/lidarr
   prune: false
@@ -496,6 +500,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/prowlarr
   prune: false
@@ -512,6 +520,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/radarr
   prune: false
@@ -528,6 +540,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/sonarr
   prune: false
@@ -544,6 +560,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/bazarr
   prune: false
@@ -560,6 +580,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/overseerr
   prune: false
@@ -576,6 +600,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/jellyfin
   prune: false
@@ -724,6 +752,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/netalertx
   prune: true
@@ -740,6 +772,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/tracktor/tracktor-1
   prune: true
@@ -756,6 +792,10 @@ metadata:
   namespace: flux-system
 spec:
   force: false
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 5m0s
   path: ./apps/transmission
   prune: true
