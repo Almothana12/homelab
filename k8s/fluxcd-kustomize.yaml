@@ -290,25 +290,41 @@ spec:
   targetNamespace:  monitoring
 
 
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: velero
+#   namespace: flux-system
+# spec:
+#   decryption:
+#     provider: sops
+#     secretRef:
+#       name: sops-age
+#   force: false
+#   interval: 5m0s
+#   path: ./infrastructure/velero
+#   prune: false
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   targetNamespace:  velero
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: velero
+  name: volsync
   namespace: flux-system
 spec:
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   force: false
   interval: 5m0s
-  path: ./infrastructure/velero
+  path: ./infrastructure/volsync
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace:  velero
+  targetNamespace:  volsync-system
 
 # ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
