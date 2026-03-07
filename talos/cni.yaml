@@ -107,3 +107,7 @@ cluster:
                   - ingressController.loadbalancerMode=shared  
                   - --set 
                   - ingressController.default=true
+                  - --set
+                  - l2announcements.enabled=true
+                  - --set
+                  - externalIPs.enabled=true
