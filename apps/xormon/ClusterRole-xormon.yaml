@@ -3,8 +3,8 @@ kind: ClusterRole
 metadata:
   name: xormon
 rules:
-- apiGroups: ["","metrics.k8s.io"]
-  resources: ["pods","nodes","services","nodes/proxy", "endpoints", "namespaces"]
+- apiGroups: ["","metrics.k8s.io","apps","batch"]
+  resources: ["pods","nodes","services","nodes/proxy", "endpoints", "namespaces", "replicasets", "jobs","cronjobs", "statefulsets", "events","deployments"]
   verbs: ["get", "watch", "list"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
