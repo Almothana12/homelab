@@ -23,8 +23,8 @@ sops:
             RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
             jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-05T20:09:39Z"
-    mac: ENC[AES256_GCM,data:KS+m+3dYlKX1mrdKpUaU6d1zGb4cMAQKohUaZryurcG+U7QfzEv4TmYqjNxCoHiSkMs9225uBucLXc1bIPVpAiqS5ZrcpfjKhnUyIMCM571duLod1KwU2sCDG/UE20XFBJNZav9LxplEWypVR2EMk4oe4V6vELjRNOkewv+NRiw=,iv:KDmA9L6itUKXl+3ElInc8qgqAuSzgNlLUb0EfsqiSLY=,tag:ThDdUFokhJt8fLGnXCeHmA==,type:str]
+    lastmodified: "2026-03-07T13:45:33Z"
+    mac: ENC[AES256_GCM,data:29I8EAqvlkMzJLsZhayjXBnlmSZ9hTOKDWgx8QpfzUZpn3D1sDTdxbT/zqLtuHRJIFTZkEaPsizPuyP0NpcYlYOd3ZEAFNKYlXOwRTqtOXDWI8qAa7wCj/2p1Eqj01jewoomIbB3XD+oUNdVJjeVoFwQL/P1QhcLLHH0S2++x2I=,iv:+9QZMqsT4EIGiugw5bYvCfnxPJE6+xyGE1f4giE5gGI=,tag:gz0No0WX/AHr9CoWQhdKww==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1
@@ -40,13 +40,15 @@ spec:
     restic:
         pruneIntervalDays: 7
         repository: restic-config-jellyfin
+        cleanupCachePVC: true
+        cleanupTempPVC: true
         retain:
             hourly: 1
             daily: 1
             weekly: 1
             monthly: 1
             yearly: 1
-        copyMethod: Clone
+        copyMethod: Direct
 sops:
     kms: []
     gcp_kms: []
@@ -62,8 +64,8 @@ sops:
             RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
             jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-05T20:09:39Z"
-    mac: ENC[AES256_GCM,data:KS+m+3dYlKX1mrdKpUaU6d1zGb4cMAQKohUaZryurcG+U7QfzEv4TmYqjNxCoHiSkMs9225uBucLXc1bIPVpAiqS5ZrcpfjKhnUyIMCM571duLod1KwU2sCDG/UE20XFBJNZav9LxplEWypVR2EMk4oe4V6vELjRNOkewv+NRiw=,iv:KDmA9L6itUKXl+3ElInc8qgqAuSzgNlLUb0EfsqiSLY=,tag:ThDdUFokhJt8fLGnXCeHmA==,type:str]
+    lastmodified: "2026-03-07T13:45:33Z"
+    mac: ENC[AES256_GCM,data:29I8EAqvlkMzJLsZhayjXBnlmSZ9hTOKDWgx8QpfzUZpn3D1sDTdxbT/zqLtuHRJIFTZkEaPsizPuyP0NpcYlYOd3ZEAFNKYlXOwRTqtOXDWI8qAa7wCj/2p1Eqj01jewoomIbB3XD+oUNdVJjeVoFwQL/P1QhcLLHH0S2++x2I=,iv:+9QZMqsT4EIGiugw5bYvCfnxPJE6+xyGE1f4giE5gGI=,tag:gz0No0WX/AHr9CoWQhdKww==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1
@@ -79,6 +81,8 @@ spec:
         repository: restic-config-jellyfin
         destinationPVC: jellyfin
         copyMethod: Direct
+        cleanupCachePVC: true
+        cleanupTempPVC: true
         moverSecurityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -99,8 +103,8 @@ sops:
             RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
             jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-05T20:09:39Z"
-    mac: ENC[AES256_GCM,data:KS+m+3dYlKX1mrdKpUaU6d1zGb4cMAQKohUaZryurcG+U7QfzEv4TmYqjNxCoHiSkMs9225uBucLXc1bIPVpAiqS5ZrcpfjKhnUyIMCM571duLod1KwU2sCDG/UE20XFBJNZav9LxplEWypVR2EMk4oe4V6vELjRNOkewv+NRiw=,iv:KDmA9L6itUKXl+3ElInc8qgqAuSzgNlLUb0EfsqiSLY=,tag:ThDdUFokhJt8fLGnXCeHmA==,type:str]
+    lastmodified: "2026-03-07T13:45:33Z"
+    mac: ENC[AES256_GCM,data:29I8EAqvlkMzJLsZhayjXBnlmSZ9hTOKDWgx8QpfzUZpn3D1sDTdxbT/zqLtuHRJIFTZkEaPsizPuyP0NpcYlYOd3ZEAFNKYlXOwRTqtOXDWI8qAa7wCj/2p1Eqj01jewoomIbB3XD+oUNdVJjeVoFwQL/P1QhcLLHH0S2++x2I=,iv:+9QZMqsT4EIGiugw5bYvCfnxPJE6+xyGE1f4giE5gGI=,tag:gz0No0WX/AHr9CoWQhdKww==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1
