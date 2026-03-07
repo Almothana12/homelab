@@ -23,8 +23,8 @@ sops:
             Wk9wVHhSREczUmY3b254dEtVb0ZITkEKqT/D3ZX4zJ3+R/ghjZaDhkAP22CzgjR5
             9KOJb5NrKqXauTE2wbALoWlaGmXnoigP27azMzA+1/lGXjOz3E5lIg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-07T13:44:29Z"
-    mac: ENC[AES256_GCM,data:G9adDmgAj+qhxWLULl6ACx7osln+fMzNuFfclsZykJmB4/65zQydb5aTZcXC/q+kzdLTnnU71a3QLiLE0RWtn6VPo5euyPxsfFFdhIBDOkOsGVwmCm0l6IYmZ7RjqJrGK6u7sv4dB57x9Jup0AEmrjocB/xHv/Oo+JqKde2KlG8=,iv:uvPhue+CTsIyWKSwpdGjT5yB1e6+GfXeiyn+yAH6Wbw=,tag:PbqfH4UFU9X7w0oow0yIvg==,type:str]
+    lastmodified: "2026-03-07T14:49:33Z"
+    mac: ENC[AES256_GCM,data:yhblFG+ZHXz2KEwI90Sd6TTxoRmb3eeqwgBlGVYQyltPsQd15CXuGNS5JEQwBjZYabA8gHE2NASkHzRvAB4RC2sX08Cn3ICXrDpa9KdKZ61gboJ8CMbxienoU7dfmj1gJ3KN60sGLe4FUMGQs3HoqUxjdGp8JQ2XFE4KSFpVKhY=,iv:SYwD7TXCP1GPCi2BvfQKWQvyvaXqTdPExeE3rq+09kI=,tag:8Noyv9gK+0WnucVOm/2Y3g==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -40,8 +40,6 @@ spec:
     restic:
         pruneIntervalDays: 7
         repository: restic-config-speedtest-tracker
-        cleanupTempPVC: true
-        cleanupCachePVC: true
         retain:
             hourly: 1
             daily: 1
@@ -64,8 +62,8 @@ sops:
             Wk9wVHhSREczUmY3b254dEtVb0ZITkEKqT/D3ZX4zJ3+R/ghjZaDhkAP22CzgjR5
             9KOJb5NrKqXauTE2wbALoWlaGmXnoigP27azMzA+1/lGXjOz3E5lIg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-07T13:44:29Z"
-    mac: ENC[AES256_GCM,data:G9adDmgAj+qhxWLULl6ACx7osln+fMzNuFfclsZykJmB4/65zQydb5aTZcXC/q+kzdLTnnU71a3QLiLE0RWtn6VPo5euyPxsfFFdhIBDOkOsGVwmCm0l6IYmZ7RjqJrGK6u7sv4dB57x9Jup0AEmrjocB/xHv/Oo+JqKde2KlG8=,iv:uvPhue+CTsIyWKSwpdGjT5yB1e6+GfXeiyn+yAH6Wbw=,tag:PbqfH4UFU9X7w0oow0yIvg==,type:str]
+    lastmodified: "2026-03-07T14:49:33Z"
+    mac: ENC[AES256_GCM,data:yhblFG+ZHXz2KEwI90Sd6TTxoRmb3eeqwgBlGVYQyltPsQd15CXuGNS5JEQwBjZYabA8gHE2NASkHzRvAB4RC2sX08Cn3ICXrDpa9KdKZ61gboJ8CMbxienoU7dfmj1gJ3KN60sGLe4FUMGQs3HoqUxjdGp8JQ2XFE4KSFpVKhY=,iv:SYwD7TXCP1GPCi2BvfQKWQvyvaXqTdPExeE3rq+09kI=,tag:8Noyv9gK+0WnucVOm/2Y3g==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -103,8 +101,8 @@ sops:
             Wk9wVHhSREczUmY3b254dEtVb0ZITkEKqT/D3ZX4zJ3+R/ghjZaDhkAP22CzgjR5
             9KOJb5NrKqXauTE2wbALoWlaGmXnoigP27azMzA+1/lGXjOz3E5lIg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-07T13:44:29Z"
-    mac: ENC[AES256_GCM,data:G9adDmgAj+qhxWLULl6ACx7osln+fMzNuFfclsZykJmB4/65zQydb5aTZcXC/q+kzdLTnnU71a3QLiLE0RWtn6VPo5euyPxsfFFdhIBDOkOsGVwmCm0l6IYmZ7RjqJrGK6u7sv4dB57x9Jup0AEmrjocB/xHv/Oo+JqKde2KlG8=,iv:uvPhue+CTsIyWKSwpdGjT5yB1e6+GfXeiyn+yAH6Wbw=,tag:PbqfH4UFU9X7w0oow0yIvg==,type:str]
+    lastmodified: "2026-03-07T14:49:33Z"
+    mac: ENC[AES256_GCM,data:yhblFG+ZHXz2KEwI90Sd6TTxoRmb3eeqwgBlGVYQyltPsQd15CXuGNS5JEQwBjZYabA8gHE2NASkHzRvAB4RC2sX08Cn3ICXrDpa9KdKZ61gboJ8CMbxienoU7dfmj1gJ3KN60sGLe4FUMGQs3HoqUxjdGp8JQ2XFE4KSFpVKhY=,iv:SYwD7TXCP1GPCi2BvfQKWQvyvaXqTdPExeE3rq+09kI=,tag:8Noyv9gK+0WnucVOm/2Y3g==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
