@@ -21,15 +21,6 @@ spec:
         - image: onlyoffice/documentserver:9.3.0
           imagePullPolicy: IfNotPresent
           name: documentserver
-          # enable autostart of the admin panel
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - |
-                    sed -i 's,autostart=false,autostart=true,' /etc/supervisor/conf.d/ds-adminpanel.conf
           volumeMounts:
             - name: data
               mountPath: /var/www/onlyoffice/Data
