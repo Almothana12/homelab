@@ -29,6 +29,6 @@ spec:
       enabled: false
     localpv-provisioner:
       localpv:
-        basePath: "/var/openebs/local/hostpath"
+        basePath: "/var/local/openebs/hostpath"
 
 
