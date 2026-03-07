@@ -48,32 +48,32 @@ spec:
       authapp:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       idm:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       nats:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       ocm:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       search:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       storagesystem:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
       storageusers:
         persistence:
@@ -82,10 +82,10 @@ spec:
       # thumbnails:
       #   persistence:
       #     enabled: true
-      #     storageClassName: longhorn
+      #     storageClassName: openebs-hostpath
       #     size: 1Gi
       web:
         persistence:
           enabled: true
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           size: 1Gi
