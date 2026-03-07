@@ -14,16 +14,21 @@ spec:
         namespace: openebs
       interval: 24h
   values:
-    mayastor:
-      io_engine:
-        envcontext: "iova-mode=pa" # to fix this error: https://github.com/openebs/mayastor/issues/1571
     engines:
       replicated:
         mayastor:
-          enabled: true
+          enabled: false
       local:
         lvm:
           enabled: false
         zfs:
           enabled: false
+    loki:
+      enabled: false
+    alloy:
+      enabled: false
+    localpv-provisioner:
+      localpv:
+        basePath: "/var/openebs/local/hostpath"
+
 
