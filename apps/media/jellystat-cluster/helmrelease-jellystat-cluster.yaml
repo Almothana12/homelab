@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: jellystat-cluster-v02
+  name: jellystat-cluster-v03
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -24,7 +24,7 @@ spec:
       postgresql: "16"
     recovery:
       method: object_store
-      clusterName: jellystat-cluster-v01
+      clusterName: jellystat-cluster-v02
       provider: s3
       endpointURL: "http://192.168.0.109:9000"
       secret:
