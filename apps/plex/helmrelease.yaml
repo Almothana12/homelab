@@ -19,6 +19,10 @@ spec:
       enabled: true
       ingressClassName: cilium
       url: "plex.almothana.xyz"
+      tls:
+        - host: 
+          - "plex.almothana.xyz"
+          secretName: almothana-xyz-tls
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-production
     pms:
