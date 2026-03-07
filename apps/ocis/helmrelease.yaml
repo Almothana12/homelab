@@ -37,7 +37,7 @@ spec:
               product: OnlyOffice
               enabled: true
               uri: https://onlyoffice.almothana.xyz
-              iconURI: http://onlyoffice.nextcloud.svc.cluster.local/web-apps/apps/documenteditor/main/resources/img/favicon.ico
+              iconURI: http://onlyoffice.onlyoffice.svc.cluster.local/web-apps/apps/documenteditor/main/resources/img/favicon.ico
               insecure: false
               disableProof: false
               secureViewEnabled: false
