@@ -20,7 +20,7 @@ spec:
       ingressClassName: cilium
       url: "plex.almothana.xyz"
       tls:
-        - host: 
+        - hosts: 
           - "plex.almothana.xyz"
           secretName: almothana-xyz-tls
       annotations:
