@@ -23,8 +23,6 @@ spec:
         - hosts: 
           - "plex.almothana.xyz"
           secretName: almothana-xyz-tls
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-production
     pms:
       configStorage: 10Gi
       resources:
