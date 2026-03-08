@@ -28,3 +28,4 @@ talosctl bootstrap --nodes 192.168.0.61 --talosconfig=./talosconfig
 talosctl kubeconfig --nodes 192.168.0.61 --talosconfig=./talosconfig
 
 flux bootstrap github --personal --owner=Almothana12  --repository homelab --path=./k8s --branch=master
+kubectl create secret generic sops-age --namespace=flux-system --from-file=<PATH>
