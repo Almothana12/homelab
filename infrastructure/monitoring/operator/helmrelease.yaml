@@ -76,7 +76,6 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: longhorn
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
