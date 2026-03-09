@@ -6,5 +6,4 @@ resources:
   - jellystat-nas
   - tautulli
   - tautulli-nas
-  - jellyseerr
   - jellystat-cluster
