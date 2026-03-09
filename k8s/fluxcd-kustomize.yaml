@@ -857,7 +857,7 @@ spec:
       name: sops-age
   force: false
   interval: 5m0s
-  path: ./apps/seer
+  path: ./apps/seerr
   prune: true
   sourceRef:
     kind: GitRepository
