@@ -6,7 +6,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: seerr
+      chart: seerr-chart
       version: '3.3.0'
       sourceRef:
         kind: HelmRepository
