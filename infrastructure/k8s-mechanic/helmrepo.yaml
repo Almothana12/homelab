@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: k8s-mechanic
+spec:
+  type: oci
+  url: oci://ghcr.io/lenaxia/charts
+  interval: 12h

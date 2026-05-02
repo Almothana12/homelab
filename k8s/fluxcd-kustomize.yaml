@@ -342,6 +342,25 @@ spec:
     name: flux-system
   targetNamespace:  volsync-system
 
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: k8s-mechanic
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/k8s-mechanic
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace:  mechanic
 # ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
 # kind: Kustomization
