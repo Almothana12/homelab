@@ -10,7 +10,7 @@ spec:
       version: '0.4.4'
       sourceRef:
         kind: HelmRepository
-        name: mechanic
+        name: k8s-mechanic
         namespace: mechanic
   values:
     gitops:
