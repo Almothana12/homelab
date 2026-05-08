@@ -12,22 +12,40 @@ permissions:
   issues: write
 
 jobs:
+  # Find all changed HelmRelease files
+  detect-files:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.list-files.outputs.apps }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed for git diff
+
+      - name: List changed HelmRelease files
+        id: list-files
+        run: |
+          files=$(git diff --name-only origin/${{ github.base_ref }} -- \
+            '*/helmrelease.yaml' 'infrastructure/**/helmrelease.yaml' 'apps/**/helmrelease.yaml' || true)
+          # Convert newline-separated list to JSON array
+          json=$(echo "$files" | jq -R -s -c 'split("\n") | map(select(length>0))')
+          echo "apps=$json" >> "$GITHUB_OUTPUT"
+
+  # Diff each HelmRelease in parallel
   diff:
+    needs: detect-files
+    if: needs.detect-files.outputs.apps != '[]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        # Run in parallel for every changed HelmRelease file
-        app: ${{ fromJSON(steps.find-files.outputs.apps) }}
+        app: ${{ fromJSON(needs.detect-files.outputs.apps) }}
     steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Find changed HelmRelease files
-        id: find-files
-        uses: ./.github/actions/find-helmrelease-files
-
-      - name: Install tools
+      - name: Setup tools (yq, dyff, helm, github-comment)
         uses: ./.github/actions/setup-tools
 
       - name: Diff and comment
