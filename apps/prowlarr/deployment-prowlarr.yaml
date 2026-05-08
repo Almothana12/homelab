@@ -18,7 +18,7 @@ spec:
         app: prowlarr
     spec:
       containers:
-        - image: linuxserver/prowlarr:2.3.0
+        - image: linuxserver/prowlarr:2.3.5
           name: prowlarr
           resources: {}
           ports:
