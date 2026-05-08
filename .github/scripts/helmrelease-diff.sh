@@ -17,8 +17,18 @@ NEW_VERSION=$(yq '.spec.chart.spec.version' "$HELMRELEASE_PATH")
 REPO_NAME=$(yq '.spec.chart.spec.sourceRef.name' "$HELMRELEASE_PATH")
 VALUES_JSON=$(yq -o json '.spec.values' "$HELMRELEASE_PATH")
 
-# 2. Determine repo URL (adjust this path to your HelmRepository file location)
-REPO_URL=$(yq ".spec.url" "infrastructure/flux-system/${REPO_NAME}.yaml")
+# 2. Find the HelmRepository definition file and extract the URL
+#    Search all YAML files under infrastructure/ (adjust the base path if needed)
+HELMREPO_URL=$(find infrastructure/ apps/ -name "*.yaml" -print0 \
+  | xargs -0 yq e 'select(.kind == "HelmRepository" and .metadata.name == "'"$REPO_NAME"'") | .spec.url' \
+  | head -1)
+
+if [[ -z "$HELMREPO_URL" ]]; then
+  echo "ERROR: Could not find HelmRepository '$REPO_NAME' in any YAML file under infrastructure/" >&2
+  exit 1
+fi
+
+REPO_URL="$HELMREPO_URL"
 
 # 3. Add repo and fetch charts
 helm repo add "$REPO_NAME" "$REPO_URL" --force-update
