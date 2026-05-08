@@ -35,12 +35,15 @@ helm repo add "$REPO_NAME" "$REPO_URL" --force-update
 helm pull "$REPO_NAME/$CHART_NAME" --version "$OLD_VERSION" --untar --untardir /tmp/old
 helm pull "$REPO_NAME/$CHART_NAME" --version "$NEW_VERSION" --untar --untardir /tmp/new
 
-# 4. Render and diff
+# 4. Render manifests with a consistent release name
 echo "$VALUES_JSON" > /tmp/values.json
-OLD_MANIFEST=$(helm template old "/tmp/old/$CHART_NAME" -f /tmp/values.json --namespace dummy)
-NEW_MANIFEST=$(helm template new "/tmp/new/$CHART_NAME" -f /tmp/values.json --namespace dummy)
+OLD_MANIFEST=$(helm template pr-preview "/tmp/old/$CHART_NAME" -f /tmp/values.json --namespace dummy)
+NEW_MANIFEST=$(helm template pr-preview "/tmp/new/$CHART_NAME" -f /tmp/values.json --namespace dummy)
 
-diff_output=$(dyff between --omit-header --set-exit-code <(echo "$OLD_MANIFEST") <(echo "$NEW_MANIFEST")) || true
+# Write to files and diff
+echo "$OLD_MANIFEST" > /tmp/old-manifests.yaml
+echo "$NEW_MANIFEST" > /tmp/new-manifests.yaml
+diff_output=$(git diff --no-index -- /tmp/old-manifests.yaml /tmp/new-manifests.yaml) || true
 
 # 5. Post PR comment
 if [[ -n "$diff_output" ]]; then
