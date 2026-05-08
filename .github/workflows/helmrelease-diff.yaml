@@ -45,8 +45,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup tools (yq, dyff, helm, github-comment)
-        uses: ./.github/actions/setup-tools
+      # - name: Setup tools (yq, dyff, helm, github-comment)
+      #   uses: ./.github/actions/setup-tools
 
       - name: Diff and comment
         run: bash ./.github/scripts/helmrelease-diff.sh "${{ matrix.app }}"
