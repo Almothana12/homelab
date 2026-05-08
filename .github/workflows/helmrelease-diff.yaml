@@ -1,0 +1,36 @@
+name: HelmRelease Diff Preview
+
+on:
+  pull_request:
+    paths:
+      - 'apps/**/helmrelease.yaml'
+      - 'infrastructure/**/helmrelease.yaml'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Run in parallel for every changed HelmRelease file
+        app: ${{ fromJSON(steps.find-files.outputs.apps) }}
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Find changed HelmRelease files
+        id: find-files
+        uses: ./.github/actions/find-helmrelease-files
+
+      - name: Install tools
+        uses: ./.github/actions/setup-tools
+
+      - name: Diff and comment
+        run: ./.github/scripts/helmrelease-diff.sh "${{ matrix.app }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

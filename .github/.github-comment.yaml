@@ -1,0 +1,17 @@
+templates:
+  diff_title: "## :white_check_mark: manifest diff ({{.Vars.app}})"
+  diff_content: |
+    {{template "link" .}}
+    {{template "join_command" .}}
+    Diff {{if eq .ExitCode 1}}found{{end}} :eyes:
+    {{template "hidden_combined_output" .}}
+
+exec:
+  diff:
+    - when: ExitCode == 1
+      template: |
+        {{template "diff_title" .}}
+        {{template "diff_content" .}}
+
+hide:
+  diff: 'Comment.HasMeta && Comment.Meta.TemplateKey == "diff" && Comment.Meta.Vars.app == Vars.app'

@@ -16,3 +16,5 @@ spec:
     gitops:
       repo: Almothana12/homelab
       manifestRoot: "."
+    watcher:
+      stabilisationWindowSeconds: 1800 # finding must persist for 30 minutes before dispatching
