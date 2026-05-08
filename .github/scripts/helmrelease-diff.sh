@@ -40,11 +40,15 @@ echo "$VALUES_JSON" > /tmp/values.json
 OLD_MANIFEST=$(helm template pr-preview "/tmp/old/$CHART_NAME" -f /tmp/values.json --namespace dummy)
 NEW_MANIFEST=$(helm template pr-preview "/tmp/new/$CHART_NAME" -f /tmp/values.json --namespace dummy)
 
-# Write to files and diff
-echo "$OLD_MANIFEST" > /tmp/old-manifests.yaml
-echo "$NEW_MANIFEST" > /tmp/new-manifests.yaml
-diff_output=$(git diff --no-index -- /tmp/old-manifests.yaml /tmp/new-manifests.yaml) || true
+# Remove chart version labels that always change with the chart version
+clean_manifest() {
+  yq eval 'del(.metadata.labels."helm.sh/chart") | del(.metadata.labels."app.kubernetes.io/version")' -
+}
 
+echo "$OLD_MANIFEST" | clean_manifest > /tmp/old-manifests.yaml
+echo "$NEW_MANIFEST" | clean_manifest > /tmp/new-manifests.yaml
+
+diff_output=$(git diff --no-index -- /tmp/old-manifests.yaml /tmp/new-manifests.yaml) || true
 # 5. Post PR comment
 if [[ -n "$diff_output" ]]; then
   {
