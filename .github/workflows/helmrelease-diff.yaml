@@ -49,6 +49,7 @@ jobs:
         uses: ./.github/actions/setup-tools
 
       - name: Diff and comment
-        run: ./.github/scripts/helmrelease-diff.sh "${{ matrix.app }}"
+        run: bash ./.github/scripts/helmrelease-diff.sh "${{ matrix.app }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
