@@ -23,8 +23,8 @@ sops:
             Wk9wVHhSREczUmY3b254dEtVb0ZITkEKqT/D3ZX4zJ3+R/ghjZaDhkAP22CzgjR5
             9KOJb5NrKqXauTE2wbALoWlaGmXnoigP27azMzA+1/lGXjOz3E5lIg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-09T11:37:22Z"
-    mac: ENC[AES256_GCM,data:I3SbVfQlJ5E4krWNbdzehOAdX8aqhvjgpGWJt0Y9Ew2y+/OcChxPrjRj/JeYcOTLL4THsaLcLs5OHyF2yFT0TDAHqb8HBpVpfKNYVmjddpMh5alLoT6Sc6EiBs06qjLS6pTaFyK0TdOnpvLUKsw4hxv+dseALYuLW5TyKMYKiZo=,iv:wDq1FTWK/yXaojJ1tHqB5S1e/Cw3zJ7iWjPwFC9QjZc=,tag:83SviwIKDdYUipBBkyYoGQ==,type:str]
+    lastmodified: "2026-05-09T10:08:05Z"
+    mac: ENC[AES256_GCM,data:qqHiiVaVaww4HOtWmSU1BkwSrD+KeFzpNgfbOXUpmrfHdCX/3oe99wJm5uORdevGuJW/dFsQoh5FcOD4M3kbNT0xwy6LXZEI4Kaz0pzddAvOt7FeRspwG8mwghc1+dOq9vQ13QosN7ojwXzpsjSuqxCbHuaXuFf6WHuyEVjyXcg=,iv:DxBhKs81F0LL/clCyix7qEIlohMlX1xpj6A/O3jNZ5E=,tag:7O8EhaUOJZiMPd1wsX7mWg==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -42,9 +42,9 @@ spec:
         repository: restic-config-seerr
         retain:
             hourly: 1
-            daily: 1
-            weekly: 1
-            monthly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
             yearly: 1
         copyMethod: Direct
 sops:
@@ -62,8 +62,8 @@ sops:
             Wk9wVHhSREczUmY3b254dEtVb0ZITkEKqT/D3ZX4zJ3+R/ghjZaDhkAP22CzgjR5
             9KOJb5NrKqXauTE2wbALoWlaGmXnoigP27azMzA+1/lGXjOz3E5lIg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-09T11:37:22Z"
-    mac: ENC[AES256_GCM,data:I3SbVfQlJ5E4krWNbdzehOAdX8aqhvjgpGWJt0Y9Ew2y+/OcChxPrjRj/JeYcOTLL4THsaLcLs5OHyF2yFT0TDAHqb8HBpVpfKNYVmjddpMh5alLoT6Sc6EiBs06qjLS6pTaFyK0TdOnpvLUKsw4hxv+dseALYuLW5TyKMYKiZo=,iv:wDq1FTWK/yXaojJ1tHqB5S1e/Cw3zJ7iWjPwFC9QjZc=,tag:83SviwIKDdYUipBBkyYoGQ==,type:str]
+    lastmodified: "2026-05-09T10:08:05Z"
+    mac: ENC[AES256_GCM,data:qqHiiVaVaww4HOtWmSU1BkwSrD+KeFzpNgfbOXUpmrfHdCX/3oe99wJm5uORdevGuJW/dFsQoh5FcOD4M3kbNT0xwy6LXZEI4Kaz0pzddAvOt7FeRspwG8mwghc1+dOq9vQ13QosN7ojwXzpsjSuqxCbHuaXuFf6WHuyEVjyXcg=,iv:DxBhKs81F0LL/clCyix7qEIlohMlX1xpj6A/O3jNZ5E=,tag:7O8EhaUOJZiMPd1wsX7mWg==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
