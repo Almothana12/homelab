@@ -56,6 +56,7 @@ NEW_MANIFEST=$(helm template pr-preview "/tmp/new/$CHART_NAME" -f /tmp/values.js
 clean_manifest() {
   yq eval '
     del(.. | select(has("metadata")) .metadata.labels."helm.sh/chart") |
+    del(.. | select(has("metadata")) .metadata.labels."chart") |
     del(.. | select(has("metadata")) .metadata.labels."app.kubernetes.io/version")
   ' -
 }
