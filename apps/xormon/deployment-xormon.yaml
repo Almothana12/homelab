@@ -33,22 +33,28 @@ spec:
             - name: DB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  key: database
-                  name: timescaledb
+                  name: xormon-cluster-v00-app
+                  key: dbname
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  name: xormon-cluster-v00-app
                   key: password
-                  name: timescaledb
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
+                  name: xormon-cluster-v00-app
                   key: user
-                  name: timescaledb
             - name: DB_HOST
-              value: timescaledb
+              valueFrom:
+                secretKeyRef:
+                  name: xormon-cluster-v00-app
+                  key: host
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                secretKeyRef:
+                  name: xormon-cluster-v00-app
+                  key: port
             - name: TZ
               value: Asia/Riyadh
           ports:
