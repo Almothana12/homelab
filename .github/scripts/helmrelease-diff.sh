@@ -67,13 +67,34 @@ echo "$NEW_MANIFEST" | clean_manifest > /tmp/new-manifests.yaml
 diff_output=$(git diff --no-index -- /tmp/old-manifests.yaml /tmp/new-manifests.yaml) || true
 
 # 5. Post PR comment
+MAX_COMMENT_SIZE=65536
+
 if [[ -n "$diff_output" ]]; then
-  {
-    echo "## :eyes: HelmRelease Diff for \`$HELMRELEASE_PATH\`"
-    echo '```diff'
-    echo "$diff_output"
-    echo '```'
-  } | gh pr comment "$PR_NUMBER" --body-file -
+  # Add a diff header
+  header="## :eyes: HelmRelease Diff for \`$HELMRELEASE_PATH\`"
+  full_body="${header}"$'\n'$'```diff\n'"${diff_output}"$'\n''```'
+
+  if [[ ${#full_body} -le $MAX_COMMENT_SIZE ]]; then
+    echo "$full_body" | gh pr comment "$PR_NUMBER" --body-file -
+  else
+    echo "Diff too large (${#full_body} chars) – creating Gist..."
+    
+    # Create a private Gist using the gist token
+    GITHUB_TOKEN="$GH_GIST_TOKEN" gh gist create \
+      --public \
+      --desc "Helm diff for ${HELMRELEASE_PATH} (PR #${PR_NUMBER})" \
+      --filename "diff.md" \
+      <<< "$full_body" > /tmp/gist-output.json
+
+    GIST_URL=$(jq -r '.html_url' /tmp/gist-output.json)
+
+    # Post a short comment linking to the Gist
+    comment_body="## :eyes: HelmRelease Diff for \`$HELMRELEASE_PATH\`"
+    comment_body+=$'\n\n'"⚠️ The diff is too large to display inline."
+    comment_body+=$'\n\n'"🔗 **[View full diff in Gist](${GIST_URL})**"
+    
+    echo "$comment_body" | gh pr comment "$PR_NUMBER" --body-file -
+  fi
 else
   echo "No changes detected." | gh pr comment "$PR_NUMBER" --body-file -
 fi

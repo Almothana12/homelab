@@ -52,4 +52,5 @@ jobs:
         run: bash ./.github/scripts/helmrelease-diff.sh "${{ matrix.app }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_GIST_TOKEN: ${{ secrets.GH_GIST_TOKEN }} 
           PR_NUMBER: ${{ github.event.pull_request.number }}
