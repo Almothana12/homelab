@@ -3,8 +3,8 @@ name: HelmRelease Diff Preview
 on:
   pull_request:
     paths:
-      - 'apps/**/helmrelease.yaml'
-      - 'infrastructure/**/helmrelease.yaml'
+      - 'apps/**/helmrelease*.yaml'
+      - 'infrastructure/**/helmrelease*.yaml'
 
 permissions:
   contents: read
