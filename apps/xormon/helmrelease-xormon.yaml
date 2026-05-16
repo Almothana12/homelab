@@ -17,10 +17,11 @@ spec:
         namespace: cnpg-system
       interval: 5m
   values:
-    type: postgresql
+    type: timescaledb
     mode: standalone
     version:
       postgresql: "16"
+      timescaledb: "2.26"
     # recovery:
     #   method: object_store
     #   clusterName: xormon-cluster-v01
@@ -32,7 +33,7 @@ spec:
     #   s3:
     #     bucket: "xormon-backup"
     cluster:
-      imageName: ghcr.io/clevyr/cloudnativepg-timescale:16
+      # imageName: ghcr.io/clevyr/cloudnativepg-timescale:16
       instances: 3
       primaryUpdateStrategy: unsupervised
       storage:
