@@ -26,7 +26,7 @@ jobs:
         id: list-files
         run: |
           files=$(git diff --name-only origin/${{ github.base_ref }} -- \
-            '*/helmrelease.yaml' 'infrastructure/**/helmrelease.yaml' 'apps/**/helmrelease.yaml' || true)
+            '*/helmrelease*.yaml' 'infrastructure/**/helmrelease*.yaml' 'apps/**/helmrelease*.yaml' || true)
           # Convert newline-separated list to JSON array
           json=$(echo "$files" | jq -R -s -c 'split("\n") | map(select(length>0))')
           echo "apps=$json" >> "$GITHUB_OUTPUT"
