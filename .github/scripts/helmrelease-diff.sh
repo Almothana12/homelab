@@ -80,7 +80,6 @@ if [[ -n "$diff_output" ]]; then
     echo "Diff too large (${#full_body} chars) – creating Gist..."
     
     # Create a private Gist using the gist token
-    echo $GH_GIST_TOKEN 
     GH_TOKEN="$GH_GIST_TOKEN" gh gist create \
       --public \
       --desc "Helm diff for ${HELMRELEASE_PATH} (PR #${PR_NUMBER})" \
