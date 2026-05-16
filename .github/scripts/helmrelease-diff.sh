@@ -79,20 +79,16 @@ if [[ -n "$diff_output" ]]; then
   else
     echo "Diff too large (${#full_body} chars) – creating Gist..."
     
-    # Create a private Gist using the gist token
-    GH_TOKEN="$GH_GIST_TOKEN" gh gist create \
+    GIST_URL=$(GH_TOKEN="$GH_GIST_TOKEN" gh gist create \
       --public \
       --desc "Helm diff for ${HELMRELEASE_PATH} (PR #${PR_NUMBER})" \
       --filename "diff.md" \
-      <<< "$full_body" > /tmp/gist-output.json
+      <<< "$full_body")
 
-    GIST_URL=$(jq -r '.html_url' /tmp/gist-output.json)
-
-    # Post a short comment linking to the Gist
     comment_body="## :eyes: HelmRelease Diff for \`$HELMRELEASE_PATH\`"
     comment_body+=$'\n\n'"⚠️ The diff is too large to display inline."
     comment_body+=$'\n\n'"🔗 **[View full diff in Gist](${GIST_URL})**"
-    
+
     echo "$comment_body" | gh pr comment "$PR_NUMBER" --body-file -
   fi
 else
