@@ -44,6 +44,11 @@ spec:
         enabled: true
         podMonitor:
           enabled: true
+      # Force instances to be scheduled on different nodes
+      affinity:
+        enablePodAntiAffinity: true
+        podAntiAffinityType: required
+        topologyKey: kubernetes.io/hostname
       # hard-code service names to avoid it changing for different versions
       services:
         additional:
