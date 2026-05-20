@@ -57,21 +57,6 @@ spec:
         enablePodAntiAffinity: true
         podAntiAffinityType: required
         topologyKey: kubernetes.io/hostname
-      # hard-code service names to avoid it changing for different versions
-      services:
-        additional:
-          - selectorType: rw
-            serviceTemplate:
-              metadata:
-                name: "authentik-cluster-rw"
-          - selectorType: ro
-            serviceTemplate:
-              metadata:
-                name: "authentik-cluster-ro"
-          - selectorType: r
-            serviceTemplate:
-              metadata:
-                name: "authentik-cluster-r"
     backups:
       enabled: true
       provider: s3
