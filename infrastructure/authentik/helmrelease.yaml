@@ -31,27 +31,27 @@ spec:
     global:
       env:
         - name: AUTHENTIK_POSTGRESQL__HOST
-          valuefrom:
+          valueFrom:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: host
         - name: AUTHENTIK_POSTGRESQL__NAME
-          valuefrom:
+          valueFrom:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: dbname
         - name: AUTHENTIK_POSTGRESQL__PORT
-          valuefrom:
+          valueFrom:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: port
         - name: AUTHENTIK_POSTGRESQL__USER
-          valuefrom:
+          valueFrom:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: username
         - name: AUTHENTIK_POSTGRESQL__PASSWORD
-          valuefrom:
+          valueFrom:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: password
