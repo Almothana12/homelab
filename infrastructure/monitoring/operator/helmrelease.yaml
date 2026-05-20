@@ -21,6 +21,7 @@ spec:
         forceConflicts: true
     grafana:
       defaultDashboardsTimezone: Asia/Riyadh
+      envFromSecret: grafana-env
       # Use an existing secret for the admin user.
       admin:
         ## Name of the secret. Can be templated.
