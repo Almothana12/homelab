@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: authentik
+      version: '2026.2.3'
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+      interval: 5m
+  values: 
+    authentik:
+      existingSecret:
+        secretName: authentik-secret
+      postgresql:
+        host: authentik-cluster-rw
+        user: file:///postgres-creds/username
+        password: file:///postgres-creds/password
+
+    server:
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: authentik-cluster-v00-app
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
+      ingress:
+        enabled: true
+        ingressClassName: cilium
+        hosts:
+          - authentik.almothana.xyz
+        tls:
+          - secretName: almothana-xyz-tls
+            hosts:          
+              - authentik.almothana.xyz
+
+    worker:
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: authentik-cluster-v00-app
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
+
+    postgresql:
+      enabled: false # will use cnpg instead of the built-in postgresql chart
+
