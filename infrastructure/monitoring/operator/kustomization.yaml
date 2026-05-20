@@ -4,5 +4,6 @@ resources:
   - namespace.yaml
   - secret-slack-secret.yaml
   - secret-grafana-admin.yaml
+  - secret-grafana-env.yaml
   - helmrepo.yaml
   - helmrelease.yaml
