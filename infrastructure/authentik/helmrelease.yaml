@@ -12,26 +12,11 @@ spec:
         kind: HelmRepository
         name: authentik
       interval: 5m
-  values: 
+  values:
     authentik:
       existingSecret:
         secretName: authentik-secret
-      postgresql:
-        host: file:///postgres-creds/host
-        name: file:///postgres-creds/dbname
-        port: file:///postgres-creds/port
-        user: file:///postgres-creds/username
-        password: file:///postgres-creds/password
-
     server:
-      volumes:
-        - name: postgres-creds
-          secret:
-            secretName: authentik-cluster-v00-app
-      volumeMounts:
-        - name: postgres-creds
-          mountPath: /postgres-creds
-          readOnly: true
       ingress:
         enabled: true
         ingressClassName: cilium
@@ -41,17 +26,34 @@ spec:
           - secretName: almothana-xyz-tls
             hosts:          
               - authentik.almothana.xyz
-
-    worker:
-      volumes:
-        - name: postgres-creds
-          secret:
-            secretName: authentik-cluster-v00-app
-      volumeMounts:
-        - name: postgres-creds
-          mountPath: /postgres-creds
-          readOnly: true
-
     postgresql:
       enabled: false # will use cnpg instead of the built-in postgresql chart
+    global:
+      env:
+        - name: AUTHENTIK_POSTGRESQL__HOST
+          valuefrom:
+            secretKeyRef:
+              name: authentik-cluster-v00-app
+              key: host
+        - name: AUTHENTIK_POSTGRESQL__NAME
+          valuefrom:
+            secretKeyRef:
+              name: authentik-cluster-v00-app
+              key: dbname
+        - name: AUTHENTIK_POSTGRESQL__PORT
+          valuefrom:
+            secretKeyRef:
+              name: authentik-cluster-v00-app
+              key: port
+        - name: AUTHENTIK_POSTGRESQL__USER
+          valuefrom:
+            secretKeyRef:
+              name: authentik-cluster-v00-app
+              key: username
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          valuefrom:
+            secretKeyRef:
+              name: authentik-cluster-v00-app
+              key: password
+
 
