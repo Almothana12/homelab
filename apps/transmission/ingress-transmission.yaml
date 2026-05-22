@@ -12,7 +12,7 @@ spec:
           service:
             name: transmission
             port:
-              name: oauth2-proxy
+              number: 4180
         path: /
         pathType: Prefix
   tls:
