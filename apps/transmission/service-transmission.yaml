@@ -9,5 +9,8 @@ spec:
     - name: oauth2-proxy
       port: 4180
       targetPort: 4180
+    - name: webui
+      port: 9091
+      targetPort: 9091
   selector:
     app: transmission
