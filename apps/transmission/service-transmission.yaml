@@ -6,8 +6,8 @@ metadata:
   name: transmission
 spec:
   ports:
-    - name: webui
-      port: 9091
-      targetPort: 9091
+    - name: oauth2-proxy
+      port: 4180
+      targetPort: 4180
   selector:
     app: transmission

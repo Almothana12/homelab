@@ -12,7 +12,7 @@ spec:
           service:
             name: transmission
             port:
-              name: webui
+              name: oauth2-proxy
         path: /
         pathType: Prefix
   tls:
