@@ -11,6 +11,8 @@ spec:
         kind: GitRepository
         name: ocis-charts
   values:
+    image:
+      tag: 8.0.4
     externalDomain: ocis.almothana.xyz
     ingress:
       enabled: true
