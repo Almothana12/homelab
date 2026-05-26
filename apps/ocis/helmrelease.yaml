@@ -165,3 +165,20 @@ spec:
           oidc:
             webClientID: fLcjDiMJbACsaMhbH5ALvRSEebX2P2dxp5EjscO9
             webClientScope: openid profile email groups
+    http:
+      csp:
+        directives:
+          connectSrc:
+            - "'self'"
+            - "https://authentik.almothana.xyz"
+          scriptSrc:
+            - "'self'"
+            - "'unsafe-inline'"
+            - "'unsafe-eval'"
+          fontSrc:
+            - "'self'"
+            - "data:"
+          frameSrc:
+            - "'self'"
+            - "blob:"
+            - "https://authentik.almothana.xyz"
