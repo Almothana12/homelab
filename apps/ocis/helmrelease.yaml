@@ -55,6 +55,7 @@ spec:
         ldap:
           writeable: false
           uri: "ldaps://ldap.authentik.almothana.xyz:636"
+          certTrusted: false
           insecure: true
           bindDN: "cn=ocis-bind-sa,ou=service-accounts,DC=ldap,DC=goauthentik,DC=io"
           useServerUUID: false
