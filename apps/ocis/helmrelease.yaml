@@ -53,7 +53,7 @@ spec:
               - role_name: user-light
                 claim_value: ocis-guests
         ldap:
-          writable: false
+          writeable: false
           uri: "ldaps://ldap.authentik.almothana.xyz:636"
           bindDN: "cn=ocis-bind-sa,ou=service-accounts,DC=ldap,DC=goauthentik,DC=io"
           useServerUUID: false
