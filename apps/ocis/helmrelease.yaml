@@ -163,7 +163,7 @@ spec:
           size: 1Gi
         config:
           oidc:
-            webClientID: fLcjDiMJbACsaMhbH5ALvRSEebX2P2dxp5EjscO9
+            webClientID: e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD
             webClientScope: openid profile email groups
     http:
       csp:
