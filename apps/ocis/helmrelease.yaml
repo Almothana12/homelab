@@ -36,8 +36,8 @@ spec:
         enabled: true
         oidc:
           issuerURI: "https://authentik.almothana.xyz/application/o/ocis/"
-          userIDClaim: preferred_username
-          userIDClaimAttributeMapping: username
+          userIDClaim: sub
+          userIDClaimAttributeMapping: userid
           accessTokenVerifyMethod: jwt
           # map Authentik groups to oCIS roles
           roleAssignment:
@@ -54,8 +54,7 @@ spec:
                 claim_value: ocis-guests
         ldap:
           writeable: false
-          uri: "ldaps://ldap.authentik.almothana.xyz:636"
-          certTrusted: false
+          uri: "ldap://ldap.authentik.almothana.xyz:389"
           insecure: true
           bindDN: "cn=ocis-bind-sa,ou=service-accounts,DC=ldap,DC=goauthentik,DC=io"
           useServerUUID: false
@@ -72,7 +71,7 @@ spec:
               idIsOctetString: false
               mail: mail
               displayName: displayName
-              userName: uid
+              userName: cn
               userType: ownCloudUserType
           group:
             baseDN: "ou=groups,dc=ldap,dc=goauthentik,dc=io"
