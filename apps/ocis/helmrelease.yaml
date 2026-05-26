@@ -164,7 +164,7 @@ spec:
         config:
           oidc:
             webClientID: e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD
-            webClientScope: openid profile email groups
+            webClientScope: openid profile email groups offline_access
     http:
       csp:
         directives:
