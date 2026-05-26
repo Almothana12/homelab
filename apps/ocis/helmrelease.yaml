@@ -30,7 +30,62 @@ spec:
       # @schema
       # -- Reference to an existing collaboration service WOPI secret (see ref:Secrets#secrets). Not used if `features.appsIntegration.enabled` equals `false`.
       collaborationWopiSecret: onlyoffice-wopi-secret
+      ldapSecretRef: ocis-ldap-bind-password
     features:
+      externalUserManagement:
+        enabled: true
+        oidc:
+          issuerURI: "https://authentik.almothana.xyz/application/o/ocis/"
+          userIDClaim: preferred_username
+          userIDClaimAttributeMapping: username
+          accessTokenVerifyMethod: jwt
+          # map Authentik groups to oCIS roles
+          roleAssignment:
+            enabled: true
+            claim: groups
+            mapping:
+              - role_name: admin
+                claim_value: ocis-admins
+              - role_name: spaceadmin
+                claim_value: ocis-spaceadmins
+              - role_name: user
+                claim_value: ocis-users
+              - role_name: user-light
+                claim_value: ocis-guests
+        ldap:
+          writable: false
+          uri: "ldaps://ldap.authentik.almothana.xyz:636"
+          bindDN: "cn=ocis-bind-sa,ou=service-accounts,DC=ldap,DC=goauthentik,DC=io"
+          useServerUUID: false
+          refintEnabled: false
+          passwordModifyExOpEnabled: false
+          user:
+            baseDN: "ou=users,dc=ldap,dc=goauthentik,dc=io"
+            scope: sub
+            objectClass: user
+            filter: "(objectClass=user)"
+            userNameMatch: none
+            schema:
+              id: uid
+              idIsOctetString: false
+              mail: mail
+              displayName: displayName
+              userName: uid
+              userType: ownCloudUserType
+          group:
+            baseDN: "ou=groups,dc=ldap,dc=goauthentik,dc=io"
+            scope: sub
+            objectClass: group
+            filter: "(objectClass=group)"
+            schema:
+              id: cn
+              idIsOctetString: false
+              mail: mail
+              displayName: cn
+              groupName: cn
+              member: member
+        autoprovisionAccounts:
+          enabled: false
       appsIntegration:
         enabled: true
         wopiIntegration:
@@ -105,3 +160,7 @@ spec:
           accessModes:
             - ReadWriteOnce
           size: 1Gi
+        config:
+          oidc:
+            webClientID: fLcjDiMJbACsaMhbH5ALvRSEebX2P2dxp5EjscO9
+            webClientScope: openid profile email groups
