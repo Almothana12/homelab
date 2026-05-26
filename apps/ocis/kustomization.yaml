@@ -5,6 +5,7 @@ resources:
   - PV-storageusers-nfs.yaml
   - PVC-storageusers-nfs.yaml
   - secret-onlyoffice-wopi-secret.yaml
+  - ocis-ldap-bind-password.yaml
   - gitrepo.yaml
   - helmrelease.yaml
   - volsync.yaml
