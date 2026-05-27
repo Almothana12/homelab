@@ -35,7 +35,7 @@ spec:
       externalUserManagement:
         enabled: true
         oidc:
-          issuerURI: "https://authentik.almothana.xyz/application/o/ocis/"
+          issuerURI: "https://authentik.almothana.xyz"
           userIDClaim: sub
           userIDClaimAttributeMapping: userid
           accessTokenVerifyMethod: jwt
