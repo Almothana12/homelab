@@ -35,7 +35,7 @@ spec:
       externalUserManagement:
         enabled: true
         oidc:
-          issuerURI: "https://authentik.almothana.xyz/"
+          issuerURI: "https://authentik.almothana.xyz/application/o/ocis/"
           userIDClaim: sub
           userIDClaimAttributeMapping: userid
           accessTokenVerifyMethod: jwt
@@ -163,7 +163,7 @@ spec:
           size: 1Gi
         config:
           oidc:
-            webClientID: web
+            webClientID: fLcjDiMJbACsaMhbH5ALvRSEebX2P2dxp5EjscO9
             webClientScope: openid profile email groups offline_access
     http:
       csp:
