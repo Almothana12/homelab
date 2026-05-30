@@ -5,5 +5,4 @@ resources:
   - PVC-prowlarr.yaml
   - deployment-prowlarr.yaml
   - service-prowlarr.yaml
-  - ingress-prowlarr.yaml
   - volsync.yaml

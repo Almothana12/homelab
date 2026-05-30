@@ -4,4 +4,3 @@ resources:
   - PVC-clipper.yaml
   - deployment-clipper.yaml
   - service-clipper.yaml
-  - ingress-clipper.yaml
