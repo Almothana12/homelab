@@ -5,4 +5,3 @@ resources:
   - PVC-bazarr.yaml
   - deployment-bazarr.yaml
   - service-bazarr.yaml
-  - ingress-bazarr.yaml
