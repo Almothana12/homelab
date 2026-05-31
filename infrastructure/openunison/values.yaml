@@ -36,7 +36,7 @@ openunison:
   az_groups:
   - k8s-admins
   auto_timestamp: false
-  force_update: initial-deployment
+  force_update: initial-deployment-2
 
 # disable the k8s dashboard. use Headlamp
 dashboard:
