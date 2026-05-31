@@ -1,0 +1,20 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: orchestra
+  namespace: openunison
+spec:
+  interval: 30m
+  dependsOn:
+    - name: openunison-operator
+  chart:
+    spec:
+      chart: orchestra
+      version: "3.1.52"
+      sourceRef:
+        kind: HelmRepository
+        name: tremolo
+  valuesFrom:
+    - kind: ConfigMap
+      name: openunison-values
+      valuesKey: values.yaml

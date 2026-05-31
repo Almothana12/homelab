@@ -1,0 +1,45 @@
+network:
+  openunison_host: "k8sou.almothana.xyz"
+  api_server_host: "k8sapi.almothana.xyz"
+  k8s_url: https://192.168.0.60:6443
+  session_inactivity_timeout_seconds: 900
+  createIngressCertificate: false
+  ingress_certificate: "almothana-xyz-tls"
+  force_redirect_to_tls: false
+  ingress_type: f5nginx
+
+enable_impersonation: false
+
+k8s_cluster_name: homelab
+
+# Get the CA from kubeconfig/talosconfig
+trusted_certs:
+- name: k8s_master
+  pem_b64: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpakNDQVRDZ0F3SUJBZ0lSQU5KRnVSUUZDMUk3WUxNYVNMczI4amt3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlOakF6TURZeE9URTBOVGhhRncwek5qQXpNRE14T1RFMApOVGhhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVM4WmRyRkNFZ21LZktJZGRmY0VrUXBwb2Uxb05FbEo3MWplNFZUKzc1dXYxTFVJUlNEMlB0VDIrTGgKSmVrTHQ5cGx3a0cydlhsSllRb1p4MkppalZQM28yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGTXB6ZWh1eVVnTXhaUkpFRkVtZURUVUFtZzAxTUFvR0NDcUdTTTQ5QkFNQ0EwZ0FNRVVDSVFDbjlRR0UKMmRxa1Vhal                                lZXYlRaZjdqOGZuL2lXZWN0VU5sdGplUURqYkIySUFJZ1dicWNnZU8rZnp2Uy9ta0tpY0Z4dlQyMQp2NU10bGY5NjhYRnlETExmWVVrPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+
+oidc:
+  client_id_is_secret: true # get the client ID from the secret
+  issuer: https://authentik.almothana.xyz/application/o/openunison/
+  user_in_idtoken: true
+  domain: ""
+  scopes: openid email profile groups
+  claims:
+    sub: sub
+    email: email
+    given_name: given_name
+    family_name: family_name
+    display_name: name
+    groups: groups
+
+# Restrict who can even reach the cluster (optional but recommended)
+openunison:
+  az_groups:
+  - k8s-admins
+  auto_timestamp: false
+  force_update: initial-deployment
+
+# disable the k8s dashboard. use Headlamp
+dashboard:
+  enabled: false
+headlamp:
+  enabled: true

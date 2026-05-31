@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openunison-operator
+  namespace: openunison
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: openunison-operator
+      version: "3.0.30"
+      sourceRef:
+        kind: HelmRepository
+        name: tremolo
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
