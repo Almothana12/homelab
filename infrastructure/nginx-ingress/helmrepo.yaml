@@ -5,4 +5,4 @@ metadata:
 spec:
   type: oci
   interval: 24h
-  url: oci://ghcr.io/nginx/charts/nginx-ingress
+  url: oci://ghcr.io/nginx/charts
