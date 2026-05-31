@@ -22,7 +22,11 @@ oidc:
   issuer: https://authentik.almothana.xyz/application/o/openunison/
   user_in_idtoken: true
   domain: ""
-  scopes: openid email profile groups
+  scopes:
+    - openid
+    - email
+    - profile
+    - groups
   claims:
     sub: sub
     email: email
