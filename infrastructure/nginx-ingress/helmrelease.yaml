@@ -14,5 +14,6 @@ spec:
       interval: 5m
   values: 
     controller:
+      kind: daemonset
       service:
         type: LoadBalancer
