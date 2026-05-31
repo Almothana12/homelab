@@ -13,3 +13,5 @@ configMapGenerator:
   - name: openunison-values
     files:
       - values.yaml
+    options:
+      disableNameSuffixHash: true
