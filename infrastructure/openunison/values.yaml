@@ -6,7 +6,7 @@ network:
   createIngressCertificate: false
   ingress_certificate: "almothana-xyz-tls"
   force_redirect_to_tls: false
-  ingress_type: f5nginx
+  ingress_type: simple
 
 enable_impersonation: false
 
