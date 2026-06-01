@@ -7,6 +7,8 @@ network:
   ingress_certificate: "almothana-xyz-tls"
   force_redirect_to_tls: false
   ingress_type: simple
+  ingress_annotations:
+    kubernetes.io/ingress.class: nginx
 
 enable_impersonation: false
 
