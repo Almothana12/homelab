@@ -34,10 +34,9 @@ oidc:
     display_name: name
     groups: groups
 
-# Restrict who can even reach the cluster (optional but recommended)
 openunison:
   az_groups:
-  - k8s-admins
+  - k8s-admins # only users of this group can login
   auto_timestamp: false
   force_update: initial-deployment-2
 
