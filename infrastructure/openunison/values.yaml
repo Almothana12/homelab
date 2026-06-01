@@ -9,6 +9,7 @@ network:
   ingress_type: simple
   ingress_annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.org/ssl-services: openunison-orchestra
 
 enable_impersonation: false
 
