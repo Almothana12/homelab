@@ -1,0 +1,7 @@
+cluster:
+  apiServer:
+    extraArgs:
+      oidc-issuer-url: https://k8sou.almothana.xyz/auth/idp/k8sIdp
+      oidc-client-id: kubernetes
+      oidc-username-claim: sub
+      oidc-groups-claim: groups
