@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret-orchestra-secrets-source.yaml
+  - secret-ou-tls-certificate.yaml
   - helmrepo.yaml
   - helmrelease-operator.yaml
   - helmrelease-orchestra.yaml
