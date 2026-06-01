@@ -35,8 +35,10 @@ oidc:
     groups: groups
 
 openunison:
-  az_groups:
-  - k8s-admins # only users of this group can login
+  # only users of these groups can login
+  az_groups: 
+  - k8s-admins 
+  - k8s-users
   auto_timestamp: false
   force_update: initial-deployment-2
 

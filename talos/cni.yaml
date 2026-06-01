@@ -111,3 +111,9 @@ cluster:
                   - l2announcements.enabled=true
                   - --set
                   - externalIPs.enabled=true
+                  - --set 
+                  - gatewayAPI.enabled=true
+                  - --set
+                  - gatewayAPI.enableAlpn=true
+                  - --set
+                  - gatewayAPI.enableAppProtocol=true
