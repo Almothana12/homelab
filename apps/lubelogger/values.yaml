@@ -20,12 +20,10 @@ ingress:
      hosts:
        - lubelogger.almothana.xyz
 
-# not using a mail server
 secret:
-  create: false
-  name: ""
-  emailServer: ""
-  emailFrom: ""
+  create: true
+  emailServer: "localhost"
+  emailFrom: "blackhole@localhost"
   port: 587
   username: ""
   password: ""
