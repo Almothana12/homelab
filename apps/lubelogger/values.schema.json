@@ -1,0 +1,478 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "affinity": {
+      "type": "object"
+    },
+    "autoscaling": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "maxReplicas": {
+          "type": "integer"
+        },
+        "minReplicas": {
+          "type": "integer"
+        },
+        "targetCPUUtilizationPercentage": {
+          "type": "integer"
+        },
+        "targetMemoryUtilizationPercentage": {
+          "type": "integer"
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "LANG": {
+          "type": "string"
+        },
+        "LC_ALL": {
+          "type": "string"
+        },
+        "LOGLEVEL": {
+          "type": "string"
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "userConfig": {
+          "type": "object",
+          "properties": {
+            "AllowedHosts": {
+              "type": "string"
+            },
+            "DefaultTab": {
+              "type": "integer"
+            },
+            "EnableAuth": {
+              "type": "boolean"
+            },
+            "EnableAutoOdometerInsert": {
+              "type": "boolean"
+            },
+            "EnableAutoReminderRefresh": {
+              "type": "boolean"
+            },
+            "EnableCsvImports": {
+              "type": "boolean"
+            },
+            "EnableExtraFieldColumns": {
+              "type": "boolean"
+            },
+            "EnableShopSupplies": {
+              "type": "boolean"
+            },
+            "HideSoldVehicles": {
+              "type": "boolean"
+            },
+            "HideZero": {
+              "type": "boolean"
+            },
+            "Logging": {
+              "type": "object",
+              "properties": {
+                "LogLevel": {
+                  "type": "object",
+                  "properties": {
+                    "Default": {
+                      "type": "string"
+                    },
+                    "Microsoft.AspNetCore": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "PreferredGasMileageUnit": {
+              "type": "string"
+            },
+            "PreferredGasUnit": {
+              "type": "string"
+            },
+            "UseDarkMode": {
+              "type": "boolean"
+            },
+            "UseDescending": {
+              "type": "boolean"
+            },
+            "UseMPG": {
+              "type": "boolean"
+            },
+            "UseMarkDownOnSavedNotes": {
+              "type": "boolean"
+            },
+            "UseThreeDecimalGasCost": {
+              "type": "boolean"
+            },
+            "UseUKMPG": {
+              "type": "boolean"
+            },
+            "UserColumnPreferences": {
+              "type": "array"
+            },
+            "UserLanguage": {
+              "type": "string"
+            },
+            "UserNameHash": {
+              "type": "string"
+            },
+            "UserPasswordHash": {
+              "type": "string"
+            },
+            "VisibleTabs": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "curl": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object",
+          "properties": {
+            "pullPolicy": {
+              "type": "string"
+            },
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "fullnameOverride": {
+      "type": "string"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "pullPolicy": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      }
+    },
+    "imagePullSecrets": {
+      "type": "array"
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "className": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "pathType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tls": {
+          "type": "array"
+        }
+      }
+    },
+    "livenessProbe": {
+      "type": "object",
+      "properties": {
+        "httpGet": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "port": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "nameOverride": {
+      "type": "string"
+    },
+    "nodeSelector": {
+      "type": "object"
+    },
+    "oidc": {
+      "type": "object",
+      "properties": {
+        "authURL": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "create": {
+          "type": "boolean"
+        },
+        "disableRegularLogin": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "logOutURL": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "providerName": {
+          "type": "string"
+        },
+        "redirectURL": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "tokenURL": {
+          "type": "string"
+        },
+        "usePKCE": {
+          "type": "boolean"
+        },
+        "userInfoURL": {
+          "type": "string"
+        },
+        "validateState": {
+          "type": "boolean"
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "accessMode": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "existingClaim": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "storageClass": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "podAnnotations": {
+      "type": "object"
+    },
+    "podLabels": {
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "type": "object"
+    },
+    "postgres": {
+      "type": "object",
+      "properties": {
+        "connect": {
+          "type": "boolean"
+        },
+        "create": {
+          "type": "boolean"
+        },
+        "database": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "keyRef": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "user": {
+          "type": "string"
+        }
+      }
+    },
+    "readinessProbe": {
+      "type": "object",
+      "properties": {
+        "httpGet": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "port": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer"
+    },
+    "resources": {
+      "type": "object"
+    },
+    "secret": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "emailFrom": {
+          "type": "string"
+        },
+        "emailServer": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "securityContext": {
+      "type": "object"
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "automount": {
+          "type": "boolean"
+        },
+        "create": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "startupProbe": {
+      "type": "object",
+      "properties": {
+        "httpGet": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "port": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "tolerations": {
+      "type": "array"
+    },
+    "updateStrategy": {
+      "type": "object",
+      "properties": {
+        "rollingUpdate": {
+          "type": "object",
+          "properties": {
+            "maxUnavailable": {
+              "type": "string"
+            },
+            "partition": {
+              "type": "integer"
+            }
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

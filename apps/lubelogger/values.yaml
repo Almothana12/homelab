@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=./values.schema.json
+
+replicaCount: 1
+
+persistence:
+  data:
+    enabled: true
+    size: 3Gi
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: lubelogger.almothana.xyz
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: almothana-xyz-tls
+     hosts:
+       - lubelogger.almothana.xyz

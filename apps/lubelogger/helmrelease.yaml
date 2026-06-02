@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lubelogger
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: lubelogger
+      version: '1.4.6'
+      sourceRef:
+        kind: HelmRepository
+        name: lubelogger
+      interval: 5m
+  valuesFrom:
+    - kind: ConfigMap
+      name: helm-values
+      valuesKey: values.yaml
+    - kind: Secret
+      name: helm-values
+      valuesKey: values.yaml
