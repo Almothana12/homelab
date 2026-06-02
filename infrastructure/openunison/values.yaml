@@ -2,7 +2,7 @@ network:
   openunison_host: "k8sou.almothana.xyz"
   api_server_host: "k8sapi.almothana.xyz"
   k8s_url: https://192.168.0.60:6443
-  session_inactivity_timeout_seconds: 900
+  session_inactivity_timeout_seconds: 43200 # 12 hours
   createIngressCertificate: false
   ingress_certificate: "almothana-xyz-tls" # this key is in the docuementation but the chart doesn't use it...
   force_redirect_to_tls: false
