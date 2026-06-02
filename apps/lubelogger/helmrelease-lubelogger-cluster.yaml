@@ -57,6 +57,21 @@ spec:
         enablePodAntiAffinity: true
         podAntiAffinityType: required
         topologyKey: kubernetes.io/hostname
+      # hard-code service names to avoid it changing for different versions
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "lubelogger-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "lubelogger-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "lubelogger-cluster-r"
     backups:
       enabled: true
       provider: s3
