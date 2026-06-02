@@ -25,5 +25,5 @@ secret:
   emailServer: "localhost"
   emailFrom: "blackhole@localhost"
   port: 587
-  username: ""
-  password: ""
+  username: "user"
+  password: "password"
