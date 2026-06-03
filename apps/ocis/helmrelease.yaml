@@ -171,6 +171,7 @@ spec:
           connectSrc:
             - "'self'"
             - "https://authentik.almothana.xyz"
+            - "https://authentik.almothana.cloud"
           scriptSrc:
             - "'self'"
             - "'unsafe-inline'"
@@ -182,3 +183,4 @@ spec:
             - "'self'"
             - "blob:"
             - "https://authentik.almothana.xyz"
+            - "https://authentik.almothana.cloud"
