@@ -21,11 +21,11 @@ spec:
         enabled: true
         ingressClassName: cilium
         hosts:
-          - authentik.almothana.xyz
+          - authentik.almothana.cloud
         tls:
-          - secretName: almothana-xyz-tls
+          - secretName: almothana-cloud-tls
             hosts:          
-              - authentik.almothana.xyz
+              - authentik.almothana.cloud
     postgresql:
       enabled: false # will use cnpg instead of the built-in postgresql chart
     global:
