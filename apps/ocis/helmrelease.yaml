@@ -38,7 +38,7 @@ spec:
           issuerURI: "https://authentik.almothana.cloud/application/o/ocis/"
           userIDClaim: sub
           userIDClaimAttributeMapping: userid
-          accessTokenVerifyMethod: jwt
+          accessTokenVerifyMethod: none
           # map Authentik groups to oCIS roles
           roleAssignment:
             enabled: true
