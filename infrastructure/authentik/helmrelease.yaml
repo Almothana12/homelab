@@ -14,7 +14,7 @@ spec:
       interval: 5m
   values:
     authentik:
-      log_level: trace
+      # log_level: trace
       existingSecret:
         secretName: authentik-secret
     server:
