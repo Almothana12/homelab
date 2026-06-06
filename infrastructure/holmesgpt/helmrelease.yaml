@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: holmesgpt
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: holmes
+      version: '0.31.1'
+      sourceRef:
+        kind: HelmRepository
+        name: robusta
+      interval: 5m
+  values: 
+    additionalEnvVars:
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: holmes-secrets
+          key: openai-api-key
+
+    modelList:
+      deepseek-v4-pro:
+        api_key: "{{ env.OPENAI_API_KEY }}"
+        model: deepseek-v4-pro

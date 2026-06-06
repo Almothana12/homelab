@@ -440,6 +440,27 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: cloudflared
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: holemesgpt
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/holmesgpt
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: holmesgpt
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
