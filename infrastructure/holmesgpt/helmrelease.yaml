@@ -13,6 +13,11 @@ spec:
         name: robusta
       interval: 5m
   values: 
+    operator:
+      enabled: true  
+      holmesApiTimeout: 300  # API timeout in seconds
+      maxHistoryItems: 10  # History entries per ScheduledHealthCheck
+
     additionalEnvVars:
     - name: OPENAI_API_KEY
       valueFrom:
