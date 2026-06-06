@@ -47,3 +47,24 @@ dashboard:
   enabled: false
 headlamp:
   enabled: true
+  config:
+    watchPlugins: true
+  pluginsManager:
+    enabled: true
+    configContent: |
+      plugins:
+      - name: flux
+        source: https://artifacthub.io/packages/headlamp/headlamp-plugins/headlamp_flux
+        version: 0.6.0
+      - name: cert-manager
+        source: https://artifacthub.io/packages/headlamp/headlamp-plugins/headlamp_cert-manager
+        version: 0.1.0
+      - name: ai-assistant
+        source: https://artifacthub.io/packages/headlamp/headlamp-plugins/headlamp_ai_assistant
+        version: 0.2.0-alpha
+      - name: kompose
+        source: https://artifacthub.io/packages/headlamp/headlamp-plugins/headlamp_kompose
+        version: 0.1.1-beta
+      installOptions:
+        parallel: true
+        maxConcurrent: 2
