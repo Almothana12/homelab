@@ -26,6 +26,13 @@ spec:
       targetMemory: ""
       behavior: {}
 
+    mcpAddons:
+      github:
+        enabled: true
+        auth:
+          githubApp:
+            secretName: "holmes-github-app"
+
     additionalEnvVars:
     - name: OPENAI_API_KEY
       valueFrom:

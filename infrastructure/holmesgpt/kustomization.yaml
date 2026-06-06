@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret-holmes-secrets.yaml
+  - secret-holmes-github-app.yaml
   - helmrepo.yaml
   - helmrelease.yaml
