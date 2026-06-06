@@ -18,6 +18,14 @@ spec:
       holmesApiTimeout: 300  # API timeout in seconds
       maxHistoryItems: 10  # History entries per ScheduledHealthCheck
 
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPU: "60"
+      targetMemory: ""
+      behavior: {}
+
     additionalEnvVars:
     - name: OPENAI_API_KEY
       valueFrom:
