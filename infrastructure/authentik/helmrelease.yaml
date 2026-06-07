@@ -17,15 +17,6 @@ spec:
       # log_level: trace
       existingSecret:
         secretName: authentik-secret
-      email:
-        host: "mailpit.mailpit.svc.cluster.local"
-        port: 1025
-        username: ""
-        password: ""
-        use_tls: false
-        use_ssl: false
-        timeout: 30
-        from: "Authentik@almothana.cloud"
     server:
       ingress:
         enabled: true
@@ -66,5 +57,15 @@ spec:
             secretKeyRef:
               name: authentik-cluster-v00-app
               key: password
-
-
+        - name: AUTHENTIK_EMAIL__HOST
+          value: "mailpit.mailpit.svc.cluster.local"
+        - name: AUTHENTIK_EMAIL__PORT
+          value: "1025"
+        - name: AUTHENTIK_EMAIL__USE_TLS
+          value: "false"
+        - name: AUTHENTIK_EMAIL__USE_SSL
+          value: "false"
+        - name: AUTHENTIK_EMAIL__TIMEOUT
+          value: "30"
+        - name: AUTHENTIK_EMAIL__FROM
+          value: "Authentik@almothana.cloud"
