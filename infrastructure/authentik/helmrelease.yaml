@@ -17,6 +17,15 @@ spec:
       # log_level: trace
       existingSecret:
         secretName: authentik-secret
+      email:
+        host: "mailpit.mailpit.svc.cluster.local"
+        port: 8025
+        username: ""
+        password: ""
+        use_tls: false
+        use_ssl: false
+        timeout: 30
+        from: "Authentik@almothana.cloud"
     server:
       ingress:
         enabled: true
@@ -27,6 +36,7 @@ spec:
           - secretName: almothana-cloud-tls
             hosts:          
               - authentik.almothana.cloud
+
     postgresql:
       enabled: false # will use cnpg instead of the built-in postgresql chart
     global:
