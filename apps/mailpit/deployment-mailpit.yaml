@@ -27,6 +27,8 @@ spec:
               value: "0" # Unlimited
             - name: "MP_UI_AUTH_FILE"
               value: "/data/auth/passwd"
+            - name: "MP_API_CORS"
+              value: "mailpit.almothana.xyz"
             # - name: "MP_SMTP_AUTH_FILE"
             #   value: "/data/auth/smtp"
           ports:
