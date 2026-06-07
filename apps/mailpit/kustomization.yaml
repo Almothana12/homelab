@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - PVC-mailpit.yaml
+  - secret-mailpit-auth.yaml
+  - deployment-mailpit.yaml
+  - service-mailpit.yaml
+  - ingress-mailpit.yaml

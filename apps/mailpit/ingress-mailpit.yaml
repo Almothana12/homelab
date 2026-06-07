@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mailpit
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: mailpit.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: mailpit
+            port:
+              number: 8025
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - mailpit.almothana.xyz
+      secretName: almothana-xyz-tls

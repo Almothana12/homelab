@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mailpit
+  name: mailpit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailpit
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mailpit
+    spec:
+      containers:
+        - image: axllent/mailpit:v1.30
+          name: mailpit
+          resources: {}
+          env:
+            - name: "MP_DATABASE"
+              value: "/data/mailpit.db"
+            - name: "MP_MAX_MESSAGES"
+              value: "0" # Unlimited
+            - name: "MP_UI_AUTH_FILE"
+              value: "/data/auth/passwd"
+            # - name: "MP_SMTP_AUTH_FILE"
+            #   value: "/data/auth/smtp"
+          ports:
+            - containerPort: 1025
+              name: smtp
+            - containerPort: 8025
+              name: http
+          volumeMounts:
+            - mountPath: /data
+              name: mailpit
+            - mountPath: /data/auth
+              name: auth
+
+      restartPolicy: Always
+      volumes:
+        - name: auth
+          secret:
+            secretName: mailpit-auth
+        - name: mailpit
+          persistentVolumeClaim:
+            claimName: mailpit
