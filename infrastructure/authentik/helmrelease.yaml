@@ -19,7 +19,7 @@ spec:
         secretName: authentik-secret
       email:
         host: "mailpit.mailpit.svc.cluster.local"
-        port: 8025
+        port: 1025
         username: ""
         password: ""
         use_tls: false
