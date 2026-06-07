@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: [FTName]
 spec:
-  ingressClassName: nginx
+  ingressClassName: cilium
   rules:
   - host: [FTName].almothana.xyz
     http:
@@ -14,7 +14,7 @@ spec:
             port:
               number: <CHANGE>
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - [FTName].almothana.xyz

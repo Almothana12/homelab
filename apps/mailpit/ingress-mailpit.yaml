@@ -14,7 +14,7 @@ spec:
             port:
               number: 8025
         path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
   tls:
     - hosts:
         - mailpit.almothana.xyz
