@@ -58,9 +58,9 @@ spec:
               name: authentik-cluster-v00-app
               key: password
         - name: AUTHENTIK_EMAIL__HOST
-          value: "mailpit.mailpit.svc.cluster.local"
+          value: "mailpit-smtp.almothana.xyz"
         - name: AUTHENTIK_EMAIL__PORT
-          value: "1025"
+          value: "587"
         - name: AUTHENTIK_EMAIL__USE_TLS
           value: "true"
         - name: AUTHENTIK_EMAIL__USE_SSL
