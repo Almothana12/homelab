@@ -62,9 +62,9 @@ spec:
         - name: AUTHENTIK_EMAIL__PORT
           value: "1025"
         - name: AUTHENTIK_EMAIL__USE_TLS
-          value: "false"
+          value: "true"
         - name: AUTHENTIK_EMAIL__USE_SSL
-          value: "false"
+          value: "false" # use TLS STARTTLS, not SSL
         - name: AUTHENTIK_EMAIL__TIMEOUT
           value: "30"
         - name: AUTHENTIK_EMAIL__FROM
