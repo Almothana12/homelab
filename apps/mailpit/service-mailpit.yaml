@@ -23,7 +23,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: smtp
-      port: 1025
+      port: 587
       targetPort: 1025
   selector:
     app: mailpit
