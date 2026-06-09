@@ -7,11 +7,23 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: smtp
-      port: 1025
-      targetPort: 1025
     - name: http
       port: 8025
       targetPort: 8025
+  selector:
+    app: mailpit
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailpit-smtp
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: mailpit-smtp.almothana.xyz
+spec:
+  type: LoadBalancer
+  ports:
+    - name: smtp
+      port: 1025
+      targetPort: 1025
   selector:
     app: mailpit

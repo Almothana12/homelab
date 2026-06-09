@@ -27,8 +27,12 @@ spec:
               value: "0" # Unlimited
             - name: "MP_UI_AUTH_FILE"
               value: "/data/auth/passwd"
-            # - name: "MP_SMTP_AUTH_FILE"
-            #   value: "/data/auth/smtp"
+            - name: "MP_SMTP_AUTH_FILE"
+              value: "/data/auth/smtp"
+            - name: "MP_SMTP_TLS_CERT"
+              value: "/data/tls/tls.crt"
+            - name: "MP_SMTP_TLS_KEY"
+              value: "/data/tls/tls.key"
           ports:
             - containerPort: 1025
               name: smtp
@@ -39,12 +43,16 @@ spec:
               name: mailpit
             - mountPath: /data/auth
               name: auth
-
+            - mountPath: /data/tls
+              name: tls
       restartPolicy: Always
       volumes:
         - name: auth
           secret:
             secretName: mailpit-auth
+        - name: tls
+          secret:
+            secretName: almothana-xyz-tls
         - name: mailpit
           persistentVolumeClaim:
             claimName: mailpit
