@@ -92,8 +92,9 @@ spec:
     # require L4 exposure and are not handled here.
     ingress:
       enabled: true
-      className: cilium
-      annotations: {}
+      className: nginx
+      annotations:
+        nginx.org/ssl-services: "stalwart"
       hosts:
         - host: mail.almothana.cloud
           paths:
