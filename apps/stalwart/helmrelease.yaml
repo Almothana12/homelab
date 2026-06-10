@@ -66,9 +66,9 @@ spec:
     # Only the DataStore object belongs here; every other setting lives
     # in the database once the server is bootstrapped.
     # See /docs/configuration/overview and /docs/ref/object/data-store.
-    # config:
-    #   "@type": RocksDb
-    #   path: /var/lib/stalwart
+    config:
+      "@type": RocksDb
+      path: /var/lib/stalwart
 
     # Service definition. Change `type` to LoadBalancer when a cloud
     # load balancer should expose the mail ports directly, or keep it
