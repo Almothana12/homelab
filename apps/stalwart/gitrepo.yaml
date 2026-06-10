@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: stalwart-chart
+spec:
+  interval: 1h
+  url: https://github.com/Almothana12/homelab
+  ref:
+    branch: master
