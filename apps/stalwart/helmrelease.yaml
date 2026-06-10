@@ -12,6 +12,7 @@ spec:
         name: stalwart-chart
       interval: 5m
   values: 
+    fullnameOverride: stalwart
     # Container image.
     image:
       repository: stalwartlabs/stalwart
