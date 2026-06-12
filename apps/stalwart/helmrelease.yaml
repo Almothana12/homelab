@@ -94,13 +94,14 @@ spec:
     ingress:
       enabled: true
       className: nginx
-      annotations: {}
+      annotations:
+        nginx.org/ssl-services: "stalwart"
       hosts:
         - host: mail.almothana.cloud
           paths:
             - path: /
               pathType: Prefix
-              portName: http
+              portName: https
       tls:
         - secretName: almothana-cloud-tls
           hosts:
