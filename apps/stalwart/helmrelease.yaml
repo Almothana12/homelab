@@ -75,7 +75,7 @@ spec:
     # as ClusterIP and front the chart with an Ingress / gateway for
     # the HTTP listeners only.
     service:
-      type: ClusterIP
+      type: LoadBalancer
       ports:
         smtp: 25
         smtps: 465
@@ -94,8 +94,7 @@ spec:
     ingress:
       enabled: true
       className: nginx
-      annotations:
-        nginx.org/ssl-services: "stalwart"
+      annotations: {}
       hosts:
         - host: mail.almothana.cloud
           paths:
