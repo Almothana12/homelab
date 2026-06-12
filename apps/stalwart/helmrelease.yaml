@@ -76,6 +76,8 @@ spec:
     # the HTTP listeners only.
     service:
       type: LoadBalancer
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: mail.almothana.cloud
       ports:
         smtp: 25
         smtps: 465
@@ -97,7 +99,7 @@ spec:
       annotations:
         nginx.org/ssl-services: "stalwart"
       hosts:
-        - host: mail.almothana.cloud
+        - host: stalwart.almothana.cloud
           paths:
             - path: /
               pathType: Prefix
@@ -105,7 +107,7 @@ spec:
       tls:
         - secretName: almothana-cloud-tls
           hosts:
-            - mail.almothana.cloud
+            - stalwart.almothana.cloud
 
     # Persistent volume for the data directory. Required when the
     # DataStore is a local backend such as RocksDB. Can be disabled
