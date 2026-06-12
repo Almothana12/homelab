@@ -58,14 +58,14 @@ spec:
               name: authentik-cluster-v00-app
               key: password
         - name: AUTHENTIK_EMAIL__HOST
-          value: "mailpit-smtp.almothana.xyz"
+          value: "mail.almothana.cloud"
         - name: AUTHENTIK_EMAIL__PORT
-          value: "587"
+          value: "465"
         - name: AUTHENTIK_EMAIL__USE_TLS
-          value: "true"
+          value: "false" # use SSL, not TLS STARTTLS
         - name: AUTHENTIK_EMAIL__USE_SSL
-          value: "false" # use TLS STARTTLS, not SSL
+          value: "true"
         - name: AUTHENTIK_EMAIL__TIMEOUT
           value: "30"
         - name: AUTHENTIK_EMAIL__FROM
-          value: "Authentik@almothana.cloud"
+          value: "no-reply@almothana.cloud"
