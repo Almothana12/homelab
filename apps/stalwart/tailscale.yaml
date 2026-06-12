@@ -23,8 +23,12 @@ metadata:
     tailscale.com/tailnet-fqdn: "stalwart-inbound.cloudforest-sargas.ts.net"
     tailscale.com/proxy-group: "ingress-proxies"
 spec:
-  type: ExternalName
-  externalName: stalwart.stalwart.svc.cluster.local
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  selector:
+    app.kubernetes.io/name: stalwart
   ports:
     - port: 25
+      name: smtp
+      targetPort: 25
       protocol: TCP
