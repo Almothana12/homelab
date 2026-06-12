@@ -4,10 +4,6 @@ metadata:
   name: {{ include "stalwart.fullname" . }}-headless
   labels:
     {{- include "stalwart.labels" . | nindent 4 }}
-  annotations:
-    {{- with .Values.service.annotations }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
 spec:
   clusterIP: None
   selector:
@@ -23,6 +19,10 @@ metadata:
   name: {{ include "stalwart.fullname" . }}
   labels:
     {{- include "stalwart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   selector:
