@@ -41,10 +41,10 @@ spec:
     # scraping the pod logs for the generated temporary password.
     # Remove it once a permanent administrator account has been
     # provisioned through the setup wizard.
-    # recoveryAdmin:
-    #   enabled: true
-    #   username: admin
-    #   password: "change-me"
+    recoveryAdmin:
+      enabled: false
+      # username: admin
+      # password: "change-me"
 
     # Starts the pods in recovery mode. Suspends mail services and
     # exposes only the management listener on the configured port.
