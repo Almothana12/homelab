@@ -133,3 +133,17 @@ spec:
     # Empty by default. Set this to opt into the `restricted` Pod Security
     # Standard; see "Restricted Pod Security Standards" below.
     containerSecurityContext: {}
+
+    # Extra volumes added to the pod. Pairs with extraVolumeMounts.
+    # Use for mounting Secrets, ConfigMaps, or additional PVCs.
+    extraVolumes:
+      - name: bind-password
+        secret:
+          secretName: ldap-bind-password
+          defaultMode: 0400
+
+    # Extra volume mounts added to the stalwart container.
+    extraVolumeMounts:
+      - name: bind-password
+        mountPath: /etc/stalwart/ldap-bind-password
+        readOnly: true
