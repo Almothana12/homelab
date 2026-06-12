@@ -5,3 +5,4 @@ resources:
   - secret-ldap-bind-password.yaml
   - gitrepo.yaml
   - helmrelease.yaml
+  - tailscale.yaml
