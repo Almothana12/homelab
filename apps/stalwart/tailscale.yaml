@@ -20,7 +20,7 @@ kind: Service
 metadata:
   name: stalwart-inbound
   annotations:
-    tailscale.com/tailnet-fqdn: "stalwart-inbound.almothana.cloud.ts.net"
+    tailscale.com/tailnet-fqdn: "stalwart-inbound.cloudforest-sargas.ts.net"
     tailscale.com/proxy-group: "ingress-proxies"
 spec:
   type: ExternalName
