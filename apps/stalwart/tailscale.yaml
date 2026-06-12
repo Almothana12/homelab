@@ -20,6 +20,7 @@ kind: Service
 metadata:
   name: stalwart-inbound
   annotations:
+    tailscale.com/hostname: "stalwart-inbound"
     tailscale.com/proxy-group: "ingress-proxies"
 spec:
   type: LoadBalancer
