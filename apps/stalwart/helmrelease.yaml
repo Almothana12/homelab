@@ -141,9 +141,16 @@ spec:
         secret:
           secretName: ldap-bind-password
           defaultMode: 0400
+      - name: almothana-cloud-tls
+        secret:
+          secretName: almothana-cloud-tls
+          defaultMode: 0400
 
     # Extra volume mounts added to the stalwart container.
     extraVolumeMounts:
       - name: bind-password
         mountPath: /etc/stalwart/ldap-bind-password
+        readOnly: true
+      - name: almothana-cloud-tls
+        mountPath: /etc/stalwart/ssl
         readOnly: true
