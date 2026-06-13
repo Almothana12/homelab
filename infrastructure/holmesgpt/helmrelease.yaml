@@ -48,7 +48,7 @@ spec:
     - name: MODEL
       value: deepseek-v4-pro
     - name: OVERRIDE_MAX_OUTPUT_TOKEN
-      value: "380000" # from https://mimo.mi.com/docs/en-US/quick-start/summary/model
+      value: "380000"
 
     modelList:
       deepseek-v4-pro:
@@ -56,6 +56,7 @@ spec:
         api_base: "{{ env.OPENAI_API_BASE }}"
         model: deepseek/deepseek-v4-pro
         temperature: 0.6
+        supports_response_schema: false
         input_cost_per_token: 0.00000014
         output_cost_per_token: 0.00000028
         custom_args:
