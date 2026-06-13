@@ -54,7 +54,7 @@ spec:
       minimax-m3:
         api_key: "{{ env.OPENAI_API_KEY }}"
         api_base: "{{ env.OPENAI_API_BASE }}"
-        model: MiniMax-M3
+        model: minimax/MiniMax-M3
         temperature: 0.6
         # mimo-v2.5-pro domestic pricing: ¥3.00/M input (cache miss), ¥6.00/M
         # output. Converted to USD/token at ~¥7.2/USD (rough estimate).
