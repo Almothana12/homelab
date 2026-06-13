@@ -34,33 +34,29 @@ spec:
             secretName: "holmes-github-app"
 
     additionalEnvVars:
-    - name: OPENAI_API_KEY
+    - name: GEMINI_API_KEY
       valueFrom:
         secretKeyRef:
           name: holmes-secrets
-          key: openai-api-key
-    - name: OPENAI_API_BASE
-      valueFrom:
-        secretKeyRef:
-          name: holmes-secrets
-          key: openai-api-base
+          key: gemini-api-key
+    - name: TOOL_SCHEMA_NO_PARAM_OBJECT_IF_NO_PARAMS
+      value: "true"  # Required for Gemini - see Environment Variables Reference
     # default model
     - name: MODEL
-      value: deepseek-v4-pro
-    - name: OVERRIDE_MAX_OUTPUT_TOKEN
-      value: "380000"
+      value: gemini-flash
 
     modelList:
-      deepseek-v4-pro:
-        api_key: "{{ env.OPENAI_API_KEY }}"
-        api_base: "{{ env.OPENAI_API_BASE }}"
-        model: deepseek/deepseek-v4-pro
-        temperature: 0.6
-        additional_drop_params: ["response_format"] 
-        input_cost_per_token: 0.00000014
-        output_cost_per_token: 0.00000028
-        custom_args:
-          max_context_size: 1000000
-        extra_body:
-          thinking:
-            type: disabled
+      gemini-pro:
+        api_key: "{{ env.GEMINI_API_KEY }}"
+        model: gemini/gemini-pro
+        temperature: 1
+
+      gemini-flash:
+        api_key: "{{ env.GEMINI_API_KEY }}"
+        model: gemini/gemini-3.5-flash
+        temperature: 1
+
+      gemini-pro-exp:
+        api_key: "{{ env.GEMINI_API_KEY }}"
+        model: gemini/gemini-exp-1206
+        temperature: 1
