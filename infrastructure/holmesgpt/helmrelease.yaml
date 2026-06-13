@@ -19,7 +19,7 @@ spec:
       maxHistoryItems: 10  # History entries per ScheduledHealthCheck
 
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 1
       maxReplicas: 3
       targetCPU: "60"
