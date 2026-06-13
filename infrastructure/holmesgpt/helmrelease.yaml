@@ -62,3 +62,9 @@ spec:
         output_cost_per_token: 0.000000833
         custom_args:
           max_context_size: 1000000
+        # MiMo enables "deep thinking" by default; reasoning output breaks the
+        # strict-JSON structured response Holmes parses (and misbehaves in the
+        # multi-turn tool loop). Disable it via the raw request body.
+        extra_body:
+          thinking:
+            type: disabled
