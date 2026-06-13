@@ -18,7 +18,10 @@ REPO_NAME=$(yq '.spec.chart.spec.sourceRef.name' "$HELMRELEASE_PATH")
 VALUES_JSON=$(yq -o json '.spec.values' "$HELMRELEASE_PATH")
 
 # 2. Find the HelmRepository definition and extract metadata
-HELMREPO_FILE=$(find infrastructure/ apps/ -name "*.yaml" -print0 \
+HELMREPO_FILE=$(find infrastructure/ apps/ -name "*.yaml" \
+  -not -path "*/templates/*" \
+  -not -path "*/charts/*" \
+  -print0 \
   | xargs -0 yq e 'select(.kind == "HelmRepository" and .metadata.name == "'"$REPO_NAME"'") | filename' \
   | head -1)
 
