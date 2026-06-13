@@ -56,8 +56,7 @@ spec:
         api_base: "{{ env.OPENAI_API_BASE }}"
         model: deepseek/deepseek-v4-pro
         temperature: 0.6
-        model_info:
-          supports_response_schema: false
+        additional_drop_params: ["response_format"] 
         input_cost_per_token: 0.00000014
         output_cost_per_token: 0.00000028
         custom_args:
