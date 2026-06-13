@@ -47,6 +47,8 @@ spec:
     # default model
     - name: MODEL
       value: mimo-v2.5-pro
+    - name: OVERRIDE_MAX_OUTPUT_TOKEN
+      value: "131072" # from https://mimo.mi.com/docs/en-US/quick-start/summary/model
 
     modelList:
       mimo-v2.5-pro:
@@ -54,5 +56,9 @@ spec:
         api_base: "{{ env.OPENAI_API_BASE }}"
         model: mimo-v2.5-pro
         temperature: 0.6
-        input_cost_per_token: 0.000000435
-        output_cost_per_token: 0.00000087
+        # mimo-v2.5-pro domestic pricing: ¥3.00/M input (cache miss), ¥6.00/M
+        # output. Converted to USD/token at ~¥7.2/USD (rough estimate).
+        input_cost_per_token: 0.000000417
+        output_cost_per_token: 0.000000833
+        custom_args:
+          max_context_size: 1000000
