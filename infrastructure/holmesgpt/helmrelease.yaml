@@ -46,25 +46,20 @@ spec:
           key: openai-api-base
     # default model
     - name: MODEL
-      value: minimax-m3
-    # - name: OVERRIDE_MAX_OUTPUT_TOKEN
-    #   value: "131072" # from https://mimo.mi.com/docs/en-US/quick-start/summary/model
+      value: deepseek-v4-pro
+    - name: OVERRIDE_MAX_OUTPUT_TOKEN
+      value: "380000" # from https://mimo.mi.com/docs/en-US/quick-start/summary/model
 
     modelList:
-      minimax-m3:
+      deepseek-v4-pro:
         api_key: "{{ env.OPENAI_API_KEY }}"
         api_base: "{{ env.OPENAI_API_BASE }}"
-        model: minimax/MiniMax-M3
+        model: deepseek/deepseek-v4-pro
         temperature: 0.6
-        # mimo-v2.5-pro domestic pricing: ¥3.00/M input (cache miss), ¥6.00/M
-        # output. Converted to USD/token at ~¥7.2/USD (rough estimate).
-        # input_cost_per_token: 0.000000417
-        # output_cost_per_token: 0.000000833
+        input_cost_per_token: 0.00000014
+        output_cost_per_token: 0.00000028
         custom_args:
           max_context_size: 1000000
-        # MiMo enables "deep thinking" by default; reasoning output breaks the
-        # strict-JSON structured response Holmes parses (and misbehaves in the
-        # multi-turn tool loop). Disable it via the raw request body.
-        # extra_body:
-        #   thinking:
-        #     type: disabled
+        extra_body:
+          thinking:
+            type: disabled
