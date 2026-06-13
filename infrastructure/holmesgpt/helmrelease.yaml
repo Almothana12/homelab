@@ -39,10 +39,17 @@ spec:
         secretKeyRef:
           name: holmes-secrets
           key: openai-api-key
+    - name: OPENAI_API_BASE
+      valueFrom:
+        secretKeyRef:
+          name: holmes-secrets
+          key: openai-api-base
 
     modelList:
       deepseek-v4-pro:
         api_key: "{{ env.OPENAI_API_KEY }}"
+        api_base: "{{ env.OPENAI_API_BASE }}"
         model: deepseek-v4-pro
+        temperature: 0.6
         input_cost_per_token: 0.000000435
         output_cost_per_token: 0.00000087
