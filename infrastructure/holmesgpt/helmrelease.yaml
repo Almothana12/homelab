@@ -44,6 +44,9 @@ spec:
         secretKeyRef:
           name: holmes-secrets
           key: openai-api-base
+    # default model
+    - name: MODEL
+      value: deepseek-v4-pro
 
     modelList:
       deepseek-v4-pro:
@@ -53,5 +56,3 @@ spec:
         temperature: 0.6
         input_cost_per_token: 0.000000435
         output_cost_per_token: 0.00000087
-    config:
-      model: "deepseek-v4-pro"
