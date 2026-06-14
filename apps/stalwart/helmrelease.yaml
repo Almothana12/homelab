@@ -67,8 +67,15 @@ spec:
     # in the database once the server is bootstrapped.
     # See /docs/configuration/overview and /docs/ref/object/data-store.
     config:
-      "@type": RocksDb
-      path: /var/lib/stalwart
+      "@type": "PostgreSql"
+      host: "stalwart-cluster-rw"
+      port: 5432
+      database: "app"
+      authUsername: "app"
+      authSecret: 
+        "@type": "File"
+        filePath: "/etc/stalwart/ldap-bind-password/password"
+      poolMaxConnections: 10
 
     # Service definition. Change `type` to LoadBalancer when a cloud
     # load balancer should expose the mail ports directly, or keep it
@@ -139,6 +146,10 @@ spec:
     # Extra volumes added to the pod. Pairs with extraVolumeMounts.
     # Use for mounting Secrets, ConfigMaps, or additional PVCs.
     extraVolumes:
+      - name: db-password
+        secret:
+          secretName: stalwart-cluster-v00-app
+          defaultMode: 0400
       - name: bind-password
         secret:
           secretName: ldap-bind-password
@@ -150,6 +161,9 @@ spec:
 
     # Extra volume mounts added to the stalwart container.
     extraVolumeMounts:
+      - name: db-password
+        mountPath: /etc/stalwart/db-password
+        readOnly: true
       - name: bind-password
         mountPath: /etc/stalwart/ldap-bind-password
         readOnly: true
