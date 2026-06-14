@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret-ldap-bind-password.yaml
+  - helmrelease-stalwart-cluster.yaml
   - gitrepo.yaml
   - helmrelease.yaml
   - tailscale.yaml
