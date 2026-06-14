@@ -74,7 +74,7 @@ spec:
       authUsername: "app"
       authSecret: 
         "@type": "File"
-        filePath: "/etc/stalwart/ldap-bind-password/password"
+        filePath: "/etc/stalwart/db-password/password"
       poolMaxConnections: 10
 
     # Service definition. Change `type` to LoadBalancer when a cloud
