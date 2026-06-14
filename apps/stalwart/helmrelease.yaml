@@ -121,7 +121,7 @@ spec:
     # for deployments that use an external store (PostgreSQL, MySQL,
     # FoundationDB, S3-backed blob store, etc.).
     persistence:
-      enabled: true
+      enabled: false
       accessMode: ReadWriteOnce
       storageClass: ""
       size: 20Gi
