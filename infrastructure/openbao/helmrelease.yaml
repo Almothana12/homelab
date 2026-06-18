@@ -12,4 +12,22 @@ spec:
         kind: HelmRepository
         name: openbao
       interval: 5m
-  # values: 
+  values:
+    server:
+      enabled: "true"
+      ingress:
+        enabled: false
+        annotations:
+          nginx.org/ssl-services: "openbao" # SSL Redirect
+        ingressClassName: "nginx"
+        pathType: Prefix
+
+        # When HA mode is enabled and K8s service registration is being used,
+        # configure the ingress to point to the OpenBao active service.
+        # activeService: true
+        hosts:
+          - host: openbao.almothana.xyz
+        tls:
+          - secretName: almothana-xyz-tls
+            hosts:
+              - openbao.almothana.xyz
