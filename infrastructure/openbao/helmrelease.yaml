@@ -16,7 +16,7 @@ spec:
     server:
       enabled: "true"
       ingress:
-        enabled: false
+        enabled: true
         annotations:
           nginx.org/ssl-services: "openbao" # SSL Redirect
         ingressClassName: "nginx"
