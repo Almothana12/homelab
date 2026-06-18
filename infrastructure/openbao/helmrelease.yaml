@@ -17,8 +17,8 @@ spec:
       enabled: "true"
       ingress:
         enabled: true
-        annotations:
-          nginx.org/ssl-services: "openbao" # SSL Redirect
+        # annotations:
+        #   nginx.org/ssl-services: "openbao" # SSL Redirect
         ingressClassName: "nginx"
         pathType: Prefix
 
