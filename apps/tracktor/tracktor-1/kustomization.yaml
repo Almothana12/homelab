@@ -6,5 +6,4 @@ resources:
   - configmap-tracktor-1-config.yaml
   - deployment-tracktor-1.yaml
   - service-tracktor-1.yaml
-  - ingress-tracktor-1.yaml
   - volsync.yaml
