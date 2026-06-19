@@ -24,7 +24,11 @@ spec:
           envFrom:
             - secretRef:
                 name: romm-api
+            - secretRef:
+                name: romm-oidc
           env:
+            - name: ROMM_BASE_URL
+              value: https://romm.almothana.xyz
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:

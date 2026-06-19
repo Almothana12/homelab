@@ -9,6 +9,7 @@ resources:
   - PVC-romm.yaml
   - secret-mariadb.yaml
   - secret-romm-api.yaml
+  - secret-romm-oidc.yaml
   - service-romm.yaml
   - service-romm-mariadb.yaml
   - ingress-romm.yaml
