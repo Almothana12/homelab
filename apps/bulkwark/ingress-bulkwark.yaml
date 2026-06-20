@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bulkwark
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: bulkwark.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: bulkwark
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - bulkwark.almothana.xyz
+      secretName: almothana-xyz-tls
