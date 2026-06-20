@@ -42,9 +42,9 @@ spec:
     # Remove it once a permanent administrator account has been
     # provisioned through the setup wizard.
     recoveryAdmin:
-      enabled: false
-      # username: admin
-      # password: "change-me"
+      enabled: true
+      username: admin
+      password: "change-me"
 
     # Starts the pods in recovery mode. Suspends mail services and
     # exposes only the management listener on the configured port.
