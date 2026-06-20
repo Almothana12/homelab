@@ -42,17 +42,17 @@ spec:
                 - --spider
                 - http://127.0.0.1:3000/api/health
           volumeMounts:
-            - name: data
+            - name: bulkwark
               mountPath: /app/data/settings
               subPath: settings
-            - name: data
+            - name: bulkwark
               mountPath: /app/data/admin
               subPath: admin
               readOnly: true
-            - name: data
+            - name: bulkwark
               mountPath: /app/data/admin-state
               subPath: admin-state
-            - name: data
+            - name: bulkwark
               mountPath: /app/data/telemetry
               subPath: telemetry
       restartPolicy: Always
