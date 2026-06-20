@@ -5,3 +5,4 @@ resources:
   - deployment-bulkwark.yaml
   - service-bulkwark.yaml
   - ingress-bulkwark.yaml
+  - namespace.yaml
