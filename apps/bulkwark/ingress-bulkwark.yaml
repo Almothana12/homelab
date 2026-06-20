@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: cilium
   rules:
-  - host: bulkwark.almothana.xyz
+  - host: webmail.almothana.cloud
     http:
       paths:
       - backend:
@@ -17,5 +17,5 @@ spec:
         pathType: Prefix
   tls:
     - hosts:
-        - bulkwark.almothana.xyz
-      secretName: almothana-xyz-tls
+        - webmail.almothana.cloud
+      secretName: almothana-cloud-tls
