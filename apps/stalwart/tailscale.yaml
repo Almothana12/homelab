@@ -32,3 +32,7 @@ spec:
       name: smtp
       targetPort: 25
       protocol: TCP
+    - port: 443
+      name: jmap-https
+      targetPort: 8443
+      protocol: TCP
