@@ -101,20 +101,7 @@ spec:
     # Ingress for the HTTP / HTTPS listeners only. Mail protocols
     # require L4 exposure and are not handled here.
     ingress:
-      enabled: true
-      className: nginx
-      annotations:
-        nginx.org/ssl-services: "stalwart"
-      hosts:
-        - host: stalwart.almothana.cloud
-          paths:
-            - path: /
-              pathType: Prefix
-              portName: https
-      tls:
-        - secretName: almothana-cloud-tls
-          hosts:
-            - stalwart.almothana.cloud
+      enabled: false
 
     # Persistent volume for the data directory. Required when the
     # DataStore is a local backend such as RocksDB. Can be disabled
