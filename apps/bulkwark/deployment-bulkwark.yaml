@@ -53,7 +53,7 @@ spec:
             - name: bulkwark
               mountPath: /app/data/admin
               subPath: admin
-              # readOnly: true
+              readOnly: true
             - name: bulkwark
               mountPath: /app/data/admin-state
               subPath: admin-state

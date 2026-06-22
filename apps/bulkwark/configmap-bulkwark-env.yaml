@@ -84,7 +84,7 @@ data:
   #
   # Set to "true" to enforce read-only mode at the application layer (cleaner
   # error than a mid-request EROFS). Pair with `:ro` on the config-volume mount.
-  # ADMIN_CONFIG_READONLY: "true"
+  ADMIN_CONFIG_READONLY: "true"
   #
   # Legacy: a single dir containing both config and state. Honoured if neither
   # of the split variables is set. New installs should use the split vars.
