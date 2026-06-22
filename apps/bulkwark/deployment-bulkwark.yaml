@@ -23,7 +23,7 @@ spec:
           envFrom:
            - secretRef:
               name: bulkwark-env
-           - configRef:
+           - configMapRef:
               name: bulkwark-env
           env:
             - name: HOSTNAME
