@@ -23,7 +23,7 @@ data:
   # Users can connect to any JMAP-compatible server.
   # NOTE: External JMAP servers must include this domain in their CORS
   # Access-Control-Allow-Origin header, or browser requests will be blocked.
-  # ALLOW_CUSTOM_JMAP_ENDPOINT=true
+  # ALLOW_CUSTOM_JMAP_ENDPOINT: "true"
 
   # =============================================================================
   # Stalwart Mail Server Integration
@@ -31,18 +31,18 @@ data:
 
   # Enable Stalwart-specific features (password change, sieve filters, etc.)
   # Set to "false" to disable if using a non-Stalwart JMAP server.
-  STALWART_FEATURES: true
+  STALWART_FEATURES: "true"
 
   # =============================================================================
   # OAuth / OpenID Connect (optional)
   # =============================================================================
 
   # Set to "true" to use OAuth instead of basic JMAP authentication
-  OAUTH_ENABLED: true
+  OAUTH_ENABLED: "true"
 
   # Set to "true" to only allow OAuth login (hides username/password form)
-  # Requires OAUTH_ENABLED=true
-  OAUTH_ONLY: true
+  # Requires OAUTH_ENABLED: "true"
+  OAUTH_ONLY: "true"
 
   # OAuth client ID registered with your identity provider
   OAUTH_CLIENT_ID: DldpY20SOHxG8SrVAq8Qb25hkVDJAp65uaN27kvI
@@ -50,7 +50,7 @@ data:
   # OAuth client secret (server-side only, never exposed to the browser)
   OAUTH_CLIENT_SECRET: RmHTyDaVaKQqlwwj6JOdLTTOhEHqQuZw9Y0nOAgHbAE2b46iZ8HhZX8l7L3rvoWtdAsu2aQUU4Bdx70lA8M5zIicPkDq1uqhT6BpiNAMtQzMhi5u8wkYnzxDX19fFfUV
   # Alternatively, you can specify the path to a file containing the OAuth client secret.
-  # OAUTH_CLIENT_SECRET_FILE=/oauth-client-secret
+  # OAUTH_CLIENT_SECRET_FILE: /oauth-client-secret
 
   # OpenID Connect issuer URL for discovery
   OAUTH_ISSUER_URL: "https://authentik.almothana.sa/application/o/bulkwark/"
@@ -58,12 +58,12 @@ data:
   # Overrides only the user-facing authorize endpoint (e.g. a per-brand login
   # host). Discovery, token exchange and refresh keep using OAUTH_ISSUER_URL.
   # Leave unset to use the authorization_endpoint from discovery.
-  # OAUTH_AUTHORIZE_URL=https://login.your-brand.example.com/application/o/authorize/
+  # OAUTH_AUTHORIZE_URL: https://login.your-brand.example.com/application/o/authorize/
 
   # Allow OAuth discovery to resolve to private (RFC-1918 / loopback) addresses.
   # Off by default as an SSRF guard. Enable for split-DNS deployments where the
   # OAuth issuer's public hostname resolves to an internal IP from this server.
-  OAUTH_ALLOW_PRIVATE_ENDPOINTS: true
+  OAUTH_ALLOW_PRIVATE_ENDPOINTS: "true"
 
   # =============================================================================
   # Session & Security
@@ -83,12 +83,12 @@ data:
   # Enable server-side settings persistence (requires SESSION_SECRET).
   # When enabled, user settings are encrypted and stored on the server,
   # allowing them to sync across browsers and devices.
-  # SETTINGS_SYNC_ENABLED=true
+  # SETTINGS_SYNC_ENABLED: "true"
 
   # Directory for storing encrypted settings files (default: ./data/settings).
   # For Docker, the working directory is /app, so the default resolves to
   # /app/data/settings - mount a persistent volume there (see docker-compose.yml).
-  # SETTINGS_DATA_DIR=./data/settings
+  # SETTINGS_DATA_DIR: ./data/settings
 
   # =============================================================================
   # Admin Dashboard Data
@@ -101,21 +101,21 @@ data:
   # admin.json (passwordHash only), plugin-config/, plugins/, themes/, and
   # branding uploads. Safe to mount read-only after setup.
   # Default: ./data/admin (or ADMIN_DATA_DIR if that legacy variable is set)
-  # ADMIN_CONFIG_DIR=./data/admin
+  # ADMIN_CONFIG_DIR: ./data/admin
   #
   # State dir - runtime mutations. Holds admin-state.json (login timestamps),
   # audit.log, and the bootstrap setup token. Always read-write.
   # Default: ./data/admin-state (or ADMIN_DATA_DIR/state when ADMIN_DATA_DIR
   #          is set, for back-compat with single-volume installs)
-  # ADMIN_STATE_DIR=./data/admin-state
+  # ADMIN_STATE_DIR: ./data/admin-state
   #
   # Set to "true" to enforce read-only mode at the application layer (cleaner
   # error than a mid-request EROFS). Pair with `:ro` on the config-volume mount.
-  ADMIN_CONFIG_READONLY: true
+  ADMIN_CONFIG_READONLY: "true"
   #
   # Legacy: a single dir containing both config and state. Honoured if neither
   # of the split variables is set. New installs should use the split vars.
-  # ADMIN_DATA_DIR=./data/admin
+  # ADMIN_DATA_DIR: ./data/admin
 
   # =============================================================================
   # Anonymous Telemetry
@@ -128,7 +128,7 @@ data:
   # https://bulwarkmail.org/docs/legal/privacy/telemetry for the full schema.
   #
   # Enable telemetry (also toggleable in the admin UI):
-  BULWARK_TELEMETRY: on
+  BULWARK_TELEMETRY: "on"
   #
   # Setting this (on or off) locks the choice and disables the admin UI toggle.
 
@@ -136,7 +136,7 @@ data:
   # (default: ./data/telemetry). For Docker, the default resolves to
   # /app/data/telemetry - mount a persistent volume there (see docker-compose.yml)
   # so the instance id and consent choice survive upgrades.
-  # TELEMETRY_DATA_DIR=./data/telemetry
+  # TELEMETRY_DATA_DIR: ./data/telemetry
 
   # =============================================================================
   # Server Listen Address
@@ -147,7 +147,7 @@ data:
   HOSTNAME: 0.0.0.0
 
   # Port the server listens on (default: 3000)
-  PORT: 3000
+  PORT: "3000"
 
   # =============================================================================
   # Logging
@@ -169,11 +169,11 @@ data:
 
   # Short name for the app, used in contexts where space is limited
   # (e.g. home screen label on mobile). Defaults to APP_NAME if not set.
-  # APP_SHORT_NAME=Bulwark
+  # APP_SHORT_NAME: "Bulwark"
 
   # Description shown in the PWA manifest (displayed by the OS during install).
   # Defaults to a generic Bulwark description if not set.
-  # APP_DESCRIPTION=Your personal webmail
+  # APP_DESCRIPTION: "Your personal webmail"
 
   # ---------------------------------------------------------------------------
   # Icons & favicon
@@ -183,13 +183,13 @@ data:
   # Supported formats: SVG (recommended), PNG, ICO.
   # Can be an absolute URL (https://...) or a path relative to the public/ directory.
   # Defaults to the Bulwark favicon if not set.
-  # FAVICON_URL=/branding/my-favicon.svg
+  # FAVICON_URL: /branding/my-favicon.svg
 
   # Source image used to auto-generate PWA icons (192×192 and 512×512 PNG).
   # Supported formats: SVG (recommended for best quality) or PNG (≥512×512px recommended).
   # Can be an absolute URL (https://...) or a path relative to the public/ directory.
   # Falls back to FAVICON_URL if not set, and to the default Bulwark icons if neither is set.
-  # PWA_ICON_URL=/branding/my-icon.svg
+  # PWA_ICON_URL: /branding/my-icon.svg
 
   # ---------------------------------------------------------------------------
   # PWA appearance
@@ -197,11 +197,11 @@ data:
 
   # Color applied to the browser UI chrome when the app is installed as a PWA
   # (address bar, status bar on Android). Default: #ffffff
-  # PWA_THEME_COLOR=#3b82f6
+  # PWA_THEME_COLOR: "#3b82f6"
 
   # Background color shown on the PWA splash screen while the app is loading.
   # Should match your app's main background color. Default: #ffffff
-  # PWA_BACKGROUND_COLOR=#ffffff
+  # PWA_BACKGROUND_COLOR: #ffffff
 
   # ---------------------------------------------------------------------------
   # Logos
@@ -212,17 +212,17 @@ data:
   # Recommended size: min 24×24px, max 128×128px.
   # Can be absolute URLs or paths relative to the public/ directory.
   # If not set, no logo is shown in the sidebar.
-  # APP_LOGO_LIGHT_URL=/branding/my-logo-color.svg
-  # APP_LOGO_DARK_URL=/branding/my-logo-white.svg
+  # APP_LOGO_LIGHT_URL: /branding/my-logo-color.svg
+  # APP_LOGO_DARK_URL: /branding/my-logo-white.svg
 
   # Logos shown on the login page.
   # Supported formats: SVG (recommended), PNG, WebP.
   # Recommended size: min 32×32px, max 512×512px.
   # Can be absolute URLs or paths relative to the public/ directory.
   # Light mode logo (shown on light backgrounds). Defaults to the Bulwark logo.
-  # LOGIN_LOGO_LIGHT_URL=/branding/Bulwark_Logo_Color.svg
+  # LOGIN_LOGO_LIGHT_URL: /branding/Bulwark_Logo_Color.svg
   # Dark mode logo (shown on dark backgrounds). Defaults to the Bulwark white logo.
-  # LOGIN_LOGO_DARK_URL=/branding/Bulwark_Logo_Color.svg
+  # LOGIN_LOGO_DARK_URL: /branding/Bulwark_Logo_Color.svg
 
   # ---------------------------------------------------------------------------
   # Login page
@@ -232,13 +232,13 @@ data:
   LOGIN_COMPANY_NAME: "Bulwark Webmail"
 
   # URL for the imprint / legal notice link on the login page.
-  # LOGIN_IMPRINT_URL=https://example.com/imprint
+  # LOGIN_IMPRINT_URL: https://example.com/imprint
 
   # URL for the privacy policy link on the login page.
-  # LOGIN_PRIVACY_POLICY_URL=https://example.com/privacy
+  # LOGIN_PRIVACY_POLICY_URL: https://example.com/privacy
 
   # URL for the company website link on the login page.
-  # LOGIN_WEBSITE_URL=https://bulwarkmail.org
+  # LOGIN_WEBSITE_URL: https://bulwarkmail.org
 
   # ---------------------------------------------------------------------------
   # Per-domain branding overrides (optional)
@@ -261,7 +261,7 @@ data:
   # Prefer setting this from the admin dashboard (PATCH /api/admin/config).
   # The env-var form is provided for stateless deployments.
   #
-  # DOMAIN_BRANDING=[{"host":"maildomain1.com","loginCompanyName":"Company One","loginLogoLightUrl":"/branding/one-color.svg","loginLogoDarkUrl":"/branding/one-white.svg","loginWebsiteUrl":"https://one.example"},{"host":"maildomain2.com","loginCompanyName":"Company Two","faviconUrl":"/branding/two-favicon.svg"},{"host":"*.intranet.example.com","loginCompanyName":"Internal"}]
+  # DOMAIN_BRANDING" '[{"host":"maildomain1.com","loginCompanyName":"Company One","loginLogoLightUrl":"/branding/one-color.svg","loginLogoDarkUrl":"/branding/one-white.svg","loginWebsiteUrl":"https://one.example"},{"host":"maildomain2.com","loginCompanyName":"Company Two","faviconUrl":"/branding/two-favicon.svg"},{"host":"*.intranet.example.com","loginCompanyName":"Internal"}]'
 
   # =============================================================================
   # Extension Directory / Marketplace
@@ -270,7 +270,7 @@ data:
   # URL of the BulwarkMail extension directory for the admin marketplace.
   # Defaults to https://extensions.bulwarkmail.org. Override only if you run
   # your own directory (e.g. http://localhost:3001 for local development).
-  # EXTENSION_DIRECTORY_URL=https://extensions.bulwarkmail.org
+  # EXTENSION_DIRECTORY_URL: https://extensions.bulwarkmail.org
 
   # =============================================================================
   # Internationalization
@@ -281,12 +281,12 @@ data:
   # Fallback UI locale used when the visitor's Accept-Language header does not
   # match any supported locale. Defaults to "en".
   # Supported: cs, da, de, en, es, fr, it, ja, ko, lv, nl, pl, pt, ru, tr, uk, zh
-  # NEXT_PUBLIC_DEFAULT_LOCALE=tr
+  # NEXT_PUBLIC_DEFAULT_LOCALE: tr
 
   # Locale prefix mode for URLs. Recommended "always" when proxying under a
   # subpath (NEXT_PUBLIC_BASE_PATH) to avoid next-intl rewrite loops.
   # Values: never (default) | always | as-needed
-  # NEXT_PUBLIC_LOCALE_PREFIX=always
+  # NEXT_PUBLIC_LOCALE_PREFIX: always
 
   # =============================================================================
   # Legacy Build-time Variables (still supported as fallback)
@@ -294,5 +294,5 @@ data:
   # These are baked into the bundle at build time. The runtime variables above
   # take priority when both are set.
   #
-  # NEXT_PUBLIC_APP_NAME=Bulwark Webmail
-  # NEXT_PUBLIC_JMAP_SERVER_URL=https://your-jmap-server.com
+  # NEXT_PUBLIC_APP_NAME: "Bulwark Webmail"
+  # NEXT_PUBLIC_JMAP_SERVER_URL: https://your-jmap-server.com
