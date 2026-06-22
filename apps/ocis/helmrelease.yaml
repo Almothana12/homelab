@@ -13,7 +13,7 @@ spec:
   values:
     image:
       tag: 8.0.4
-    externalDomain: ocis.almothana.cloud
+    externalDomain: ocis.almothana.sa
     ingress:
       enabled: true
       ingressClassName: cilium
@@ -21,8 +21,8 @@ spec:
         ingress.cilium.io/loadbalancer-mode: shared
       tls:
         - hosts:
-            - ocis.almothana.cloud
-          secretName: almothana-cloud-tls
+            - ocis.almothana.sa
+          secretName: almothana-sa-tls
     secretRefs:
       # @schema
       # type: [string, null]
@@ -35,7 +35,7 @@ spec:
       externalUserManagement:
         enabled: true
         oidc:
-          issuerURI: "https://authentik.almothana.cloud/application/o/ocis/"
+          issuerURI: "https://authentik.almothana.sa/application/o/ocis/"
           userIDClaim: sub
           userIDClaimAttributeMapping: userid
           accessTokenVerifyMethod: none
@@ -170,7 +170,7 @@ spec:
         directives:
           connectSrc:
             - "'self'"
-            - "https://authentik.almothana.cloud"
+            - "https://authentik.almothana.sa"
           scriptSrc:
             - "'self'"
             - "'unsafe-inline'"
@@ -181,4 +181,4 @@ spec:
           frameSrc:
             - "'self'"
             - "blob:"
-            - "https://authentik.almothana.cloud"
+            - "https://authentik.almothana.sa"

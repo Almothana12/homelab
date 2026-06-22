@@ -84,7 +84,7 @@ spec:
     service:
       type: LoadBalancer
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: mail.almothana.cloud
+        external-dns.alpha.kubernetes.io/hostname: mail.almothana.sa
       ports:
         smtp: 25
         smtps: 465
@@ -154,9 +154,9 @@ spec:
         secret:
           secretName: ldap-bind-password
           defaultMode: 0400
-      - name: almothana-cloud-tls
+      - name: almothana-sa-tls
         secret:
-          secretName: almothana-cloud-tls
+          secretName: almothana-sa-tls
           defaultMode: 0400
 
     # Extra volume mounts added to the stalwart container.
@@ -167,6 +167,6 @@ spec:
       - name: bind-password
         mountPath: /etc/stalwart/ldap-bind-password
         readOnly: true
-      - name: almothana-cloud-tls
+      - name: almothana-sa-tls
         mountPath: /etc/stalwart/ssl
         readOnly: true

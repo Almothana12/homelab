@@ -16,7 +16,7 @@ StringData:
   APP_NAME: "Bulwark Webmail"
 
   # URL of your JMAP-compatible mail server (required unless ALLOW_CUSTOM_JMAP_ENDPOINT is set)
-  JMAP_SERVER_URL: "https://mail.almothana.cloud"
+  JMAP_SERVER_URL: "https://mail.almothana.sa"
 
   # Allow users to specify a custom JMAP server URL on the login form.
   # When enabled, a "JMAP Server" field appears on the login page.
@@ -53,7 +53,7 @@ StringData:
   # OAUTH_CLIENT_SECRET_FILE=/oauth-client-secret
 
   # OpenID Connect issuer URL for discovery
-  OAUTH_ISSUER_URL: "https://authentik.almothana.cloud/application/o/bulkwark/"
+  OAUTH_ISSUER_URL: "https://authentik.almothana.sa/application/o/bulkwark/"
 
   # Overrides only the user-facing authorize endpoint (e.g. a per-brand login
   # host). Discovery, token exchange and refresh keep using OAUTH_ISSUER_URL.

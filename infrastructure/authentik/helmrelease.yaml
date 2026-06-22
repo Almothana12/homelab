@@ -22,11 +22,11 @@ spec:
         enabled: true
         ingressClassName: cilium
         hosts:
-          - authentik.almothana.cloud
+          - authentik.almothana.sa
         tls:
-          - secretName: almothana-cloud-tls
+          - secretName: almothana-sa-tls
             hosts:          
-              - authentik.almothana.cloud
+              - authentik.almothana.sa
 
     postgresql:
       enabled: false # will use cnpg instead of the built-in postgresql chart
@@ -58,7 +58,7 @@ spec:
               name: authentik-cluster-v00-app
               key: password
         - name: AUTHENTIK_EMAIL__HOST
-          value: "mail.almothana.cloud"
+          value: "mail.almothana.sa"
         - name: AUTHENTIK_EMAIL__PORT
           value: "465"
         - name: AUTHENTIK_EMAIL__USE_TLS
@@ -68,4 +68,4 @@ spec:
         - name: AUTHENTIK_EMAIL__TIMEOUT
           value: "30"
         - name: AUTHENTIK_EMAIL__FROM
-          value: "no-reply@almothana.cloud"
+          value: "no-reply@almothana.sa"
