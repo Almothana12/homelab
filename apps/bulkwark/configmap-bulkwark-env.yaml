@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bulkwark-env
-StringData: 
+data: 
   # Bulwark Webmail - Production Configuration
   # Copy this file to .env.local and fill in your values.
   # For development with the built-in mock server, see .env.dev.example instead.
