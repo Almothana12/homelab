@@ -20,6 +20,11 @@ spec:
         - image: ghcr.io/bulwarkmail/webmail:1.7.4
           name: bulkwark
           resources: {}
+          envFrom:
+           - secretRef:
+              name: bulkwark-env
+           - configRef:
+              name: bulkwark-env
           env:
             - name: HOSTNAME
               value: 0.0.0.0
