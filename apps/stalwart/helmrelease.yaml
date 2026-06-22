@@ -41,8 +41,8 @@ spec:
     # scraping the pod logs for the generated temporary password.
     # Remove it once a permanent administrator account has been
     # provisioned through the setup wizard.
-    # recoveryAdmin:
-    #   enabled: true
+    recoveryAdmin:
+      enabled: false
     #   username: admin
     #   password: "change-me"
 
