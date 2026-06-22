@@ -7,3 +7,4 @@ resources:
   - ClusterIssuer-letsencrypt-production.yaml
   - ClusterIssuer-letsencrypt-staging.yaml
   - Certificate-production-certificate-cloud.yaml
+  - Certificate-production-certificate-sa.yaml
