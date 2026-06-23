@@ -36,8 +36,8 @@ spec:
         enabled: true
         oidc:
           issuerURI: "https://authentik.almothana.sa/application/o/ocis/"
-          userIDClaim: sub
-          userIDClaimAttributeMapping: userid
+          userIDClaim: preferred_username
+          userIDClaimAttributeMapping: username
           accessTokenVerifyMethod: none
           # map Authentik groups to oCIS roles
           roleAssignment:
