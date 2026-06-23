@@ -22,7 +22,7 @@ trusted_certs:
 
 oidc:
   client_id_is_secret: true # get the client ID from the secret
-  issuer: https://authentik.almothana.cloud/application/o/openunison/
+  issuer: https://sso.almothana.sa/application/o/openunison/
   user_in_idtoken: true
   domain: ""
   scopes: openid email profile groups
