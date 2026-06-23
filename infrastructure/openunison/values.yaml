@@ -42,6 +42,9 @@ openunison:
   auto_timestamp: false
   force_update: initial-deployment-2
 
+network_policies:
+  enabled: false # to fix webhook timeout issue with Cilium and k8s API.
+
 # disable the k8s dashboard. use Headlamp
 dashboard:
   enabled: false
