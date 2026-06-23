@@ -51,9 +51,13 @@ spec:
                   key: password
           resources: {}
           readinessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 2
           ports:
             - name: http
               containerPort: 8080
