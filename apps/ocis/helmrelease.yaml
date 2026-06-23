@@ -86,7 +86,7 @@ spec:
               groupName: cn
               member: member
         autoprovisionAccounts:
-          enabled: false
+          enabled: true
       appsIntegration:
         enabled: true
         wopiIntegration:
