@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cliparr
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: cliparr.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: cliparr
+            port:
+              number: 7171
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - cliparr.almothana.xyz
+      secretName: almothana-xyz-tls

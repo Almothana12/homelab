@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cliparr
+  name: cliparr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cliparr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cliparr
+    spec:
+      containers:
+        - image: ghcr.io/techsquidtv/cliparr:1.2
+          name: cliparr
+          resources: {}
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cliparr
+                  key: app-key
+          ports:
+            - containerPort: 7171
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: cliparr
+            - mountPath: /library
+              name: library
+      restartPolicy: Always
+      volumes:
+        - name: cliparr
+          persistentVolumeClaim:
+            claimName: cliparr
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
