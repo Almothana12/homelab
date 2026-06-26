@@ -1047,7 +1047,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: clippar
+  name: cliparr
   namespace: flux-system
 spec:
   decryption:
@@ -1056,7 +1056,7 @@ spec:
       name: sops-age
   force: false
   interval: 5m0s
-  path: ./apps/clippar
+  path: ./apps/cliparr
   prune: true
   sourceRef:
     kind: GitRepository
