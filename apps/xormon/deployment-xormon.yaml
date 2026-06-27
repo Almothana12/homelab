@@ -17,7 +17,7 @@ spec:
         app: xormon
     spec:
       containers:
-        - image: xorux/xormon-ng:2.2.50
+        - image: xorux/xormon-ng:2.3.0
           name: xormon
           resources: {}
           env:
