@@ -33,13 +33,13 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: cliparr
-            - mountPath: /library
-              name: library
+            # - mountPath: /library
+            #   name: library
       restartPolicy: Always
       volumes:
         - name: cliparr
           persistentVolumeClaim:
             claimName: cliparr
-        - name: library
-          persistentVolumeClaim:
-            claimName: plex-library
+        # - name: library
+        #   persistentVolumeClaim:
+        #     claimName: plex-library
