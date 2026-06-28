@@ -17,7 +17,7 @@ spec:
         app: bulkwark
     spec:
       containers:
-        - image: ghcr.io/bulwarkmail/webmail:1.7.4
+        - image: ghcr.io/bulwarkmail/webmail:1.7.5
           name: bulkwark
           resources: {}
           envFrom:
