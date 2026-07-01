@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: kubetail
       interval: 5m
-  values: 
+  values:
     kubetail:
       dashboard:
         enabled: true
@@ -24,20 +24,4 @@ spec:
           allowedOrigins:
             - https://kubetail.almothana.xyz
         ingress:
-          enabled: true
-          className: cilium
-          rules:
-            - host: kubetail.almothana.xyz
-              http:
-                paths:
-                  - backend:
-                      service:
-                        name: kubetail
-                        port:
-                          number: 8080
-                    path: /
-                    pathType: Prefix
-          tls:
-            - hosts:
-                - kubetail.almothana.xyz
-              secretName: almothana-xyz-tls
+          enabled: false # using Authentik proxy
