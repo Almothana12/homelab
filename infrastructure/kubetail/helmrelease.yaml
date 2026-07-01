@@ -16,6 +16,13 @@ spec:
     kubetail:
       dashboard:
         enabled: true
+        runtimeConfig:
+          session:
+            cookie:
+              name: __Host-session
+              secure: true
+          allowedOrigins:
+            - https://kubetail.almothana.xyz
         ingress:
           enabled: true
           className: cilium
