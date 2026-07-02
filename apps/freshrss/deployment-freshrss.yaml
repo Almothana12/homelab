@@ -30,10 +30,10 @@ spec:
               protocol: TCP
               name: http
           volumeMounts:
-            - name: freshrss-data
+            - name: freshrss
               mountPath: /var/www/FreshRSS/data
               subPath: data
-            - name: freshrss-extensions
+            - name: freshrss
               mountPath: /var/www/FreshRSS/extensions
               subPath: extensions
       restartPolicy: Always
