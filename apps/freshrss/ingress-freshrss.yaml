@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: freshrss
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: freshrss.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: freshrss
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - freshrss.almothana.xyz
+      secretName: almothana-xyz-tls
