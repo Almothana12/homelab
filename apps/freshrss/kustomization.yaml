@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace-freshrss.yaml
   - PVC-freshrss.yaml
+  - secret-freshrss.yaml
   - deployment-freshrss.yaml
   - service-freshrss.yaml
   - ingress-freshrss.yaml
