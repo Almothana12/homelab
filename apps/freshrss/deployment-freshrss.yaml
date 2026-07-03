@@ -20,6 +20,9 @@ spec:
         - image: freshrss/freshrss:1.29.1
           name: freshrss
           resources: {}
+          envFrom:
+            - secretRef:
+                name: freshrss
           env:
             - name: TZ
               value: Asia/Riyadh
