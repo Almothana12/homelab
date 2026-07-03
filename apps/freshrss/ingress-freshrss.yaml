@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: cilium
   rules:
-  - host: freshrss.almothana.xyz
+  - host: freshrss.almothana.sa
     http:
       paths:
       - backend:
@@ -17,5 +17,5 @@ spec:
         pathType: Prefix
   tls:
     - hosts:
-        - freshrss.almothana.xyz
-      secretName: almothana-xyz-tls
+        - freshrss.almothana.sa
+      secretName: almothana-sa-tls
