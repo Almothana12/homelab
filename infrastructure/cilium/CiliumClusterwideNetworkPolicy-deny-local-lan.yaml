@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: deny-local-lan
+spec:
+  endpointSelector: {} # every pod, all namespaces
+  enableDefaultDeny:
+    egress: false               # subtractive only; do NOT flip pods to default-deny egress
+    ingress: false
+  egressDeny:
+    - toCIDRSet:
+        - cidr: 192.168.0.0/24
+          except:
+            - 192.168.0.2/32
+            - 192.168.0.109/32
+            - 192.168.0.248/29

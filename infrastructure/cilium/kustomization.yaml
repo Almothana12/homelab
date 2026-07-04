@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - CiliumLoadBalancerIPPool.yaml
   - CiliumL2AnnouncementPolicy.yaml
+  - CiliumClusterwideNetworkPolicy-deny-local-lan.yaml
