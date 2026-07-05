@@ -27,6 +27,17 @@ spec:
           rules:
             dns:
               - matchPattern: "*"
+    # To Authentik
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: server
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/name: authentik
+            io.kubernetes.pod.namespace: authentik
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
     # To pods in the same namespace
     - toEndpoints:
         - {}
