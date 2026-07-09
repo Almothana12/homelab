@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bulkwark
+  name: bulwark
 spec:
   ingressClassName: cilium
   rules:
@@ -10,7 +10,7 @@ spec:
       paths:
       - backend:
           service:
-            name: bulkwark
+            name: bulwark
             port:
               number: 3000
         path: /

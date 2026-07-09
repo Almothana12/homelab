@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: bulkwark-env
+  name: bulwark-env
 data: 
   # Bulwark Webmail - Production Configuration
   # Copy this file to .env.local and fill in your values.
@@ -36,7 +36,7 @@ data:
   # =============================================================================
   # OAuth / OpenID Connect (optional)
   # =============================================================================
-  # OAuth is configured in the secret bulkwark-env.
+  # OAuth is configured in the secret bulwark-env.
   AUTO_SSO_ENABLED: "true"
   
   # =============================================================================

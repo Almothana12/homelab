@@ -2,29 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: bulkwark
-  name: bulkwark
+    app: bulwark
+  name: bulwark
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bulkwark
+      app: bulwark
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: bulkwark
+        app: bulwark
     spec:
       containers:
         - image: ghcr.io/bulwarkmail/webmail:1.7.6
-          name: bulkwark
+          name: bulwark
           resources: {}
           envFrom:
            - secretRef:
-              name: bulkwark-env
+              name: bulwark-env
            - configMapRef:
-              name: bulkwark-env
+              name: bulwark-env
           env:
             - name: HOSTNAME
               value: 0.0.0.0
@@ -47,21 +47,21 @@ spec:
                 - --spider
                 - http://127.0.0.1:3000/api/health
           volumeMounts:
-            - name: bulkwark
+            - name: bulwark
               mountPath: /app/data/settings
               subPath: settings
-            - name: bulkwark
+            - name: bulwark
               mountPath: /app/data/admin
               subPath: admin
               readOnly: true
-            - name: bulkwark
+            - name: bulwark
               mountPath: /app/data/admin-state
               subPath: admin-state
-            - name: bulkwark
+            - name: bulwark
               mountPath: /app/data/telemetry
               subPath: telemetry
       restartPolicy: Always
       volumes:
-        - name: bulkwark
+        - name: bulwark
           persistentVolumeClaim:
-            claimName: bulkwark
+            claimName: bulwark

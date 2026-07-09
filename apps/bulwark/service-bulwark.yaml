@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: bulkwark
-  name: bulkwark
+    app: bulwark
+  name: bulwark
 spec:
   ports:
     - name: http
       port: 3000
       targetPort: 3000
   selector:
-    app: bulkwark
+    app: bulwark
