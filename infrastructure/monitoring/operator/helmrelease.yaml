@@ -68,7 +68,7 @@ spec:
           - url: https://openobserve.almothana.xyz/api/default/prometheus/api/v1/write
             name: openobserve
             queueConfig:
-              maxSamplesPerSend: 1000
+              maxSamplesPerSend: 200
             basicAuth:
               username:
                 name: openobserve-remote-write
