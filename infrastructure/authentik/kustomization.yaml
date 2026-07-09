@@ -6,3 +6,4 @@ resources:
   - secret-authentik-secret.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - networkpolicy-authentik.yaml

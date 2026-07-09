@@ -1,0 +1,235 @@
+# Base policy for all Authentik pods
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik
+spec:
+  endpointSelector:
+    matchLabels: {} # all pods in the namespace
+  ingress:
+    # From pods in the same namespace
+    - fromEndpoints:
+        - {}
+  egress:
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To pods in the same namespace
+    - toEndpoints:
+        - {}
+
+# Authentik Server
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-server
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: authentik
+      app.kubernetes.io/component: server
+  ingress:
+    # From Ingress
+    - fromEntities:
+        - ingress
+    # From Cloudflared namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudflared
+  egress:
+    # To the Internet # https://docs.goauthentik.io/install-config/air-gapped/
+    - toFQDNs:
+        - matchName: version.goauthentik.io
+        - matchName: goauthentik.io
+        - matchName: authentik.error-reporting.a7k.io
+        - matchName: secure.gravatar.com
+        - matchName: api-0167bfea.duosecurity.com # DUO MFA
+      toPorts:
+        - ports:
+            - port: "443"
+
+# Authentik Embedded Outpost
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-embedded-outpost
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: authentik
+      app.kubernetes.io/component: server
+  egress:
+    - toServices:
+        - k8sService:
+            serviceName: cliparr
+            namespace: plex
+        - k8sService:
+            serviceName: clipper
+            namespace: plex
+        - k8sService:
+            serviceName: prowlarr
+            namespace: plex
+        - k8sService:
+            serviceName: radarr
+            namespace: plex
+        - k8sService:
+            serviceName: sonarr
+            namespace: plex
+        - k8sService:
+            serviceName: bazarr
+            namespace: plex
+        - k8sService:
+            serviceName: lidarr
+            namespace: plex
+        - k8sService:
+            serviceName: tracktor-1
+            namespace: tracktor
+        - k8sService:
+            serviceName: kubetail-dashboard
+            namespace: kubetail
+# Authentik Outpost RAC
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-rac
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: authentik-outpost-rac
+  ingress:
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9300"
+  egress:
+    # To the RAC devices
+    - toCIDRSet:
+        - cidr: 195.20.235.239/32
+        - cidr: 192.168.0.2/32
+        - cidr: 192.168.0.222/32
+      toPorts:
+        - ports:
+            - port: "22"
+              protocol: TCP
+            - port: "3389"
+              protocol: TCP
+
+# Authentik Outpost LDAP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-ldap
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: authentik-outpost-ldap
+  ingress:
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9300"
+    # From ocis namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ocis
+      toPorts:
+        - ports:
+            - port: "3389" # LDAP
+              protocol: TCP
+            - port: "6636" # LDAPS
+              protocol: TCP
+    # From jellyfin namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: plex
+      toPorts:
+        - ports:
+            - port: "3389" # LDAP
+              protocol: TCP
+            - port: "6636" # LDAPS
+              protocol: TCP
+
+# Authentik Worker
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-worker
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: authentik
+      app.kubernetes.io/component: worker
+  egress:
+    # To the Kubernetes API
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+    # to Internet
+    - toFQDNs:
+        - matchName: hooks.slack.com
+        - matchName: version.goauthentik.io
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-cnpg
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+  ingress:
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9187"
+    # From CNPG operator
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+      toPorts:
+        - ports:
+            - port: "8000"
+  egress:
+    # To the Kubernetes API
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+    # To MinIO backup bucket
+    - toCIDRSet:
+        - cidr: 192.168.0.109/32
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
