@@ -63,6 +63,19 @@ spec:
         podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
+        # configure remote write to the Openobserve instance
+        remoteWrite:
+          - url: https://openobserve.almothana.xyz/api/v1/receive
+            name: openobserve
+            queueConfig:
+              maxSamplesPerSend: 1000
+            basicAuth:
+              username:
+                name: openobserve-remote-write
+                key: username
+              password:
+                name: openobserve-remote-write
+                key: password
         storageSpec: 
           volumeClaimTemplate:
             spec:
