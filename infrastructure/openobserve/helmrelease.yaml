@@ -66,6 +66,8 @@ spec:
           O2_MCP_CONTENT_VALIDATION_ENABLED: "true"
           O2_MCP_CONTENT_VALIDATION_MODE: "hybrid"
           O2_MCP_RESPONSE_VALIDATION_ENABLED: "true"
+        clusterAccess:
+          enabled: true  # Enable kubectl/cluster access — creates ServiceAccount, ClusterRole, ClusterRoleBinding
 
       parameters:
         O2_AI_ENABLED: "true" # IMPORTANT: Requires o2ai.enabled to be true
