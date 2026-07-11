@@ -31,6 +31,15 @@ spec:
       optional: false
 
   values:
+    # Helm chart uses old tags. override them here.
+    image:
+      oss:
+        tag: "v0.91.1"
+      enterprise:
+        tag: "v0.91.1"
+      o2ai:
+        tag: "v0.91.0"
+
     ingress:
       enabled: true
       className: cilium
@@ -79,7 +88,6 @@ spec:
         O2_INCIDENTS_RCA_ENABLED: "true"
         O2_INCIDENTS_AUTO_RESOLVE_AFTER_MINUTES: "-1"
         O2_INCIDENTS_ALERT_GRAPH_ENABLED: "true"
-        O2_INCIDENTS_REANALYSIS_COOLDOWN_MINUTES: "30"  # Minimum 
 
     auth:
       # O2_AI_API_KEY is supplied via valuesFrom (the Secret above) -- do not hardcode it here.
