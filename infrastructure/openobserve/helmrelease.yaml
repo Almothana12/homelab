@@ -47,12 +47,12 @@ spec:
 
     enterprise:
       enabled: true
-      sreagent:
+      o2ai:
         enabled: true
         config:
-          O2_SRE_HOST: "0.0.0.0"
-          O2_SRE_PORT: "8000"
-          O2_SRE_LOG_LEVEL: "INFO"
+          O2_AI_HOST: "0.0.0.0"
+          O2_AI_PORT: "8000"
+          O2_AI_LOG_LEVEL: "INFO"
           ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL: "true"
           O2_AI_GATEWAY_ENABLED: "false"
           O2_AI_PROVIDER: "gemini"  # Options: anthropic, openai, gemini
@@ -67,9 +67,8 @@ spec:
           O2_MCP_CONTENT_VALIDATION_MODE: "hybrid"
           O2_MCP_RESPONSE_VALIDATION_ENABLED: "true"
 
-      # IMPORTANT: Requires sreagent.enabled to be true
       parameters:
-        O2_AI_ENABLED: "true"
+        O2_AI_ENABLED: "true" # IMPORTANT: Requires o2ai.enabled to be true
         O2_AGENT_URL: ""  # Leave empty - auto-generated
         O2_TOOL_API_URL: ""  # Leave empty - auto-generated
 
