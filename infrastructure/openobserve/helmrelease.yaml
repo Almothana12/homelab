@@ -1,0 +1,85 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openobserve-standalone
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: openobserve-standalone
+      version: '0.80.3'
+      sourceRef:
+        kind: HelmRepository
+        name: openobserve
+      interval: 5m
+
+  valuesFrom:
+    - kind: Secret
+      name: openobserve-sre
+      valuesKey: ai-api-key
+      targetPath: auth.O2_AI_API_KEY
+      optional: false
+    - kind: Secret
+      name: openobserve-root
+      valuesKey: root-email
+      targetPath: auth.ZO_ROOT_USER_EMAIL
+      optional: false
+    - kind: Secret
+      name: openobserve-root
+      valuesKey: root-password
+      targetPath: auth.ZO_ROOT_USER_PASSWORD
+      optional: false
+
+  values:
+    ingress:
+      enabled: true
+      className: cilium
+      annotations: {}
+      hosts:
+        - name: openobserve.almothana.xyz
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: almothana-xyz-tls
+          hosts:
+            - openobserve.almothana.xyz
+
+    enterprise:
+      enabled: true
+      sreagent:
+        enabled: true
+        config:
+          O2_SRE_HOST: "0.0.0.0"
+          O2_SRE_PORT: "8000"
+          O2_SRE_LOG_LEVEL: "INFO"
+          ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL: "true"
+          O2_AI_GATEWAY_ENABLED: "false"
+          O2_AI_PROVIDER: "gemini"  # Options: anthropic, openai, gemini
+          O2_AI_MODEL: "gemini-3.1-flash-lite"
+          O2_AI_GATEWAY_URL: ""  # Leave empty when not using gateway
+          O2_AGENT_URL: ""  # Leave empty - auto-generated
+          O2_TOOL_API_URL: ""  # Leave empty - auto-generated
+          # MCP validation settings
+          O2_MCP_VALIDATION_ENABLED: "true"
+          O2_MCP_VALIDATION_RETRY: "true"
+          O2_MCP_CONTENT_VALIDATION_ENABLED: "true"
+          O2_MCP_CONTENT_VALIDATION_MODE: "hybrid"
+          O2_MCP_RESPONSE_VALIDATION_ENABLED: "true"
+
+      # IMPORTANT: Requires sreagent.enabled to be true
+      parameters:
+        O2_AI_ENABLED: "true"
+        O2_AGENT_URL: ""  # Leave empty - auto-generated
+        O2_TOOL_API_URL: ""  # Leave empty - auto-generated
+
+        # Incidents and RCA
+        O2_INCIDENTS_ENABLED: "true"
+        O2_INCIDENTS_RCA_ENABLED: "true"
+        O2_INCIDENTS_AUTO_RESOLVE_AFTER_MINUTES: "-1"
+        O2_INCIDENTS_ALERT_GRAPH_ENABLED: "true"
+        O2_INCIDENTS_REANALYSIS_COOLDOWN_MINUTES: "30"  # Minimum 
+
+    auth:
+      # O2_AI_API_KEY is supplied via valuesFrom (the Secret above) -- do not hardcode it here.
+      O2_AI_API_KEY: ""
