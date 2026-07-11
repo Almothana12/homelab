@@ -64,8 +64,8 @@ spec:
           O2_AI_LOG_LEVEL: "INFO"
           ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL: "true"
           O2_AI_GATEWAY_ENABLED: "false"
-          O2_AI_PROVIDER: "zhipuai"
-          O2_AI_MODEL: "glm-5.2"
+          O2_AI_PROVIDER: "google"
+          O2_AI_MODEL: "gemini-3.1-flash-lite"
           O2_AI_GATEWAY_URL: ""  # Leave empty when not using gateway
           O2_AGENT_URL: ""  # Leave empty - auto-generated
           O2_TOOL_API_URL: ""  # Leave empty - auto-generated
@@ -76,12 +76,12 @@ spec:
           O2_MCP_CONTENT_VALIDATION_MODE: "hybrid"
           O2_MCP_RESPONSE_VALIDATION_ENABLED: "true"
         extraEnv:
-          - name: ZHIPUAI_API_KEY
+          - name: GEMINI_API_KEY
             valueFrom:
               secretKeyRef:
                 name: openobserve-sre
                 key: ai-api-key
-          - name: ZHIPU_API_KEY
+          - name: GOOGLE_GENERATIVE_AI_API_KEY
             valueFrom:
               secretKeyRef:
                 name: openobserve-sre
