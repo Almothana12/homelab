@@ -3,14 +3,10 @@ kind: Kustomization
 namespace: xormon
 resources:
   - namespace.yaml
-  - PVC-timescaledb.yaml
   - PVC-xormon.yaml
   - helmrelease-xormon.yaml
-  - secret-timescaledb.yaml
   - secret-xormon.yaml
-  - deployment-timescaledb.yaml
   - deployment-xormon.yaml
-  - service-timescaledb.yaml
   - service-xormon.yaml
   - ingress-xormon.yaml
   - sa-xormon.yaml
