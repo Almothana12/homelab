@@ -67,7 +67,7 @@ spec:
       - name: ZO_SMTP_ENCRYPTION
         value: "ssltls"
       - name: ZO_SMTP_FROM_EMAIL
-        value: "openobserve@almothana.sa"
+        value: "no-reply@almothana.sa"
       - name: ZO_SMTP_USER_NAME
         valueFrom:
           secretKeyRef:
