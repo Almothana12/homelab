@@ -542,6 +542,8 @@ metadata:
   name: openobserve
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: opentelemetry-operator
   decryption:
     provider: sops
     secretRef:
@@ -554,6 +556,23 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: openobserve
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: opentelemetry-operator
+  namespace: flux-system
+spec:
+  # NO targetNamespace: the bundle is self-namespacing (opentelemetry-operator-system)
+  # and its webhook certs are pinned to that namespace.
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/opentelemetry-operator
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
