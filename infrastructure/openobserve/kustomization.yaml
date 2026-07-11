@@ -5,6 +5,7 @@ resources:
   - secret-openobserve-root.yaml
   - secret-openobserve-sre.yaml
   - secret-o2c-auth.yaml
+  - secret-openobserve-smtp.yaml
   - helmrepo.yaml
   - helmrelease.yaml
   - helmrelease-collector.yaml

@@ -54,6 +54,32 @@ spec:
           hosts:
             - openobserve.almothana.xyz
 
+    extraEnv:
+      # Used to build correct links in alert/report emails.
+      - name: ZO_WEB_URL
+        value: "https://openobserve.almothana.xyz"
+      - name: ZO_SMTP_ENABLED
+        value: "true"
+      - name: ZO_SMTP_HOST
+        value: "mail.almothana.sa"
+      - name: ZO_SMTP_PORT
+        value: "465"
+      - name: ZO_SMTP_ENCRYPTION
+        value: "ssltls"
+      - name: ZO_SMTP_FROM_EMAIL
+        value: "openobserve@almothana.sa"
+      - name: ZO_SMTP_USER_NAME
+        valueFrom:
+          secretKeyRef:
+            name: openobserve-smtp
+            key: username
+      - name: ZO_SMTP_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: openobserve-smtp
+            key: password
+
+
     enterprise:
       enabled: true
       o2ai:
