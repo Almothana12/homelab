@@ -1,0 +1,56 @@
+# Base policy for all Authentik pods
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ocis
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: ocis
+  ingress:
+    # From pods in the same namespace
+    - fromEndpoints:
+        - {}
+    # From Ingress
+    - fromEntities:
+        - ingress
+    # From Cloudflared namespace
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: cloudflared
+    # From OnlyOffice
+    - fromEndpoints:
+        - matchLabels: 
+            io.kubernetes.pod.namespace: onlyoffice
+            app: onlyoffice
+  egress:
+    # To pods in the same namespace
+    - toEndpoints:
+        - {}
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To Authentik
+    - toServices:
+        - k8sService:
+            serviceName: authentik-server
+            namespace: authentik
+    - toServices:
+        - k8sService:
+            serviceName: ak-outpost-ldap-outpost
+            namespace: authentik
+    # To OnlyOffice
+    - toServices:
+        - k8sService:
+            serviceName: onlyoffice
+            namespace: onlyoffice
+
