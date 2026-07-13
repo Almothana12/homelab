@@ -121,7 +121,7 @@ spec:
     - toCIDRSet:
         - cidr: 195.20.235.239/32
         - cidr: 192.168.0.2/32
-        - cidr: 192.168.0.223/32
+        - cidr: 192.168.0.222/32
       toPorts:
         - ports:
             - port: "22"
