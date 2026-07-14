@@ -117,3 +117,15 @@ cluster:
                   - gatewayAPI.enableAlpn=true
                   - --set
                   - gatewayAPI.enableAppProtocol=true
+                  - --set
+                  - hubble.enabled=true
+                  --set
+                  - hubble.export.dynamic.enabled=true
+                  --set 
+                  - hubble.export.dynamic.config.content[0].name=blocked-events
+                  --set 
+                  - hubble.export.dynamic.config.content[0].filePath=/var/run/cilium/hubble/events-system.log
+                  --set 
+                  - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[0]=DROPPED
+                  --set 
+                  - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[1]=ERROR
