@@ -17,7 +17,7 @@ spec:
         app: metube
     spec:
       containers:
-        - image: ghcr.io/alexta69/metube:2026.07.05
+        - image: ghcr.io/alexta69/metube:2026.07.13
           name: metube
           resources: {}
           env: []
