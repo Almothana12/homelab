@@ -87,6 +87,7 @@ spec:
       alertmanagerSpec:
         secrets:
           - slack-secret
+          - smtp-secret
         storage:
           volumeClaimTemplate:
             spec:
@@ -97,6 +98,11 @@ spec:
       config:
         global:
           resolve_timeout: 5m
+          smtp_smarthost: 'mail.almothana.sa:587'
+          smtp_from: 'no-reply@almothana.sa'
+          smtp_auth_username: 'no-reply@almothana.sa'
+          smtp_auth_password_file: /etc/alertmanager/secrets/smtp-secret/password
+          smtp_require_tls: true
         route:
           group_by: ['namespace']
           group_wait: 2m
@@ -115,4 +121,7 @@ spec:
         - name: 'slack'
           slack_configs:
           - api_url_file: /etc/alertmanager/secrets/slack-secret/slack-api-url
+          email_configs:
+          - to: 'alerting@almothana.sa'
+            send_resolved: true
 

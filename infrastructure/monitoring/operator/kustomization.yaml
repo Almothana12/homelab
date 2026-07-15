@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret-slack-secret.yaml
+  - secret-smtp-secret.yaml
   - secret-grafana-admin.yaml
   - secret-grafana-env.yaml
   - secret-openobserve-remote-write.yaml
