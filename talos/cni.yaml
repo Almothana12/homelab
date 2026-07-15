@@ -129,3 +129,15 @@ cluster:
                   - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[0]=DROPPED
                   --set 
                   - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[1]=ERROR
+                  - --set
+                  - prometheus.enabled=true
+                  - --set
+                  - prometheus.serviceMonitor.enabled=true
+                  - --set
+                  - operator.prometheus.enabled=true
+                  - --set
+                  - operator.prometheus.serviceMonitor.enabled=true
+                  - --set
+                  - hubble.metrics.enabled="{dns,drop:sourceContext=namespace|workload-name;destinationContext=namespace|workload-name,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction}"
+                  - --set
+                  - hubble.metrics.serviceMonitor.enabled=true
