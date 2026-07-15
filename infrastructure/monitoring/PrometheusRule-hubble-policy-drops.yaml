@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: hubble-policy-drops
+spec:
+  groups:
+    - name: hubble.rules
+      rules:
+        - alert: CiliumPolicyDenied
+          expr: |
+            sum by (source, destination) (
+              rate(hubble_drop_total{reason="POLICY_DENIED"}[5m])
+            ) > 0.01
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Policy drops from {{ $labels.source }}{{ if $labels.destination }} to {{ $labels.destination }}{{ end }}"
+            description: "Sustained POLICY_DENIED drops for 5m ({{ $value | humanize }} p/s). Investigate: hubble observe --verdict DROPPED -n {{ $labels.source }}"
