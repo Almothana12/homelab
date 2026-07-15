@@ -16829,7 +16829,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:v0.155.0
+        image: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:v0.156.0
         livenessProbe:
           httpGet:
             path: /healthz
