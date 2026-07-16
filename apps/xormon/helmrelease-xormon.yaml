@@ -81,6 +81,8 @@ spec:
         name: backup-s3-credentials
       s3:
         bucket: "xormon-backup"
+        path: "/v2"
+
       scheduledBackups:
         - name: daily-backup
           schedule: "0 0 0 * * *" # Daily at midnight
