@@ -15,20 +15,6 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: cloudflared
-    # From Prometheus
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
-      toPorts:
-        - ports:
-            - port: "9187"
-    # From CNPG operator
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: cnpg-system
-      toPorts:
-        - ports:
-            - port: "8000"
   egress:
     # To pods in the same namespace
     - toEndpoints:
@@ -48,3 +34,42 @@ spec:
     # To the Internet (YouTube)
     - toEntities:
         - world
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: invidious-cnpg
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+  ingress:
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9187"
+    # From CNPG operator
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+      toPorts:
+        - ports:
+            - port: "8000"
+  egress:
+    # To the Kubernetes API
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+    # To MinIO backup bucket
+    - toCIDRSet:
+        - cidr: 192.168.0.109/32
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
