@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: invidious-companion
+  name: invidious-companion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invidious-companion
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: invidious-companion
+    spec:
+      containers:
+        - image: quay.io/invidious/invidious-companion:2026.07.17-ffa2156
+          name: invidious-companion
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          env:
+            - name: SERVER_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-secrets
+                  key: COMPANION_KEY
+          ports:
+            - containerPort: 8282
+              protocol: TCP
+              name: http
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8282
+            periodSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8282
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8282
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 4
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: companion-cache
+              mountPath: /var/tmp/youtubei.js
+      restartPolicy: Always
+      volumes:
+        - name: companion-cache
+          emptyDir: {}

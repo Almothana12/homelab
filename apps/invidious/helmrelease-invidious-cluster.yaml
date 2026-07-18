@@ -1,0 +1,72 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: invidious-cluster-v00
+spec:
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cnpg-system
+  interval: 5m
+  chart:
+    spec:
+      chart: cluster
+      version: 0.8.0
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+        namespace: cnpg-system
+      interval: 5m
+  values:
+    type: postgresql
+    mode: standalone
+    version:
+      postgresql: "16"
+    cluster:
+      instances: 2
+      primaryUpdateStrategy: unsupervised
+      storage:
+        size: 2Gi
+      initdb:
+        database: invidious
+        owner: invidious
+      monitoring:
+        enabled: true
+        podMonitor:
+          enabled: true
+      # hard-code service names to avoid it changing for different versions
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "invidious-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "invidious-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "invidious-cluster-r"
+    backups:
+      enabled: true
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      encryption: ""
+      compression: "gzip"
+      wal:
+        encryption: ""
+        compression: "gzip"
+      data:
+        encryption: ""
+        compression: "gzip"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "invidious-backup"
+      scheduledBackups:
+        - name: daily-backup
+          schedule: "0 0 0 * * *" # Daily at midnight
+          backupOwnerReference: self
+      retentionPolicy: "5d"

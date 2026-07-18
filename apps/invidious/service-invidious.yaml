@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: invidious
+  name: invidious
+spec:
+  selector:
+    app: invidious
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP

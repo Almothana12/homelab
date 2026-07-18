@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: invidious
+  name: invidious
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invidious
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: invidious
+    spec:
+      containers:
+        - image: quay.io/invidious/invidious:2026.07.14-e5bde4b
+          name: invidious
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          env:
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-cluster-v00-app
+                  key: dbname
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-cluster-v00-app
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-cluster-v00-app
+                  key: password
+            - name: HMAC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-secrets
+                  key: HMAC_KEY
+            - name: COMPANION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: invidious-secrets
+                  key: COMPANION_KEY
+            - name: INVIDIOUS_CONFIG
+              value: |
+                db:
+                  dbname: $(DB_NAME)
+                  user: $(DB_USER)
+                  password: "$(DB_PASSWORD)"
+                  host: invidious-cluster-rw.invidious.svc.cluster.local
+                  port: 5432
+                check_tables: true
+                invidious_companion:
+                  - private_url: "http://invidious-companion:8282/companion"
+                    public_url: "https://youtube.almothana.xyz/companion"
+                invidious_companion_key: "$(COMPANION_KEY)"
+                hmac_key: "$(HMAC_KEY)"
+                domain: youtube.almothana.xyz
+                https_only: true
+                external_port: 443
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+              name: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: 3000
+            periodSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 4
+      restartPolicy: Always

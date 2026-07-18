@@ -1,0 +1,50 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: invidious
+spec:
+  endpointSelector: {}
+  ingress:
+    # From pods in the same namespace
+    - fromEndpoints:
+        - {}
+    # From Ingress
+    - fromEntities:
+        - ingress
+    # From Cloudflared namespace
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudflared
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9187"
+    # From CNPG operator
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+      toPorts:
+        - ports:
+            - port: "8000"
+  egress:
+    # To pods in the same namespace
+    - toEndpoints:
+        - {}
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To the Internet (YouTube)
+    - toEntities:
+        - world

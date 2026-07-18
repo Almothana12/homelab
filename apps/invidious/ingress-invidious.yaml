@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: invidious
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: youtube.almothana.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: invidious
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+          - backend:
+              service:
+                name: invidious-companion
+                port:
+                  number: 8282
+            path: /companion
+            pathType: Prefix
+  tls:
+    - hosts:
+        - youtube.almothana.xyz
+      secretName: almothana-xyz-tls
