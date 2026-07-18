@@ -7,3 +7,4 @@ resources:
   - helmrepo.yaml
   - helmrelease.yaml
   - networkpolicy-authentik.yaml
+  - ../cnpg/networkpolicy

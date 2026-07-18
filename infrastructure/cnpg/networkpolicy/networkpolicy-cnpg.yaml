@@ -1,0 +1,79 @@
+# Reusable network policy for all CNPG clusters
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cnpg-cluster
+spec:
+  # match CNPG pods
+  endpointSelector:
+    matchExpressions:
+      - key: cnpg.io/cluster
+        operator: Exists
+  ingress:
+    # From pods in the same namespace
+    - fromEndpoints:
+        - {}
+    # From the CNPG operator
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+      toPorts:
+        - ports:
+            - port: "8000"
+    # From the API server proxy (kubectl-cnpg status)
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "8000"
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "9187"
+    # From XorMon
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: xormon
+      toPorts:
+        - ports:
+            - port: "5432"
+    # From pgAdmin
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: pgadmin
+      toPorts:
+        - ports:
+            - port: "5432"
+  egress:
+    # To pods in the same namespace
+    - toEndpoints:
+        - {}
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To the Kubernetes API
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+    # To MinIO
+    - toCIDRSet:
+        - cidr: 192.168.0.109/32
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP

@@ -10,3 +10,4 @@ resources:
   - service-invidious-companion.yaml
   - ingress-invidious.yaml
   - networkpolicy-invidious.yaml
+  - ../../infrastructure/cnpg/networkpolicy
