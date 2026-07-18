@@ -48,6 +48,11 @@ spec:
             serviceTemplate:
               metadata:
                 name: "invidious-cluster-r"
+      # Force instances to be scheduled on different nodes
+      affinity:
+        enablePodAntiAffinity: true
+        podAntiAffinityType: required
+        topologyKey: kubernetes.io/hostname
     backups:
       enabled: true
       provider: s3
