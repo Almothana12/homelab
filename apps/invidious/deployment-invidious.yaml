@@ -16,6 +16,9 @@ spec:
       labels:
         app: invidious
     spec:
+      # don't inject INVIDIOUS_PORT=tcp://... service-link vars,
+      # invidious parses INVIDIOUS_* env vars as config overrides
+      enableServiceLinks: false
       containers:
         - image: quay.io/invidious/invidious:2026.07.14-e5bde4b
           name: invidious
