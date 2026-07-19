@@ -52,6 +52,6 @@ spec:
                 name: adguard-configuration
                 key: password
           - name: LOG_LEVEL
-            value: debug
+            value: info
           - name: DRY_RUN
             value: "false"
