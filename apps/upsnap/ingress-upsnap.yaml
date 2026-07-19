@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: upsnap
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: upsnap.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: upsnap
+            port:
+              number: 8090
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - upsnap.almothana.xyz
+      secretName: almothana-xyz-tls

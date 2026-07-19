@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: upsnap
+  name: upsnap
+spec:
+  ports:
+    - port: 8090
+      targetPort: 8090
+  selector:
+    app: upsnap

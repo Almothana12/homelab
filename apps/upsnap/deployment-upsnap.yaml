@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: upsnap
+  name: upsnap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upsnap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: upsnap
+    spec:
+      # WoL magic packets require host network
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - image: ghcr.io/seriousm4x/upsnap:5.4.3
+          name: upsnap
+          resources: {}
+          env: []
+          ports:
+            - containerPort: 8090
+          volumeMounts:
+            - mountPath: /app/pb_data
+              name: upsnap
+
+      restartPolicy: Always
+      volumes:
+        - name: upsnap
+          persistentVolumeClaim:
+            claimName: upsnap
