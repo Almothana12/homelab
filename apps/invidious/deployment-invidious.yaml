@@ -72,6 +72,8 @@ spec:
                 domain: youtube.almothana.xyz
                 https_only: true
                 external_port: 443
+                popular_enabled: false
+                registration_enabled: false
           ports:
             - containerPort: 3000
               protocol: TCP
