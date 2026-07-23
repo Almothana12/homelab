@@ -103,7 +103,7 @@ spec:
           smtp_auth_password_file: /etc/alertmanager/secrets/smtp-secret/password
           smtp_require_tls: true
         route:
-          group_by: ['namespace']
+          group_by: ['namespace', 'alertname']
           group_wait: 2m
           group_interval: 10m
           repeat_interval: 48h
@@ -111,7 +111,7 @@ spec:
           routes:
             - receiver: 'null'
               matchers:
-                - alertname = "Watchdog"
+                - alertname =~ "InfoInhibitor|Watchdog"
             - receiver: 'email'
               matchers:
                 - severity = 'critical'
