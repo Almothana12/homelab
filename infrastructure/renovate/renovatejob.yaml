@@ -7,6 +7,9 @@ spec:
     - Almothana12/homelab
   image: renovate/renovate:43.104.1
   parallelism: 3
+  extraEnv:
+    - name: LOG_LEVEL
+      value: debug
   provider:
     name: github
     endpoint: ""  # optional, defaults to https://api.github.com
