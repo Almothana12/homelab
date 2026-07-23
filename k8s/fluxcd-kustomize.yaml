@@ -539,6 +539,49 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: renovate-operator
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/renovate/operator
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: renovate-operator
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: renovate
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: renovate-operator
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/renovate
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: renovate-operator
+
+---
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: onlyoffice
   namespace: flux-system
 spec:

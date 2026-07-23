@@ -1,0 +1,25 @@
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: renovate-github
+spec:
+  discoveryFilters:
+    - Almothana12/homelab
+  image: renovate/renovate:43.104.1
+  parallelism: 3
+  provider:
+    name: github
+    endpoint: ""  # optional, defaults to https://api.github.com
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  schedule: "0 3 * * *"
+  githubAppReference:
+    secretName: github-app-credentials
+    appIdSecretKey: APP_ID
+    installationIdSecretKey: INSTALL_ID
+    pemSecretKey: PEM
