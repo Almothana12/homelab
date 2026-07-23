@@ -20,7 +20,9 @@ spec:
       # invidious parses INVIDIOUS_* env vars as config overrides
       enableServiceLinks: false
       containers:
-        - image: quay.io/invidious/invidious:2026.07.14-e5bde4b
+        # rolling tag pinned by digest: renovate bumps the digest on every new
+        # build. note: invidious' "latest" tag is stale, "master" is the live one
+        - image: quay.io/invidious/invidious:master@sha256:991e552bf1ea591fd36249a0b43a897b644c6f54cdae61d150cb3a27d08d7d8b
           name: invidious
           resources:
             limits:

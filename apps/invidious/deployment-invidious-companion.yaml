@@ -17,7 +17,8 @@ spec:
         app: invidious-companion
     spec:
       containers:
-        - image: quay.io/invidious/invidious-companion:2026.07.17-ffa2156
+        # rolling tag pinned by digest (companion publishes "latest", not "master")
+        - image: quay.io/invidious/invidious-companion:latest@sha256:cd5c3dae67bdb025eb5c849963418bbcb3c77d94fd13b8c6a017111a329f6865
           name: invidious-companion
           resources:
             limits:

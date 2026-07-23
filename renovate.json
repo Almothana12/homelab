@@ -5,13 +5,12 @@
   ],
   "packageRules": [
     {
-      "description": "Invidious images use date-sha tags (2026.07.14-e5bde4b); parse as calver so updates are detected, and automerge them",
+      "description": "Invidious tracks rolling tags (master/latest) pinned by digest; take every new build and automerge it",
       "matchDatasources": ["docker"],
       "matchPackageNames": [
         "quay.io/invidious/invidious",
         "quay.io/invidious/invidious-companion"
       ],
-      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d{2})\\.(?<patch>\\d{2})(?:-[a-f0-9]+)?$",
       "automerge": true
     }
   ],
