@@ -11,7 +11,8 @@
         "quay.io/invidious/invidious",
         "quay.io/invidious/invidious-companion"
       ],
-      "automerge": true
+      "automerge": true,
+      "ignoreTests": true
     }
   ],
   "flux": {
