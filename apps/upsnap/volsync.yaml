@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-upsnap
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:s4AIEjGPzaSVlh/Oa3Q5ZHo6FxfWfvPGVsuRHYHTagOl6KOB9EBXyIw+,iv:+SBzo6XCt1kXV7oxOCED38Ee6kCmXJ1eCbTocnvv8xA=,tag:VWspPZhVXohV9pmN2SoWWQ==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:GDTVtlyYywHL6005ruR83Wqv,iv:d3wGghaFHbJHrhYp18c5OjQNhkxhtCpmHf6mD0KwuqY=,tag:BusjZkx/Gi2Wy8LgsVjaUA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:EO8EM/+W,iv:6wAs8eG/sfwlflX1typ9BYjcpZP1LReO1TRnUehKpRA=,tag:PeE1M+oN1waTV/ixHzuyMg==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:xUw9JbyT8wAJcual,iv:9m4d/6uRJrYO9xwJHnAXAGDQ9sscN6WsNubnL/06I48=,tag:cP530b3AX4j00vhyztnlUg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsblZsRkhySVpINjZhTlRw
+            K2pCdFBsMERXWXIrT2JEOUcvTzlKNXZKVG44ClJ4RlBMeGI2TmRudU9xRzhlMDdC
+            Vmx5akxWVm1mT2puQkhpYStIYjJGWU0KLS0tIG5NZysyK29TbUc5bEt4TS8rL2Z4
+            V1AwRTQ4UE1kN1hsS05PRnBHZGc0eDgK/8npkkGyCGIjcDozUNfkSxPLp72gJj1Z
+            H/E1cQoQcnsRG+e/ZmAk6+T7ZLZu5kHtWxyFEyBbjVTlhdP6/2QsUg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-07-24T08:40:25Z"
+    mac: ENC[AES256_GCM,data:TFCxRpys0kO5bnrRcwThm09x50fcvFC6UBEW1yoQNjGnAl3pQ6RCw098FkX36QXwtX6cJucvCnlAzrGNca5BxT7um1izXFciAKaNnjkl35LQM/j+SitqJMgYVTFy4UWw6yjMmtv6K/5PYWZXxZ0bU1AWgjApghUZHIkK/vWDLyk=,iv:u2X0WZ3v9qGbL/vwqsZt7YTuoENFGQCr0j6pHGRjSNI=,tag:Co6F+95EMpzLWuiQFygaZQ==,type:str]
+    pgp: []
+    encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
+    version: 3.9.1
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: upsnap
+spec:
+    sourcePVC: upsnap
+    trigger:
+        schedule: 0 23 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-upsnap
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+        moverSecurityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+# ---
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#     name: upsnap
+# spec:
+#     trigger:
+#         manual: restore-once
+#     restic:
+#         repository: restic-config-upsnap
+#         destinationPVC: upsnap
+#         copyMethod: Direct
+#         cleanupCachePVC: true
+#         cleanupTempPVC: true
+#         moverSecurityContext:
+#             runAsUser: 0
+#             runAsGroup: 0
+#             fsGroup: 0
+#             fsGroupChangePolicy: OnRootMismatch
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsblZsRkhySVpINjZhTlRw
+            K2pCdFBsMERXWXIrT2JEOUcvTzlKNXZKVG44ClJ4RlBMeGI2TmRudU9xRzhlMDdC
+            Vmx5akxWVm1mT2puQkhpYStIYjJGWU0KLS0tIG5NZysyK29TbUc5bEt4TS8rL2Z4
+            V1AwRTQ4UE1kN1hsS05PRnBHZGc0eDgK/8npkkGyCGIjcDozUNfkSxPLp72gJj1Z
+            H/E1cQoQcnsRG+e/ZmAk6+T7ZLZu5kHtWxyFEyBbjVTlhdP6/2QsUg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-07-24T08:40:25Z"
+    mac: ENC[AES256_GCM,data:TFCxRpys0kO5bnrRcwThm09x50fcvFC6UBEW1yoQNjGnAl3pQ6RCw098FkX36QXwtX6cJucvCnlAzrGNca5BxT7um1izXFciAKaNnjkl35LQM/j+SitqJMgYVTFy4UWw6yjMmtv6K/5PYWZXxZ0bU1AWgjApghUZHIkK/vWDLyk=,iv:u2X0WZ3v9qGbL/vwqsZt7YTuoENFGQCr0j6pHGRjSNI=,tag:Co6F+95EMpzLWuiQFygaZQ==,type:str]
+    pgp: []
+    encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
+    version: 3.9.1

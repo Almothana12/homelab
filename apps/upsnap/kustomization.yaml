@@ -6,3 +6,4 @@ resources:
   - deployment-upsnap.yaml
   - service-upsnap.yaml
   - ingress-upsnap.yaml
+  - volsync.yaml
