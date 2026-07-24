@@ -6,7 +6,8 @@ talosctl gen config homelab https://192.168.0.61:6443 \
     --config-patch @schedule-cp.yaml \
     --config-patch @metrics-server.yaml \
     --config-patch @extraMounts.yaml \
-    --config-patch @oidc.yaml
+    --config-patch @oidc.yaml \
+    --config-patch @monitoring-cp.yaml
 
 talosctl apply-config --insecure --nodes 192.168.0.61 \
     --file controlplane.yaml \
