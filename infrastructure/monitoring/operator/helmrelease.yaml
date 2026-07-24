@@ -22,6 +22,27 @@ spec:
     grafana:
       defaultDashboardsTimezone: Asia/Riyadh
       envFromSecret: grafana-env
+      env:
+        # SSO
+        GF_AUTH_GENERIC_OAUTH_SCOPES: openid profile email entitlements
+        GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://sso.almothana.sa/application/o/authorize/
+        GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://sso.almothana.sa/application/o/token/
+        GF_AUTH_GENERIC_OAUTH_API_URL: https://sso.almothana.sa/application/o/userinfo/
+        GF_AUTH_SIGNOUT_REDIRECT_URL: https://sso.almothana.sa/application/o/grafana/end-session/
+
+        # Map Authentik groups to Grafana roles.
+        GF_AUTH_GENERIC_OAUTH_GROUPS_ATTRIBUTE_PATH: groups
+        GF_AUTH_GENERIC_OAUTH_ALLOWED_GROUPS: "k8s-admins k8s-users"
+        GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: >-
+          contains(groups[*], 'k8s-admins') && 'GrafanaAdmin' ||
+          contains(groups[*], 'k8s-users') && 'Editor' ||
+          'Viewer'
+        GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
+        GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_STRICT: "true"
+        # Optionally enable auto-login (bypasses Grafana login screen)
+        GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+        # Required if Grafana is running behind a reverse proxy
+        GF_SERVER_ROOT_URL: https://grafana.almothana.xyz
       # Use an existing secret for the admin user.
       admin:
         ## Name of the secret. Can be templated.
