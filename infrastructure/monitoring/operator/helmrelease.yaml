@@ -47,15 +47,7 @@ spec:
           - kubernetes.io/pvc-protection
     prometheus:
       ingress:
-        enabled: true
-        ingressClassName: cilium
-        pathType: Prefix
-        hosts:
-          - prometheus.almothana.xyz
-        tls:
-          - secretName: almothana-xyz-tls
-            hosts:
-            - prometheus.almothana.xyz
+        enabled: false # using Authentik outpost
       prometheusSpec:
         # set as false to use the rules in the PrometheusRule resources (https://github.com/onzack/grafana-dashboards/tree/main?tab=readme-ov-file#troubleshooting)
         ruleSelectorNilUsesHelmValues: false

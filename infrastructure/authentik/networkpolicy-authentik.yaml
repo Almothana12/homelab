@@ -98,6 +98,12 @@ spec:
         - k8sService:
             serviceName: kubetail-dashboard
             namespace: kubetail
+        - k8sService:
+            serviceName: kube-prometheus-stack-prometheus
+            namespace: monitoring
+        - k8sService:
+            serviceName: kube-prometheus-stack-alertmanager
+            namespace: monitoring
 # Authentik Outpost RAC
 ---
 apiVersion: cilium.io/v2
