@@ -6,3 +6,4 @@ resources:
   - PrometheusRule-standard-namespace-monitoring.yaml
   - PrometheusRule-pvc-usage.yaml
   - PrometheusRule-hubble-policy-drops.yaml
+  - PrometheusRule-volsync.yaml

@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: volsync
+spec:
+  groups:
+    - name: volsync.rules
+      rules:
+        - alert: VolSyncBackupOutOfSync
+          expr: |
+            volsync_volume_out_of_sync{
+              job="volsync-metrics",
+              role="source"
+            } == 1
+          for: 30m
+          labels:
+            severity: critical
+          annotations:
+            summary: "VolSync backup out of sync ({{ $labels.obj_namespace }}/{{ $labels.obj_name }})"
+            description: |
+              The scheduled {{ $labels.method }} backup {{ $labels.obj_namespace }}/{{ $labels.obj_name }}
+              has been out of sync for more than 30 minutes. Check the ReplicationSource status
+              and its latest mover job.
+
+        - alert: VolSyncBackupMissedInterval
+          expr: |
+            increase(
+              volsync_missed_intervals_total{
+                job="volsync-metrics",
+                role="source"
+              }[25h]
+            ) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: "VolSync backup missed an interval ({{ $labels.obj_namespace }}/{{ $labels.obj_name }})"
+            description: |
+              The scheduled {{ $labels.method }} backup {{ $labels.obj_namespace }}/{{ $labels.obj_name }}
+              missed at least one interval during the last 25 hours.
+
+        - alert: VolSyncBackupDurationHigh
+          expr: |
+            volsync_sync_duration_seconds{
+              job="volsync-metrics",
+              role="source",
+              quantile="0.99"
+            } > 3600
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "VolSync backup duration high ({{ $labels.obj_namespace }}/{{ $labels.obj_name }})"
+            description: |
+              The recent {{ $labels.method }} backup duration for
+              {{ $labels.obj_namespace }}/{{ $labels.obj_name }} exceeded one hour.
