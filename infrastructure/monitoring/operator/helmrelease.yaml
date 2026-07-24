@@ -24,6 +24,7 @@ spec:
       envFromSecret: grafana-env
       env:
         # SSO
+        GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
         GF_AUTH_GENERIC_OAUTH_SCOPES: openid profile email entitlements
         GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://sso.almothana.sa/application/o/authorize/
         GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://sso.almothana.sa/application/o/token/
@@ -39,8 +40,8 @@ spec:
           'Viewer'
         GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
         GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_STRICT: "true"
-        # Optionally enable auto-login (bypasses Grafana login screen)
-        GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+        # bypasses Grafana login screen
+        GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
         # Required if Grafana is running behind a reverse proxy
         GF_SERVER_ROOT_URL: https://grafana.almothana.xyz
       # Use an existing secret for the admin user.
