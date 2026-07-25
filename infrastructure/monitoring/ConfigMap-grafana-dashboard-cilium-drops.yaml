@@ -626,12 +626,140 @@ data:
             "type": "loki",
             "uid": "loki"
           },
+          "description": "Groups exact POLICY_DENIED Hubble records by endpoint, IP, port, packet summary, and observer node, then assigns a deterministic investigation hint. Counts are exported Hubble records and can include more than one observation of a packet; use the Prometheus panels above for packet totals.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 13,
+            "w": 24,
+            "x": 0,
+            "y": 35
+          },
+          "id": 10,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "enablePagination": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Events"
+              }
+            ]
+          },
+          "pluginVersion": "12.0.0",
+          "targets": [
+            {
+              "direction": "backward",
+              "editorMode": "code",
+              "expr": "topk(100, sum by (source_namespace, source_pod, source_ip, source_identity, destination_namespace, destination_pod, destination_ip, destination_identity, tcp_destination_port, udp_destination_port, protocol, traffic_direction, summary, observer_node, cause_hint) (count_over_time({cluster=\"homelab\", log_type=\"hubble-flow\", verdict=\"DROPPED\", drop_reason=\"POLICY_DENIED\", protocol=~\"$protocol\"} | source_namespace=~\"$source\" or source_ip=~\"$source\" | destination_namespace=~\"$destination\" or destination_ip=~\"$destination\" | json summary=\"flow.Summary\", source_identity=\"flow.source.identity\", destination_identity=\"flow.destination.identity\" | label_format cause_hint=`{{ if eq .tcp_destination_port \"6443\" }}Kubernetes API identity/state{{ else if contains \"Redirect\" .summary }}Host/router ICMP redirect{{ else if and (contains \"ICMP\" .protocol) (eq .source_namespace \"\") }}Host/router ICMP control traffic{{ else if and (eq .traffic_direction \"EGRESS\") (eq .destination_namespace \"\") }}External egress / FQDN or CIDR policy{{ else if and (contains \"ICMP\" .protocol) (eq .destination_namespace \"kube-system\") }}ICMP response denied{{ else }}Network policy gap{{ end }}` [$__range])))",
+              "queryType": "instant",
+              "refId": "A"
+            }
+          ],
+          "title": "Root-cause candidates (Loki)",
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {
+                "mode": "columns"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "cause_hint": 0,
+                  "source_namespace": 1,
+                  "source_pod": 2,
+                  "source_ip": 3,
+                  "source_identity": 4,
+                  "destination_namespace": 5,
+                  "destination_pod": 6,
+                  "destination_ip": 7,
+                  "destination_identity": 8,
+                  "protocol": 9,
+                  "tcp_destination_port": 10,
+                  "udp_destination_port": 11,
+                  "traffic_direction": 12,
+                  "summary": 13,
+                  "observer_node": 14,
+                  "Value": 15
+                },
+                "renameByName": {
+                  "Value": "Events",
+                  "cause_hint": "Cause hint",
+                  "destination_identity": "Destination identity",
+                  "destination_ip": "Destination IP",
+                  "destination_namespace": "Destination namespace",
+                  "destination_pod": "Destination pod",
+                  "observer_node": "Observer node",
+                  "protocol": "Protocol",
+                  "source_identity": "Source identity",
+                  "source_ip": "Source IP",
+                  "source_namespace": "Source namespace",
+                  "source_pod": "Source pod",
+                  "summary": "Packet evidence",
+                  "tcp_destination_port": "TCP destination port",
+                  "traffic_direction": "Direction",
+                  "udp_destination_port": "UDP destination port"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
           "description": "Exact POLICY_DENIED Hubble events from the dedicated file collector. Expand a row to inspect pod names, IPs, ports, observer node, and the original flow JSON. This panel follows protocol, source, and destination filters.",
           "gridPos": {
             "h": 15,
             "w": 24,
             "x": 0,
-            "y": 35
+            "y": 48
           },
           "id": 9,
           "options": {
@@ -650,7 +778,7 @@ data:
             {
               "direction": "backward",
               "editorMode": "code",
-              "expr": "{cluster=\"homelab\", log_type=\"hubble-flow\", verdict=\"DROPPED\", drop_reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source_namespace=~\"$source\", destination_namespace=~\"$destination\"} | line_format \"{{.source_namespace}}/{{.source_pod}} ({{.source_ip}}) -> {{.destination_namespace}}/{{.destination_pod}} ({{.destination_ip}}) {{.protocol}} {{.traffic_direction}} reason={{.drop_reason}}\"",
+              "expr": "{cluster=\"homelab\", log_type=\"hubble-flow\", verdict=\"DROPPED\", drop_reason=\"POLICY_DENIED\", protocol=~\"$protocol\"} | source_namespace=~\"$source\" or source_ip=~\"$source\" | destination_namespace=~\"$destination\" or destination_ip=~\"$destination\" | json summary=\"flow.Summary\" | line_format \"{{.source_namespace}}/{{.source_pod}} ({{.source_ip}}) -> {{.destination_namespace}}/{{.destination_pod}} ({{.destination_ip}}) {{.protocol}} dst_port={{.tcp_destination_port}}{{.udp_destination_port}} {{.traffic_direction}} evidence={{.summary}} reason={{.drop_reason}}\"",
               "queryType": "range",
               "refId": "A"
             }
