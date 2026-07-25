@@ -171,7 +171,7 @@ data:
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "description": "Current per-second drop rate over the automatic Grafana rate interval.",
+          "description": "Current POLICY_DENIED packet rate over the automatic Grafana rate interval.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -228,14 +228,14 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "sum(rate(hubble_drop_total{reason=~\"$reason\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__rate_interval])) or vector(0)",
+              "expr": "sum(rate(hubble_drop_total{reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__rate_interval])) or vector(0)",
               "instant": true,
               "legendFormat": "drops/s",
               "range": false,
               "refId": "A"
             }
           ],
-          "title": "Current drop rate (packets/s)",
+          "title": "Current policy-denied rate (packets/s)",
           "type": "stat"
         },
         {
@@ -243,7 +243,7 @@ data:
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "description": "Number of source/destination/reason combinations that dropped at least one packet in the selected range.",
+          "description": "Number of source/destination paths with at least one POLICY_DENIED packet in the selected range.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -296,14 +296,14 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "count(sum by (source, destination, reason) (increase(hubble_drop_total{reason=~\"$reason\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])) > 0) or vector(0)",
+              "expr": "count(sum by (source, destination) (increase(hubble_drop_total{reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])) > 0) or vector(0)",
               "instant": true,
               "legendFormat": "paths",
               "range": false,
               "refId": "A"
             }
           ],
-          "title": "Affected paths",
+          "title": "Policy-denied paths",
           "type": "stat"
         },
         {
@@ -406,7 +406,7 @@ data:
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "description": "Top source namespaces or reserved identities by total drops. Empty endpoint metadata is shown explicitly as unattributed node/network traffic.",
+          "description": "Top source namespaces or reserved identities by POLICY_DENIED drops. Background datapath drops such as IPv6 Router Solicitation are excluded.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -462,14 +462,14 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "topk(10, label_replace(sum by (source) (increase(hubble_drop_total{reason=~\"$reason\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])), \"source\", \"unattributed node/network traffic\", \"source\", \"^$\")) > 0",
+              "expr": "topk(10, label_replace(sum by (source) (increase(hubble_drop_total{reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])), \"source\", \"unattributed\", \"source\", \"^$\")) > 0",
               "instant": true,
               "legendFormat": "{{source}}",
               "range": false,
               "refId": "A"
             }
           ],
-          "title": "Top drop sources",
+          "title": "Top policy-denied sources",
           "type": "bargauge"
         },
         {
@@ -477,7 +477,7 @@ data:
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "description": "Top destination namespaces or reserved identities by total drops. Empty endpoint metadata is shown explicitly as unattributed node/network traffic.",
+          "description": "Top destination namespaces or reserved identities by POLICY_DENIED drops. Background datapath drops such as IPv6 Router Solicitation are excluded.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -533,14 +533,14 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "topk(10, label_replace(sum by (destination) (increase(hubble_drop_total{reason=~\"$reason\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])), \"destination\", \"unattributed node/network traffic\", \"destination\", \"^$\")) > 0",
+              "expr": "topk(10, label_replace(sum by (destination) (increase(hubble_drop_total{reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])), \"destination\", \"unattributed\", \"destination\", \"^$\")) > 0",
               "instant": true,
               "legendFormat": "{{destination}}",
               "range": false,
               "refId": "A"
             }
           ],
-          "title": "Top drop destinations",
+          "title": "Top policy-denied destinations",
           "type": "bargauge"
         },
         {
@@ -548,7 +548,7 @@ data:
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "description": "Aggregated dropped paths. Workload and traffic-direction columns appear after the updated Hubble metric context is deployed; use the Loki panel below for exact pod, IP, and port details.",
+          "description": "Aggregated POLICY_DENIED paths. Workload and traffic-direction columns appear when provided by Hubble; use the Loki panel below for exact pod, IP, and port details.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -610,7 +610,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "label_replace(label_replace(sum by (source, source_workload, destination, destination_workload, traffic_direction, reason, protocol) (increase(hubble_drop_total{reason=~\"$reason\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])) > 0, \"source\", \"unattributed\", \"source\", \"^$\"), \"destination\", \"unattributed\", \"destination\", \"^$\")",
+              "expr": "label_replace(label_replace(sum by (source, source_workload, destination, destination_workload, traffic_direction, reason, protocol) (increase(hubble_drop_total{reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source=~\"$source\", destination=~\"$destination\"}[$__range])) > 0, \"source\", \"unattributed\", \"source\", \"^$\"), \"destination\", \"unattributed\", \"destination\", \"^$\")",
               "format": "table",
               "instant": true,
               "legendFormat": "",
@@ -618,7 +618,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Dropped paths (metrics)",
+          "title": "Policy-denied paths (metrics)",
           "type": "table"
         },
         {
@@ -626,7 +626,7 @@ data:
             "type": "loki",
             "uid": "loki"
           },
-          "description": "Exact Hubble drop events from the dedicated file collector. Expand a row to inspect pod names, IPs, ports, observer node, and the original flow JSON. This panel follows the reason, source, and destination dashboard filters.",
+          "description": "Exact POLICY_DENIED Hubble events from the dedicated file collector. Expand a row to inspect pod names, IPs, ports, observer node, and the original flow JSON. This panel follows protocol, source, and destination filters.",
           "gridPos": {
             "h": 15,
             "w": 24,
@@ -650,12 +650,12 @@ data:
             {
               "direction": "backward",
               "editorMode": "code",
-              "expr": "{cluster=\"homelab\", log_type=\"hubble-flow\", verdict=~\"DROPPED|ERROR\", drop_reason=~\"$reason\", source_namespace=~\"$source\", destination_namespace=~\"$destination\"} | line_format \"{{.source_namespace}}/{{.source_pod}} ({{.source_ip}}) -> {{.destination_namespace}}/{{.destination_pod}} ({{.destination_ip}}) {{.protocol}} {{.traffic_direction}} reason={{.drop_reason}}\"",
+              "expr": "{cluster=\"homelab\", log_type=\"hubble-flow\", verdict=\"DROPPED\", drop_reason=\"POLICY_DENIED\", protocol=~\"$protocol\", source_namespace=~\"$source\", destination_namespace=~\"$destination\"} | line_format \"{{.source_namespace}}/{{.source_pod}} ({{.source_ip}}) -> {{.destination_namespace}}/{{.destination_pod}} ({{.destination_ip}}) {{.protocol}} {{.traffic_direction}} reason={{.drop_reason}}\"",
               "queryType": "range",
               "refId": "A"
             }
           ],
-          "title": "Actionable dropped flows (Loki)",
+          "title": "policy-denied flows (Loki)",
           "type": "logs"
         }
       ],
@@ -689,7 +689,7 @@ data:
             },
             "definition": "label_values(hubble_drop_total, reason)",
             "includeAll": true,
-            "label": "Reason",
+            "label": "Overview reason",
             "multi": true,
             "name": "reason",
             "options": [],
