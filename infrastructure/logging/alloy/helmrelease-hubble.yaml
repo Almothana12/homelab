@@ -1,0 +1,60 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: alloy-hubble
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: alloy
+      version: '1.11.0'
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 5m
+  values:
+    # Hubble writes one flow file on every node through Cilium's
+    # /var/run/cilium hostPath. A DaemonSet reads each local file exactly once.
+    controller:
+      type: daemonset
+      tolerations:
+        - operator: Exists
+      volumes:
+        extra:
+          - name: hubble-logs
+            hostPath:
+              path: /var/run/cilium/hubble
+              type: DirectoryOrCreate
+          - name: alloy-hubble-storage
+            hostPath:
+              path: /var/lib/alloy-hubble
+              type: DirectoryOrCreate
+    alloy:
+      storagePath: /var/lib/alloy-hubble
+      resources:
+        requests:
+          cpu: 20m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
+      configMap:
+        create: false
+        name: alloy-hubble-config
+        key: config-hubble.alloy
+      mounts:
+        extra:
+          - name: hubble-logs
+            mountPath: /var/run/cilium/hubble
+            readOnly: true
+          - name: alloy-hubble-storage
+            mountPath: /var/lib/alloy-hubble
+    # This collector only reads local files and writes to Loki.
+    rbac:
+      create: false
+    serviceAccount:
+      create: true
+      automountServiceAccountToken: false
+    service:
+      enabled: false
+    ingress:
+      enabled: false

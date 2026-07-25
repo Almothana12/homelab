@@ -1,0 +1,94 @@
+loki.write "default" {
+  endpoint {
+    url = "http://loki.logging.svc.cluster.local:3100/loki/api/v1/push"
+  }
+}
+
+// Cilium mounts /var/run/cilium from the node and writes one JSON object per
+// line. Only the active file is matched; loki.source.file follows file rotation.
+loki.source.file "hubble_drops" {
+  targets = [
+    {
+      __path__ = "/var/run/cilium/hubble/events-system.log",
+      cluster = "homelab",
+      job = "cilium/hubble-export",
+      log_type = "hubble-flow",
+      node = sys.env("HOSTNAME"),
+      service_name = "hubble-flow",
+    },
+  ]
+  forward_to = [loki.process.hubble_drops.receiver]
+
+  file_match {
+    enabled = true
+    sync_period = "10s"
+  }
+}
+
+loki.process "hubble_drops" {
+  stage.json {
+    expressions = {
+      event_time = "flow.time",
+      verdict = "flow.verdict",
+      drop_reason = "flow.drop_reason_desc",
+      source_namespace = "flow.source.namespace",
+      source_pod = "flow.source.pod_name",
+      destination_namespace = "flow.destination.namespace",
+      destination_pod = "flow.destination.pod_name",
+      source_ip = "flow.IP.source",
+      destination_ip = "flow.IP.destination",
+      traffic_direction = "flow.traffic_direction",
+      observer_node = "flow.node_name",
+      tcp_source_port = "flow.l4.TCP.source_port",
+      tcp_destination_port = "flow.l4.TCP.destination_port",
+      udp_source_port = "flow.l4.UDP.source_port",
+      udp_destination_port = "flow.l4.UDP.destination_port",
+      http_method = "flow.l7.http.method",
+      http_url = "flow.l7.http.url",
+      http_code = "flow.l7.http.code",
+    }
+  }
+
+  stage.regex {
+    expression = "\"l4\":\\{\"(?P<protocol>TCP|UDP|SCTP|ICMPv4|ICMPv6)\""
+  }
+
+  stage.timestamp {
+    source = "event_time"
+    format = "RFC3339Nano"
+    action_on_failure = "fudge"
+  }
+
+  // Keep only bounded fields as indexed Loki labels.
+  stage.labels {
+    values = {
+      verdict = "",
+      drop_reason = "",
+      protocol = "",
+      source_namespace = "",
+      destination_namespace = "",
+      traffic_direction = "",
+    }
+  }
+
+  // Endpoint, IP, port, and URL values remain queryable without creating a
+  // high-cardinality Loki stream for every pod or connection.
+  stage.structured_metadata {
+    values = {
+      source_pod = "",
+      destination_pod = "",
+      source_ip = "",
+      destination_ip = "",
+      observer_node = "",
+      tcp_source_port = "",
+      tcp_destination_port = "",
+      udp_source_port = "",
+      udp_destination_port = "",
+      http_method = "",
+      http_url = "",
+      http_code = "",
+    }
+  }
+
+  forward_to = [loki.write.default.receiver]
+}
