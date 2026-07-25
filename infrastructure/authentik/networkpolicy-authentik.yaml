@@ -53,6 +53,7 @@ spec:
         - matchName: goauthentik.io
         - matchName: authentik.error-reporting.a7k.io
         - matchName: secure.gravatar.com
+        - matchName: www.gravatar.com
         - matchName: api-0167bfea.duosecurity.com # DUO MFA
       toPorts:
         - ports:
