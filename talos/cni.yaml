@@ -119,15 +119,15 @@ cluster:
                   - gatewayAPI.enableAppProtocol=true
                   - --set
                   - hubble.enabled=true
-                  --set
+                  - --set
                   - hubble.export.dynamic.enabled=true
-                  --set 
+                  - --set
                   - hubble.export.dynamic.config.content[0].name=blocked-events
-                  --set 
+                  - --set
                   - hubble.export.dynamic.config.content[0].filePath=/var/run/cilium/hubble/events-system.log
-                  --set 
+                  - --set
                   - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[0]=DROPPED
-                  --set 
+                  - --set
                   - hubble.export.dynamic.config.content[0].includeFilters[0].verdict[1]=ERROR
                   - --set
                   - prometheus.enabled=true
