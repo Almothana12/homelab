@@ -31,6 +31,15 @@ spec:
           rules:
             dns:
               - matchPattern: "*"
+    # ICMP back to CoreDNS, e.g. port-unreachable when a reply arrives after
+    # the pod already closed the socket
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      icmps:
+        - fields:
+            - type: DestinationUnreachable
     # To the Internet (YouTube)
     - toEntities:
         - world

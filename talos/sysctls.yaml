@@ -1,0 +1,9 @@
+machine:
+  sysctls:
+    # Stop the nodes emitting ICMP redirects. Cilium already sets
+    # send_redirects=0 on cilium_host/cilium_vxlan, but the kernel ORs the
+    # per-interface value with conf/all, so all=1 re-enabled it everywhere and
+    # the node routers were redirecting pod traffic that hairpinned through
+    # them. Those redirects then hit CiliumNetworkPolicy as denied ingress.
+    net.ipv4.conf.all.send_redirects: "0"
+    net.ipv4.conf.default.send_redirects: "0"

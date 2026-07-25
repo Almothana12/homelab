@@ -187,9 +187,13 @@ spec:
       app.kubernetes.io/name: authentik
       app.kubernetes.io/component: worker
   egress:
-    # To the Kubernetes API
+    # To the Kubernetes API. The apiserver runs on the control-plane nodes, so
+    # while its endpoints churn the node IP briefly carries only the
+    # host/remote-node identity — allow those too, scoped to the apiserver port.
     - toEntities:
         - kube-apiserver
+        - host
+        - remote-node
       toPorts:
         - ports:
             - port: "6443"
