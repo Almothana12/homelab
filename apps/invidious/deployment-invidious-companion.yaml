@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         # rolling tag pinned by digest (companion publishes "latest", not "master")
-        - image: quay.io/invidious/invidious-companion:latest@sha256:cd5c3dae67bdb025eb5c849963418bbcb3c77d94fd13b8c6a017111a329f6865
+        - image: quay.io/invidious/invidious-companion:latest@sha256:093fe7aa806e2fb969430e1c27c1563e161679878cd78736250fa6e3671ef1a9
           name: invidious-companion
           resources:
             limits:
