@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: audiobookshelf
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: audiobookshelf.almothana.sa
+      http:
+        paths:
+          - backend:
+              service:
+                name: audiobookshelf
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - audiobookshelf.almothana.sa
+      secretName: almothana-sa-tls
