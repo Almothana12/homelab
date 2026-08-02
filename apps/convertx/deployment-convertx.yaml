@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: convertx
+  name: convertx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: convertx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: convertx
+    spec:
+      containers:
+        - image: ghcr.io/c4illin/convertx:0.18.0
+          name: convertx
+          resources: {}
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: convertx
+                  key: JWT_SECRET
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            periodSeconds: 30
+          volumeMounts:
+            - mountPath: /app/data
+              name: convertx
+      restartPolicy: Always
+      volumes:
+        - name: convertx
+          persistentVolumeClaim:
+            claimName: convertx
