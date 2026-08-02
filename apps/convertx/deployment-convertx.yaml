@@ -17,7 +17,7 @@ spec:
         app: convertx
     spec:
       containers:
-        - image: ghcr.io/c4illin/convertx:0.18.0
+        - image: ghcr.io/c4illin/convertx:v0.18.0
           name: convertx
           resources: {}
           env:
