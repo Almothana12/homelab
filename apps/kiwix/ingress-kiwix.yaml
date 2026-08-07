@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kiwix
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: kiwix.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kiwix
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - kiwix.almothana.xyz
+      secretName: almothana-xyz-tls

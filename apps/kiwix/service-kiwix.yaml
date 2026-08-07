@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiwix
+  labels:
+    app: kiwix
+spec:
+  selector:
+    app: kiwix
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
