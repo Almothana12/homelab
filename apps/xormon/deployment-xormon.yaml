@@ -63,7 +63,7 @@ spec:
             - containerPort: 8162
               protocol: TCP
           volumeMounts:
-            - mountPath: /usr/src/app/server-nest/files
+            - mountPath: /app/server-nest/files
               name: xormon
             - mountPath: /app/server-nest/ssl/xormon.crt
               name: xormon-ssl
