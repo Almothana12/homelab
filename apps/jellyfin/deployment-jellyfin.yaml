@@ -19,7 +19,11 @@ spec:
       containers:
         - image: linuxserver/jellyfin:10.11.11
           name: jellyfin
-          resources: {}
+          resources:
+            requests:
+              cpu: 10m
+              memory: 600Mi
+            limits: {}
           env:
             - name: TZ
               value: Asia/Riyadh

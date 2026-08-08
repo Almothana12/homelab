@@ -99,6 +99,11 @@ spec:
         #       password:
         #         name: openobserve-remote-write
         #         key: password
+        resources:
+          requests:
+            cpu: 200m
+            memory: 1700Mi
+          limits: {}
         storageSpec: 
           volumeClaimTemplate:
             spec:
