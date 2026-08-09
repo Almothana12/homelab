@@ -10,6 +10,10 @@ spec:
   extraEnv:
     - name: LOG_LEVEL
       value: debug
+    - name: RENOVATE_PR_HOURLY_LIMIT
+      value: "0"
+    - name: RENOVATE_PR_CONCURRENT_LIMIT
+      value: "0"
   provider:
     name: github
     endpoint: ""  # optional, defaults to https://api.github.com
