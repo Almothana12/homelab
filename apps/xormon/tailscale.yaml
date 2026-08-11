@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xormon-agent
+  annotations:
+    tailscale.com/hostname: xormon-agent
+    tailscale.com/tags: "tag:xormon-agent"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  selector:
+    app: xormon
+  ports:
+    - name: agent-tls
+      port: 8162
+      targetPort: 8162
+      protocol: TCP
