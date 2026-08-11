@@ -52,6 +52,21 @@ spec:
             name: xormon-auth
           inRoles:
             - pg_monitor
+      # hard-code service names to avoid it changing for different versions
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "immich-cluster-r"
       # Force instances to be scheduled on different nodes
       affinity:
         enablePodAntiAffinity: true
