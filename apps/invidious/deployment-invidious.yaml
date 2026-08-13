@@ -22,7 +22,7 @@ spec:
       containers:
         # rolling tag pinned by digest: renovate bumps the digest on every new
         # build. note: invidious' "latest" tag is stale, "master" is the live one
-        - image: quay.io/invidious/invidious:master@sha256:b73ae768795f852d2a0ccef19f05cb14fd60ed7991c1df012ca465a9f7460225
+        - image: quay.io/invidious/invidious:master@sha256:08ee1783a7f6167e3a29430c9ed390d4b44c25742a40819433d7754fd907e02c
           name: invidious
           resources:
             limits:
