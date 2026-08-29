@@ -578,6 +578,25 @@ spec:
   targetNamespace: renovate-operator
 
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: newt
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/newt
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: newt
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
