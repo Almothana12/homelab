@@ -1111,6 +1111,14 @@ spec:
     secretRef:
       name: sops-age
   force: false
+  ignore: # Tailscale controller overrides the externalName of the egress service. don't fight it.
+    - paths:
+        - /spec/externalName
+      target:
+        version: v1
+        kind: Service
+        name: postfix
+        namespace: stalwart
   interval: 5m0s
   path: ./apps/stalwart
   prune: true
