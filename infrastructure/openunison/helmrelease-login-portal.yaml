@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: orchestra-login-portal
-      version: "2.3.96"
+      version: "2.3.97"
       sourceRef:
         kind: HelmRepository
         name: tremolo
