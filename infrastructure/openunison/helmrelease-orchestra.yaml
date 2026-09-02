@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: orchestra
-      version: "3.1.53"
+      version: "3.1.55"
       sourceRef:
         kind: HelmRepository
         name: tremolo
