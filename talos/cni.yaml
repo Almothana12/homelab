@@ -141,3 +141,9 @@ cluster:
                   - hubble.metrics.enabled="{dns,drop:sourceContext=namespace|ip|reserved-identity;destinationContext=namespace|ip|reserved-identity;labelsContext=source_namespace\,source_workload\,destination_namespace\,destination_workload\,traffic_direction,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction}"
                   - --set
                   - hubble.metrics.serviceMonitor.enabled=true
+                  - --set 
+                  - ipv6.enabled=true
+                  - --set 
+                  - enableIPv6Masquerade=true
+                  - --set
+                  - k8s.requireIPv6PodCIDR=true # wait for Kubernetes to provide the PodCIDR before ready
