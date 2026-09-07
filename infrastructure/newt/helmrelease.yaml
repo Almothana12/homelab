@@ -13,6 +13,11 @@ spec:
         name: fossorial
       interval: 5m
   values: 
+    global:
+      image:
+        registry: docker.io
+        repository: fosrl/newt
+        tag: "1.16.0"
     newtInstances:
       - name: main-tunnel
         enabled: true
