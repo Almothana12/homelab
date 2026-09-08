@@ -1,0 +1,46 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: newt
+spec:
+  endpointSelector: {}
+  # explicit deny to be safe
+  egressDeny:
+    - toEntities:
+        - ingress
+        - host
+        - remote-node
+        - kube-apiserver
+  egress:
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To Pangolin
+    - toFQDNs:
+        - matchName: pangolin.almothana.sa
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "51820"
+              protocol: UDP
+            - port: "21820"
+              protocol: UDP
+    # To FreshRSS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: freshrss
+            k8s:app: freshrss
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP

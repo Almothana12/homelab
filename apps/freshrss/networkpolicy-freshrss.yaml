@@ -10,10 +10,17 @@ spec:
     # From Ingress
     - fromEntities:
         - ingress
-    # From Cloudflared namespace
+    # From Newt namespace
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: cloudflared
+            k8s:io.kubernetes.pod.namespace: newt
+            k8s:app.kubernetes.io/component: newt
+            k8s:newt.instance: main-tunnel
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+
   egress:
     # To DNS
     - toEndpoints:
