@@ -5,7 +5,7 @@ metadata:
 spec:
   discoveryFilters:
     - Almothana12/homelab
-  image: renovate/renovate:44.39.2
+  image: renovate/renovate:44.79.1
   parallelism: 3
   extraEnv:
     - name: LOG_LEVEL
