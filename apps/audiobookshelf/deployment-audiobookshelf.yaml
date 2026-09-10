@@ -28,6 +28,8 @@ spec:
           env:
             - name: TZ
               value: Asia/Riyadh
+            - name: SSRF_REQUEST_FILTER_WHITELIST
+              value: "pinchflat.almothana.xyz"
           ports:
             - containerPort: 80
               name: http
