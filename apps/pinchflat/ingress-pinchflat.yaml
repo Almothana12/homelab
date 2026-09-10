@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pinchflat
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: pinchflat.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: pinchflat
+            port:
+              number: 8945
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - pinchflat.almothana.xyz
+      secretName: almothana-xyz-tls

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pinchflat
+  name: pinchflat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pinchflat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: pinchflat
+    spec:
+      containers:
+        - image: ghcr.io/kieraneglin/pinchflat:latest@sha256:e3e4e79490bb85e72ab233d332b4169142ed7907def7111223665c84952b0c7e # because there is no alternative to latest tag. prject is not actively maintained.
+          name: pinchflat
+          resources: {}
+          env: 
+            - name: TZ
+              value: "Asia/Riyadh"
+          ports:
+            - containerPort: 8945
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: pinchflat
+            - mountPath: /downloads
+              name: library
+              subPath: youtube
+      restartPolicy: Always
+      volumes:
+        - name: pinchflat
+          persistentVolumeClaim:
+            claimName: pinchflat
+        - name: library
+          persistentVolumeClaim:
+            claimName: plex-library
