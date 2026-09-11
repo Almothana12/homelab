@@ -1,3 +1,5 @@
 talos/controlplane.yaml
 talos/worker.yaml
+talos/worker-gpu.yaml
+talos/secrets.yaml
 .decrypted~*
