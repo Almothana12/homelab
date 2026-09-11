@@ -25,3 +25,10 @@ spec:
             - https://kubetail.almothana.xyz
         ingress:
           enabled: false # using Authentik proxy
+      clusterAgent:
+        podTemplate:
+          extraContainers:
+            tolerations:
+              - key: "nvidia.com/gpu"
+                operator: "Exists"
+                effect: "NoSchedule"

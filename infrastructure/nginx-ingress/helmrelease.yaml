@@ -17,3 +17,7 @@ spec:
       kind: daemonset
       service:
         type: LoadBalancer
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
