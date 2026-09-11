@@ -58,3 +58,7 @@ talosctl apply-config --insecure --nodes 192.168.0.64 \
 talosctl apply-config --insecure --nodes 192.168.0.65 \
     --file worker-gpu.yaml \
     --config-patch @gpu-2.yaml
+
+# Taints and labels GPU workers. TODO: make this automatic in Talos config
+kubectl taint nodes gpu-1 gpu-2 nvidia.com/gpu=present:NoSchedule 
+kubectl label nodes gpu-1 gpu-2 node-role.kubernetes.io/gpu=
