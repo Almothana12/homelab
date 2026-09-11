@@ -50,7 +50,7 @@ spec:
             k8s:newt.instance: main-tunnel
       toPorts:
         - ports:
-            - port: "80"
+            - port: "9000"
               protocol: TCP
   egress:
     # To the Internet # https://docs.goauthentik.io/install-config/air-gapped/
