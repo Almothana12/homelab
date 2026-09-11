@@ -37,7 +37,8 @@ kubectl create secret generic sops-age --namespace=flux-system --from-file=<PATH
 # GPU Workers
 talosctl gen config homelab https://192.168.0.61:6443 \
     --with-secrets secrets.yaml \
-    --talos-version v1.11 \ # workaround by Claude for the v1alpha1 format. use multi-doc config later
+    # workaround by Claude for the v1alpha1 format. use multi-doc config later
+    --talos-version v1.11 \ 
     --output-types worker \
     --output worker-gpu.yaml \
     --config-patch @install-disk.yaml \
