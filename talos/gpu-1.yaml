@@ -1,0 +1,13 @@
+machine:
+  network:
+    hostname: gpu-1
+    interfaces:
+      - interface: enP7s7
+        addresses:
+          - 192.168.0.64/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.0.1
+        dhcp: true
+    nameservers:
+      - 192.168.0.2

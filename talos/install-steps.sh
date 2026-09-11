@@ -33,3 +33,27 @@ talosctl kubeconfig --nodes 192.168.0.61 --talosconfig=./talosconfig
 
 flux bootstrap github --personal --owner=Almothana12  --repository homelab --path=./k8s --branch=master
 kubectl create secret generic sops-age --namespace=flux-system --from-file=<PATH>
+
+# GPU Workers
+talosctl gen config homelab https://192.168.0.61:6443 \
+    --with-secrets secrets.yaml \
+    --talos-version v1.11 \ # workaround by Claude for the v1alpha1 format. use multi-doc config later
+    --output-types worker \
+    --output worker-gpu.yaml \
+    --config-patch @install-disk.yaml \
+    --config-patch @cni.yaml \
+    --config-patch @metrics-server.yaml \
+    --config-patch @extraMounts.yaml \
+    --config-patch @dual-stack.yaml \
+    --config-patch @sysctls.yaml \
+    --config-patch @gpu-install.yaml \
+    --config-patch @gpu-worker-patch.yaml
+
+
+talosctl apply-config --insecure --nodes 192.168.0.64 \
+    --file worker-gpu.yaml \
+    --config-patch @gpu-1.yaml
+
+talosctl apply-config --insecure --nodes 192.168.0.65 \
+    --file worker-gpu.yaml \
+    --config-patch @gpu-2.yaml
