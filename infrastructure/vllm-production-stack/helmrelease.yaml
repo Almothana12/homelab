@@ -1,0 +1,56 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vllm-production-stack
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: vllm-stack
+      version: '0.1.12'
+      sourceRef:
+        kind: HelmRepository
+        name: vllm-production-stack
+      interval: 5m
+  values: # https://github.com/vllm-project/production-stack/blob/main/helm/values.yaml
+    servingEngineSpec:
+      # Global runtime class for all models (can be overridden per model)
+      runtimeClassName: "nvidia"
+
+      # Global tolerations applied to all model deployments
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+      modelSpec:
+      - name: "qwen-3.8-27b-nvfp4"
+        modelURL: "nvidia/Qwen3.8-27B-NVFP4"
+        repository: "vllm/vllm-openai"
+        tag: "v0.29.0"
+
+        replicaCount: 1
+
+        requestCPU: 6
+        requestMemory: "16Gi"
+        requestGPU: 1
+
+        pvcStorage: "10Gi"
+
+    # cacheserverSpec:
+    #   repository: "lmcache/vllm-openai"
+    #   tag: "latest-nightly"
+    #   containerPort: 8000
+    #   servicePort: 80
+    #   serde: "naive"
+    #   resources:
+    #     requests:
+    #       cpu: "4"
+    #       memory: "8Gi"
+    #       # Example InfiniBand/RDMA extended resource
+    #       rdma/ib: "1"
+    #     limits:
+    #       cpu: "4"
+    #       memory: "10Gi"
+    #       # Example InfiniBand/RDMA extended resource
+    #       rdma/ib: "1"

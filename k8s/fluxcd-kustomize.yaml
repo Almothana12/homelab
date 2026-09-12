@@ -602,6 +602,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: vllm-production-stack
+  namespace: flux-system
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/vllm-production-stack
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: vllm
+
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: onlyoffice
   namespace: flux-system
 spec:

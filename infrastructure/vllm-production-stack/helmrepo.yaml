@@ -1,0 +1,7 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: vllm-production-stack
+spec:
+  interval: 5m
+  url: https://vllm-project.github.io/production-stack
