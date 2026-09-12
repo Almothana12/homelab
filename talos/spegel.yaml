@@ -1,0 +1,8 @@
+# This is required for Spegel to work with Talos. https://spegel.dev/docs/getting-started/#talos
+machine:
+  files:
+    - path: /etc/cri/conf.d/20-customization.part
+      op: create
+      content: |
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
