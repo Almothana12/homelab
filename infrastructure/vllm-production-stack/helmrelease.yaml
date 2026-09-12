@@ -24,7 +24,7 @@ spec:
           effect: "NoSchedule"
 
       modelSpec:
-      - name: "qwen-3.8-27b-nvfp4"
+      - name: "qwen-38-27b-nvfp4"
         modelURL: "nvidia/Qwen3.8-27B-NVFP4"
         repository: "vllm/vllm-openai"
         tag: "v0.29.0"
