@@ -33,7 +33,7 @@ spec:
         image: vllm/vllm-openai:v0.29.0
         command: ["/bin/sh", "-c"]
         args: [
-          "vllm serve Qwen/Qwen3.8-27B-FP8  --tensor-parallel-size 1  --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3  --mm-encoder-tp-mode data"
+          "vllm serve Qwen/Qwen3.8-27B-FP8  --tensor-parallel-size 1  --gpu-memory-utilization 0.6  --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3  --mm-encoder-tp-mode data"
         ]
         env:
         - name: HF_TOKEN
