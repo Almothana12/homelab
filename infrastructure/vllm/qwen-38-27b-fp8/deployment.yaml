@@ -24,6 +24,10 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: "2Gi"
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
       containers:
       - name: qwen-38-27b-fp8
         image: vllm/vllm-openai:v
