@@ -4,7 +4,8 @@ metadata:
   name: default-l2
 spec:
   interfaces:
-    - ^enp.*
+    # PCI interface names can use lowercase p or uppercase P (for example enP7s7).
+    - ^en[pP].*
     - ^eth[0-9]+
   externalIPs: true
   loadBalancerIPs: true
