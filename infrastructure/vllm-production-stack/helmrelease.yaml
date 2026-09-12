@@ -28,14 +28,17 @@ spec:
         modelURL: "nvidia/Qwen3.8-27B-NVFP4"
         repository: "vllm/vllm-openai"
         tag: "v0.29.0"
-
         replicaCount: 1
-
         requestCPU: 6
         requestMemory: "16Gi"
         requestGPU: 1
-
-        pvcStorage: "10Gi"
+        pvcStorage: "100Gi"
+        env:
+        - name: HF_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token
+              key: token
 
     # cacheserverSpec:
     #   repository: "lmcache/vllm-openai"
