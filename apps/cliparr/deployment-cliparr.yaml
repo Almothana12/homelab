@@ -17,7 +17,7 @@ spec:
         app: cliparr
     spec:
       containers:
-        - image: ghcr.io/techsquidtv/cliparr:1.2
+        - image: ghcr.io/techsquidtv/cliparr:2.0
           name: cliparr
           resources: {}
           env:
