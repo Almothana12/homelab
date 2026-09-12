@@ -1353,3 +1353,25 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: kiwix
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: open-webui
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: cnpg
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  force: false
+  interval: 5m0s
+  path: ./apps/open-webui
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: open-webui

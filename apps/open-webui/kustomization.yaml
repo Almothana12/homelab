@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - secret-open-webui.yaml
+  - helmrelease-open-webui-cluster.yaml
+  - helmrepo.yaml
+  - helmrelease.yaml
+  - networkpolicy-open-webui.yaml
+  - ../../infrastructure/cnpg/networkpolicy

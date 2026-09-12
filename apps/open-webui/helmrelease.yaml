@@ -1,0 +1,113 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  dependsOn:
+    - name: open-webui-cluster-v00
+  interval: 5m
+  chart:
+    spec:
+      chart: open-webui
+      version: '16.5.0'
+      sourceRef:
+        kind: HelmRepository
+        name: open-webui
+      interval: 5m
+  values:
+    # using vLLM
+    ollama:
+      enabled: false
+    pipelines:
+      enabled: false
+    # Single replica, so the built-in in-memory websocket manager is enough.
+    # Scaling out needs manager: redis, redis.enabled: true, and RWX/S3 storage.
+    websocket:
+      enabled: true
+      manager: ""
+      redis:
+        enabled: false
+
+    replicaCount: 1
+
+    # Holds uploads and the model cache. Chats, settings and embeddings live in CNPG.
+    persistence:
+      enabled: true
+      size: 10Gi
+
+    ingress:
+      enabled: true
+      class: cilium
+      host: chat.almothana.sa
+      tls: true
+      existingSecret: almothana-sa-tls
+
+    # Only seeds the connection on first start; afterwards connections are
+    # stored in the database and managed under Admin Settings > Connections.
+    enableOpenaiApi: true
+    openaiBaseApiUrl: http://qwen-38-27b-fp8.vllm.svc.cluster.local:8000/v1
+    openaiApiKey: ""
+
+    sso:
+      enabled: true
+      enableSignup: true
+      oidc:
+        enabled: true
+        clientExistingSecret: open-webui
+        clientIdExistingSecretKey: OAUTH_CLIENT_ID
+        clientExistingSecretKey: OAUTH_CLIENT_SECRET
+        providerUrl: https://sso.almothana.sa/application/o/open-webui/.well-known/openid-configuration
+        providerName: Authentik
+        scopes: "openid email profile"
+
+    extraEnvVars:
+      - name: WEBUI_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: open-webui
+            key: WEBUI_SECRET_KEY
+      # CNPG app credentials, expanded into DATABASE_URL below
+      - name: CNPG_APP_USER
+        valueFrom:
+          secretKeyRef:
+            name: open-webui-cluster-v00-app
+            key: username
+      - name: CNPG_APP_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: open-webui-cluster-v00-app
+            key: password
+      - name: DATABASE_URL
+        value: postgresql://$(CNPG_APP_USER):$(CNPG_APP_PASSWORD)@open-webui-cluster-rw:5432/app
+      # PGVECTOR_DB_URL defaults to DATABASE_URL
+      - name: VECTOR_DB
+        value: pgvector
+      - name: OPENID_REDIRECT_URI
+        value: https://chat.almothana.sa/oauth/oidc/callback
+      # No local sign-ups; accounts come from Authentik
+      - name: ENABLE_SIGNUP
+        value: "False"
+
+    startupProbe:
+      httpGet:
+        path: /health
+        port: http
+      periodSeconds: 10
+      failureThreshold: 30
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: http
+      periodSeconds: 30
+    readinessProbe:
+      httpGet:
+        path: /health/db
+        port: http
+      periodSeconds: 10
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 1Gi
+      limits:
+        memory: 4Gi
