@@ -4,6 +4,8 @@ metadata:
   name: vllm-production-stack
 spec:
   interval: 5m
+  # Allow image pulls, model loading and GPU warmup to finish during an upgrade.
+  timeout: 45m
   chart:
     spec:
       chart: vllm-stack
@@ -12,10 +14,44 @@ spec:
         kind: HelmRepository
         name: vllm-production-stack
       interval: 5m
+  # Chart 0.1.12 hardcodes a 20-minute Deployment progress deadline.
+  # Keep it longer than the 30-minute model startup probe below.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: vllm-production-stack-qwen-38-27b-nvfp4-deployment-vllm
+            patch: |
+              - op: replace
+                path: /spec/progressDeadlineSeconds
+                value: 2400
   values: # https://github.com/vllm-project/production-stack/blob/main/helm/values.yaml
     servingEngineSpec:
       # Global runtime class for all models (can be overridden per model)
       runtimeClassName: "nvidia"
+
+      # The existing local PVC is pinned to gpu-1, whose only GPU is reserved
+      # by the old pod. RWO permits sharing on that node; GPU capacity blocks
+      # a surge pod. Release the old GPU allocation before starting the next pod.
+      # With one replica this causes downtime during each rolling update.
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+
+      # Model loading, compilation and warmup exceed the default 10-minute budget.
+      startupProbe:
+        initialDelaySeconds: 15
+        periodSeconds: 10
+        failureThreshold: 180
+        timeoutSeconds: 5
+        httpGet:
+          path: /health
+          port: 8000
 
       # Global tolerations applied to all model deployments
       tolerations:
@@ -32,13 +68,31 @@ spec:
         requestCPU: 6
         requestMemory: "16Gi"
         requestGPU: 1
-        pvcStorage: "100Gi"
+        # Match the existing claim: openebs-hostpath does not support expansion.
+        # Hostpath has no 10Gi quota; /data/hub currently uses about 35Gi.
+        # Retain this claim and its cached weights rather than replacing it.
+        pvcStorage: "10Gi"
         env:
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:
               name: hf-token
               key: token
+        # HF_HOME is already /data. Persist compilation/autotune caches too;
+        # the default /root/.cache/vllm is lost when the container restarts.
+        - name: VLLM_CACHE_ROOT
+          value: /data/vllm-cache/v0.29.0
+
+    routerSpec:
+      # Observed router startup takes ~30s; the chart allows only ~20s.
+      startupProbe:
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        failureThreshold: 24
+        timeoutSeconds: 5
+        httpGet:
+          path: /health
+          port: router-port
 
     # cacheserverSpec:
     #   repository: "lmcache/vllm-openai"
