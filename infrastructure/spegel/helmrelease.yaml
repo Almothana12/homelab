@@ -19,3 +19,11 @@ spec:
       - key: "nvidia.com/gpu"
         operator: "Exists"
         effect: "NoSchedule"
+    # Enabled monitoring
+    serviceMonitor:
+      enabled: true
+    grafanaDashboard:
+      enabled: true
+      mode: Sidecar
+      labels:
+        grafana_dashboard: "1"
