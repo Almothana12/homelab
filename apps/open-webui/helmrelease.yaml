@@ -45,7 +45,7 @@ spec:
     # Only seeds the connection on first start; afterwards connections are
     # stored in the database and managed under Admin Settings > Connections.
     enableOpenaiApi: true
-    openaiBaseApiUrl: http://qwen-38-27b-fp8.vllm.svc.cluster.local:8000/v1
+    openaiBaseApiUrl: http://qwen-38-27b-fp8.ai.svc.cluster.local:8000/v1
     openaiApiKey: ""
 
     sso:

@@ -31,10 +31,10 @@ spec:
     # To pods in the same namespace (CNPG)
     - toEndpoints:
         - {}
-    # To vLLM
+    # To model servers
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: vllm
+            k8s:io.kubernetes.pod.namespace: ai
       toPorts:
         - ports:
             - port: "8000"

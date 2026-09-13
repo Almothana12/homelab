@@ -622,7 +622,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: vllm
+  name: ai
   namespace: flux-system
 spec:
   decryption:
@@ -631,12 +631,12 @@ spec:
       name: sops-age
   force: false
   interval: 5m0s
-  path: ./infrastructure/vllm
+  path: ./infrastructure/ai
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  targetNamespace: vllm
+  targetNamespace: ai
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1

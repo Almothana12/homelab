@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - namespace-vllm.yaml
+  - namespace-ai.yaml
   - secret-hf-token.yaml
   - qwen-38-27b-fp8
