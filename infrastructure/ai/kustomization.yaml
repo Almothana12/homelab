@@ -4,3 +4,4 @@ resources:
   - namespace-ai.yaml
   - secret-hf-token.yaml
   - qwen-38-27b-fp8
+  - qwen-38-27b-fp8-sglang
