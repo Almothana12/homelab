@@ -19,3 +19,6 @@ spec:
       enabled: false
     hostPaths:
       driverInstallDir: /usr/local
+    devicePlugin:
+      config:
+        name: time-slicing-config-fine
