@@ -1,4 +1,6 @@
 machine:
+  nodeLabels:
+    nvidia.com/device-plugin.config: gpu-2 # key in the time-slicing-config-fine ConfigMap (infrastructure/gpu-operator)
   network:
     hostname: gpu-2
     interfaces:
