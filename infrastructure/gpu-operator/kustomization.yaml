@@ -4,3 +4,10 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+
+configMapGenerator:
+  - name: time-slicing-config-fine
+    files:
+      - gpu-2=time-slicing-config-gpu-2.yaml
+    options:
+      disableNameSuffixHash: true
