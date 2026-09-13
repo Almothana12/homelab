@@ -39,6 +39,8 @@ spec:
         - ports:
             - port: "8000"
               protocol: TCP
+            - port: "30000"
+              protocol: TCP
     # To Authentik
     - toServices:
         - k8sService:
