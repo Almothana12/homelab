@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qwen-38-27b-nvfp4-sglang
+  labels:
+    app: qwen-38-27b-nvfp4-sglang
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: qwen-38-27b-nvfp4-sglang
+  template:
+    metadata:
+      labels:
+        app: qwen-38-27b-nvfp4-sglang
+    spec:
+      runtimeClassName: nvidia
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: hf-cache
+        persistentVolumeClaim:
+          claimName: qwen-38-27b-nvfp4-sglang
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: "10Gi"
+      containers:
+      - name: sglang
+        image: lmsysorg/sglang:v0.5.19
+        # https://lmsysorg.mintlify.app/cookbook/autoregressive/Qwen/Qwen3.8-27B#hw=dgx-spark&variant=default&quant=nvfp4-nvidia&nodes=single&spec=dflash&tier=low-latency&ssmDtype=float32
+        command: ["sglang", "serve"]
+        args:
+        - --trust-remote-code
+        - --model-path=nvidia/Qwen3.8-27B-NVFP4
+        - --kv-cache-dtype=fp8_e4m3
+        - --mem-fraction-static=0.80
+        - --attention-backend=flashinfer
+        - --chunked-prefill-size=2048
+        - --reasoning-parser=qwen3
+        - --tool-call-parser=qwen3_coder
+        - --mamba-full-memory-ratio=11.93
+        - --host=0.0.0.0
+        - --port=30000
+        - --speculative-algorithm=DFLASH
+        - --speculative-draft-model-path=incoai/Qwen3.8-27B-DFlash2
+        - --speculative-num-draft-tokens=8
+        - --mamba-radix-cache-strategy=extra_buffer
+        - --mamba-ssm-dtype=float32
+        - --max-running-requests=16
+        env:
+        - name: HF_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token
+              key: token
+        ports:
+        - name: http
+          containerPort: 30000
+        resources:
+          limits:
+            cpu: "8"
+            memory: 40Gi
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "2"
+            memory: 16Gi
+            nvidia.com/gpu: "1"
+        volumeMounts:
+        - name: hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 180
+        readinessProbe:
+          httpGet:
+            path: /health_generate
+            port: http
+          periodSeconds: 15
+          timeoutSeconds: 10
+          failureThreshold: 3
