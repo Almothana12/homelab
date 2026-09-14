@@ -5,7 +5,7 @@ metadata:
   labels:
     app: qwen-38-27b-fp8-sglang
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
