@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: ai.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name:  qwen-38-27b-nvfp4-sglang
+            port:
+              number: 8000
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - ai.almothana.xyz
+      secretName: almothana-xyz-tls

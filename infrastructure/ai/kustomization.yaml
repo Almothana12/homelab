@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespace-ai.yaml
   - secret-hf-token.yaml
+  - ingress-ai.yaml
   - qwen-38-27b-fp8
   - qwen-38-27b-fp8-sglang
   - qwen-38-27b-nvfp4-sglang
