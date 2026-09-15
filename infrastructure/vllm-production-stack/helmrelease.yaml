@@ -103,6 +103,19 @@ spec:
           path: /health
           port: router-port
 
+      ingress:
+        enabled: true
+        className: cilium
+        hosts:
+          - host: vllm.almothana.xyz
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - secretName: almothana-xyz-tls
+            hosts:
+              - vllm.almothana.xyz
+
     # cacheserverSpec:
     #   repository: "lmcache/vllm-openai"
     #   tag: "latest-nightly"
