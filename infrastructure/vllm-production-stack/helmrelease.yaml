@@ -92,7 +92,7 @@ spec:
         #   value: /data/nv-compute-cache
 
     routerSpec:
-      repository: "vllm/vllm-router"
+      repository: "lmcache/lmstack-router"
       tag: "v0.1.12"
       startupProbe:
         initialDelaySeconds: 5
