@@ -33,10 +33,6 @@ spec:
       # Global runtime class for all models (can be overridden per model)
       runtimeClassName: "nvidia"
 
-      # The existing local PVC is pinned to gpu-1, whose only GPU is reserved
-      # by the old pod. RWO permits sharing on that node; GPU capacity blocks
-      # a surge pod. Release the old GPU allocation before starting the next pod.
-      # With one replica this causes downtime during each rolling update.
       strategy:
         type: RollingUpdate
         rollingUpdate:
@@ -68,23 +64,36 @@ spec:
         requestCPU: 6
         requestMemory: "16Gi"
         requestGPU: 1
-        # Match the existing claim: openebs-hostpath does not support expansion.
-        # Hostpath has no 10Gi quota; /data/hub currently uses about 35Gi.
-        # Retain this claim and its cached weights rather than replacing it.
-        pvcStorage: "10Gi"
+        pvcStorage: "50Gi"
+        enableTool: true
+        toolCallParser: "qwen3_coder"
+        vllmConfig:
+          gpuMemoryUtilization: 0.60
+          enablePrefixCaching: true
+          maxNumSeqs: 16
+          extraArgs:
+          - "--kv-cache-dtype"
+          - "fp8"
+          - "--reasoning-parser"
+          - "qwen3"
         env:
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:
               name: hf-token
               key: token
-        # HF_HOME is already /data. Persist compilation/autotune caches too;
-        # the default /root/.cache/vllm is lost when the container restarts.
-        - name: VLLM_CACHE_ROOT
-          value: /data/vllm-cache/v0.29.0
+        # # HF_HOME is already /data. Persist compilation/autotune caches too;
+        # # the default /root/.cache/vllm is lost when the container restarts.
+        # - name: VLLM_CACHE_ROOT
+        #   value: /data/vllm-cache/v0.29.0
+        # # Same for kernels the driver JIT-compiles because they don't ship
+        # # prebuilt for GB10 (default /root/.nv/ComputeCache).
+        # - name: CUDA_CACHE_PATH
+        #   value: /data/nv-compute-cache
 
     routerSpec:
-      # Observed router startup takes ~30s; the chart allows only ~20s.
+      repository: "vllm/vllm-router"
+      tag: "v0.1.12"
       startupProbe:
         initialDelaySeconds: 5
         periodSeconds: 5
