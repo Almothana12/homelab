@@ -8,6 +8,7 @@ resources:
   - secret-xormon.yaml
   - deployment-xormon.yaml
   - service-xormon.yaml
+  - service-xormon-agent-lan.yaml
   - ingress-xormon.yaml
   - sa-xormon.yaml
   - ClusterRole-xormon.yaml

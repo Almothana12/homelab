@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xormon-agent-lan
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: xormon-agent.almothana.xyz
+spec:
+  type: LoadBalancer
+  selector:
+    app: xormon
+  ports:
+    - name: agent-tcp
+      port: 8162
+      targetPort: 8162
+      protocol: TCP
