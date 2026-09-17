@@ -68,7 +68,7 @@ spec:
         enableTool: true
         toolCallParser: "qwen3_coder"
         vllmConfig:
-          gpuMemoryUtilization: 0.60
+          gpuMemoryUtilization: 0.72
           enablePrefixCaching: true
           maxNumSeqs: 16
           extraArgs:
@@ -76,6 +76,13 @@ spec:
           - "fp8"
           - "--reasoning-parser"
           - "qwen3"
+          - "--speculative-config"
+          - '{"method":"dflash","model":"incoai/Qwen3.8-27B-DFlash2","num_speculative_tokens":8}'
+          # Optional accuracy parity with SGLang (--mamba-ssm-dtype=float32):
+          # keeps hybrid GDN recurrent state in fp32 instead of the model dtype.
+          # Costs a little memory; uncomment if fp8 KV drift is a concern.
+          # - "--mamba-ssm-cache-dtype"
+          # - "float32"
         env:
         - name: HF_TOKEN
           valueFrom:
