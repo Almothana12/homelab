@@ -10,7 +10,7 @@ spec:
       paths:
       - backend:
           service:
-            name:  qwen-38-27b-nvfp4-sglang
+            name:  vllm-tp
             port:
               number: 8000
         path: /

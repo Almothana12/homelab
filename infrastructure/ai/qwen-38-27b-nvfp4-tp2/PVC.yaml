@@ -1,0 +1,24 @@
+# Separate node-local caches; keep the production-stack PVC untouched for rollback.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-tp-leader-cache
+spec:
+  accessModes: 
+  - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 80Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-tp-worker-cache
+spec:
+  accessModes: 
+  - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 80Gi

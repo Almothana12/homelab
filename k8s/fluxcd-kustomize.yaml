@@ -625,6 +625,8 @@ metadata:
   name: ai
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: lws
   decryption:
     provider: sops
     secretRef:

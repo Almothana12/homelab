@@ -1,0 +1,282 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: vllm-tp
+spec:
+  replicas: 1
+  # LeaderReady would deadlock: the leader needs its worker to initialize TP.
+  startupPolicy: LeaderCreated
+  rolloutStrategy:
+    type: RollingUpdate
+    rollingUpdateConfiguration:
+      maxSurge: 0
+      maxUnavailable: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: vllm-tp
+          app.kubernetes.io/component: leader
+      spec:
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Don't schedule the pods on the same node if they have the same label AND the value of the label is the same.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: leaderworkerset.sigs.k8s.io/group-key
+                      operator: Exists
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.29.0
+            imagePullPolicy: IfNotPresent
+            command: [vllm, serve]
+            args:
+              - nvidia/Qwen3.8-27B-NVFP4
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 0
+              - --master-addr
+              - "10.100.217.2"
+              - --master-port
+              - "29501"
+              # API/Service traffic uses the management address, not the TP rail.
+              - --host
+              - 192.168.0.64
+              - --port
+              - "8000"
+              - --gpu-memory-utilization
+              - "0.72"
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "16"
+              - --kv-cache-dtype
+              - fp8
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+              - --speculative-config
+              - '{"method":"dflash","model":"incoai/Qwen3.8-27B-DFlash2","num_speculative_tokens":8,"draft_tensor_parallel_size":2}'
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: VLLM_HOST_IP
+                value: 10.100.217.2
+              - name: NCCL_SOCKET_IFNAME
+                value: "=enP2p1s0f0np0"
+              - name: GLOO_SOCKET_IFNAME
+                value: enP2p1s0f0np0
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              # Deliberate TCP baseline. RDMA device exposure is a separate change.
+              - name: NCCL_IB_DISABLE
+                value: "1"
+              - name: NCCL_DEBUG
+                value: INFO
+            ports:
+              - name: http
+                containerPort: 8000
+                protocol: TCP
+            resources:
+              requests:
+                cpu: "6"
+                memory: 16Gi
+                nvidia.com/gpu: "1"
+              limits:
+                nvidia.com/gpu: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+            volumeMounts:
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            startupProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 360
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 6
+        volumes:
+          - name: cache
+            persistentVolumeClaim:
+              claimName: vllm-tp-leader-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
+    workerTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: vllm-tp
+          app.kubernetes.io/component: worker
+      spec:
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Don't schedule the pods on the same node if they have the same label AND the value of the label is the same.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: leaderworkerset.sigs.k8s.io/group-key
+                      operator: Exists
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.29.0
+            imagePullPolicy: IfNotPresent
+            command: [vllm, serve]
+            args:
+              - nvidia/Qwen3.8-27B-NVFP4
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 1,2,3,4
+              - --master-addr
+              - "10.100.217.2"
+              - --master-port
+              - "29501"
+              - --headless
+              - --gpu-memory-utilization
+              - "0.72"
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "16"
+              - --kv-cache-dtype
+              - fp8
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+              - --speculative-config
+              - '{"method":"dflash","model":"incoai/Qwen3.8-27B-DFlash2","num_speculative_tokens":8,"draft_tensor_parallel_size":2}'
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: VLLM_HOST_IP
+                value: 10.100.217.1
+              - name: NCCL_SOCKET_IFNAME
+                value: "=enP2p1s0f0np0"
+              - name: GLOO_SOCKET_IFNAME
+                value: enP2p1s0f0np0
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_DISABLE
+                value: "1"
+              - name: NCCL_DEBUG
+                value: INFO
+            resources:
+              requests:
+                cpu: "6"
+                memory: 16Gi
+                nvidia.com/gpu: "1"
+              limits:
+                nvidia.com/gpu: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+            volumeMounts:
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            # Headless workers expose no HTTP API. Gate readiness on the group's
+            # leader health, not a fictitious local port. This is not an independent
+            # worker health check; process exit triggers LWS group recreation.
+            readinessProbe:
+              exec:
+                command:
+                  - python3
+                  - -c
+                  - "import urllib.request; urllib.request.build_opener(urllib.request.ProxyHandler({})).open('http://192.168.0.64:8000/health', timeout=3).close()"
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+        volumes:
+          - name: cache
+            persistentVolumeClaim:
+              claimName: vllm-tp-worker-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi

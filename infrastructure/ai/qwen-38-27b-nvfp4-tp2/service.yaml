@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-tp
+  labels:
+    app.kubernetes.io/name: vllm-tp
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: vllm-tp
+    app.kubernetes.io/component: leader
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
