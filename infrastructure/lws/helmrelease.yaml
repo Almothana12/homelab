@@ -18,4 +18,9 @@ spec:
     crds: CreateReplace
   upgrade:
     crds: CreateReplace
-  values: {}
+  values:
+    # default requests is 1 CPU / 1Gi!
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
