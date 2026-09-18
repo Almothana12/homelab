@@ -1,6 +1,10 @@
 machine:
-  nodeLabels:
-    nvidia.com/device-plugin.config: gpu-2 # key in the time-slicing-config-fine ConfigMap (infrastructure/gpu-operator)
+  kubelet:
+    nodeIP:
+      # Keep Kubernetes/Cilium on the management LAN, not the direct GPU links.
+      validSubnets:
+        - 192.168.0.65/32
+        - 2000::/3
   network:
     hostname: gpu-2
     interfaces:
@@ -11,5 +15,19 @@ machine:
           - network: 0.0.0.0/0
             gateway: 192.168.0.1
         dhcp: true
+      - interface: enP2p1s0f0np0
+        dhcp: false
+        mtu: 1500
+        addresses:
+          - 10.100.217.1/24
+      - interface: enp1s0f0np0
+        dhcp: false
+        mtu: 1500
+        addresses:
+          - 10.100.216.1/24
+      - interface: enP2p1s0f1np1
+        dhcp: false
+      - interface: enp1s0f1np1
+        dhcp: false
     nameservers:
       - 192.168.0.2
