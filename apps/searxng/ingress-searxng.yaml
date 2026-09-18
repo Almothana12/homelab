@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: searxng
+spec:
+  ingressClassName: cilium
+  rules:
+  - host: searxng.almothana.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: searxng
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+        - searxng.almothana.xyz
+      secretName: almothana-xyz-tls
