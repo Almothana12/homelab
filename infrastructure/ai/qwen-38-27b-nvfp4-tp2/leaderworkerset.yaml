@@ -31,9 +31,8 @@ spec:
             requiredDuringSchedulingIgnoredDuringExecution:
               - topologyKey: kubernetes.io/hostname
                 labelSelector:
-                  matchExpressions:
-                    - key: leaderworkerset.sigs.k8s.io/group-key
-                      operator: Exists
+                  matchLabels:
+                    app.kubernetes.io/name: vllm-tp
                 matchLabelKeys:
                   - leaderworkerset.sigs.k8s.io/group-key
         tolerations:
@@ -173,9 +172,8 @@ spec:
             requiredDuringSchedulingIgnoredDuringExecution:
               - topologyKey: kubernetes.io/hostname
                 labelSelector:
-                  matchExpressions:
-                    - key: leaderworkerset.sigs.k8s.io/group-key
-                      operator: Exists
+                  matchLabels:
+                    app.kubernetes.io/name: vllm-tp
                 matchLabelKeys:
                   - leaderworkerset.sigs.k8s.io/group-key
         tolerations:
