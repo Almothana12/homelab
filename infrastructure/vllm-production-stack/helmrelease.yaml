@@ -32,6 +32,8 @@ spec:
     servingEngineSpec:
       # Global runtime class for all models (can be overridden per model)
       runtimeClassName: "nvidia"
+      serviceMonitor:
+        enabled: true
 
       strategy:
         type: RollingUpdate
@@ -105,7 +107,8 @@ spec:
         httpGet:
           path: /health
           port: router-port
-
+      serviceMonitor:
+        enabled: true
       ingress:
         enabled: true
         className: cilium
@@ -119,6 +122,8 @@ spec:
             hosts:
               - vllm.almothana.xyz
 
+    grafanaDashboards:
+      enabled: true
     # cacheserverSpec:
     #   repository: "lmcache/vllm-openai"
     #   tag: "latest-nightly"
