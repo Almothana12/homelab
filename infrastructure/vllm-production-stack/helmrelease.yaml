@@ -89,14 +89,10 @@ spec:
             secretKeyRef:
               name: hf-token
               key: token
-        # # HF_HOME is already /data. Persist compilation/autotune caches too;
-        # # the default /root/.cache/vllm is lost when the container restarts.
-        # - name: VLLM_CACHE_ROOT
-        #   value: /data/vllm-cache/v0.29.0
-        # # Same for kernels the driver JIT-compiles because they don't ship
-        # # prebuilt for GB10 (default /root/.nv/ComputeCache).
-        # - name: CUDA_CACHE_PATH
-        #   value: /data/nv-compute-cache
+        - name: VLLM_CACHE_ROOT
+          value: /data/vllm-cache
+        - name: CUDA_CACHE_PATH
+          value: /data/nv-compute-cache
 
     routerSpec:
       repository: "lmcache/lmstack-router"
