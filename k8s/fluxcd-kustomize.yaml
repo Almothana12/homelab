@@ -674,6 +674,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: lws
+  namespace: flux-system
+spec:
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/lws
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: lws-system
+---
+
+
+##################
+##### APPS #######
+##################
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: onlyoffice
   namespace: flux-system
 spec:
