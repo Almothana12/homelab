@@ -1,0 +1,140 @@
+---
+# Alerting for the two DGX Spark (GB10) GPU nodes.
+#
+# GB10 is a unified-memory part: DCGM exports no framebuffer fields
+# (DCGM_FI_DEV_FB_USED/FB_FREE/FB_TOTAL are absent on this hardware, not zero),
+# so "GPU memory" alerts are driven from the shared LPDDR5X pool that
+# node-exporter reports. DCGM series are labelled with a lowercase `hostname`;
+# node-exporter series are joined to a node name through node_uname_info.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: gpu-nodes
+spec:
+  groups:
+    - name: gpu-node-telemetry
+      rules:
+        - alert: GpuDcgmExporterDown
+          # Absence of the whole job is caught by the second clause, so a
+          # crashed exporter on both nodes still fires.
+          expr: up{job="nvidia-dcgm-exporter"} == 0 or absent(up{job="nvidia-dcgm-exporter"}) == 1
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DCGM exporter is not reporting ({{ $labels.instance }})"
+            description: >-
+              GPU telemetry has been unavailable for 15 minutes. GPU compute,
+              temperature and power panels on the DGX Spark dashboard are blind
+              until this recovers.
+
+        - alert: GpuTemperatureHigh
+          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP) > 83
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU temperature high on {{ $labels.hostname }} ({{ $value | printf \"%.0f\" }}C)"
+            description: >-
+              Sustained above 83C for 10 minutes. Check SM clock on the DGX
+              Spark dashboard for matching throttling, and verify chassis
+              airflow.
+
+        - alert: GpuTemperatureCritical
+          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP) > 88
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU temperature critical on {{ $labels.hostname }} ({{ $value | printf \"%.0f\" }}C)"
+            description: >-
+              Above 88C for 5 minutes. The GPU is likely clock-limited; consider
+              draining GPU workloads from this node.
+
+        # --- Unified memory: the GB10 stand-in for VRAM pressure -------------
+        - alert: GpuNodeUnifiedMemoryHigh
+          expr: >-
+            100 * (
+              sum by (nodename) (
+                (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)
+                * on(instance) group_left(nodename) node_uname_info{nodename=~"gpu-.*"}
+              )
+              /
+              sum by (nodename) (
+                node_memory_MemTotal_bytes
+                * on(instance) group_left(nodename) node_uname_info{nodename=~"gpu-.*"}
+              )
+            ) > 92
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Unified memory above 92% on {{ $labels.nodename }} ({{ $value | printf \"%.1f\" }}%)"
+            description: >-
+              On GB10 this pool is both system RAM and GPU memory. CUDA
+              allocations bypass container cgroup limits, so sustained pressure
+              here risks the OOM killer reaping an inference pod rather than
+              returning a CUDA OOM.
+
+        - alert: GpuNodeMemoryPressureStalling
+          expr: >-
+            sum by (nodename) (
+              rate(node_pressure_memory_waiting_seconds_total[5m])
+              * on(instance) group_left(nodename) node_uname_info{nodename=~"gpu-.*"}
+            ) > 0.1
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Memory stalls on {{ $labels.nodename }}"
+            description: >-
+              Tasks spent over 10% of the time waiting on memory reclaim. This
+              usually precedes an OOM kill on the GPU nodes.
+
+        # --- Disk ------------------------------------------------------------
+        - alert: GpuNodeDiskSpaceLow
+          expr: >-
+            100 * (1 -
+              sum by (nodename) (
+                node_filesystem_avail_bytes{mountpoint="/var"}
+                * on(instance) group_left(nodename) node_uname_info{nodename=~"gpu-.*"}
+              )
+              /
+              sum by (nodename) (
+                node_filesystem_size_bytes{mountpoint="/var"}
+                * on(instance) group_left(nodename) node_uname_info{nodename=~"gpu-.*"}
+              )
+            ) > 85
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "/var above 85% on {{ $labels.nodename }} ({{ $value | printf \"%.1f\" }}%)"
+            description: >-
+              /var holds containerd images and local volumes on Talos. Large
+              model pulls fail once this fills.
+
+        # --- Hardware health --------------------------------------------------
+        - alert: GpuPcieReplayErrors
+          expr: sum by (hostname) (increase(DCGM_FI_DEV_PCIE_REPLAY_COUNTER[1h])) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PCIe replay errors on {{ $labels.hostname }}"
+            description: >-
+              The PCIe link is retrying transfers, which points at a physical
+              link or seating problem.
+
+        - alert: GpuXidErrors
+          # Not currently emitted by DCGM on GB10; harmless until a future
+          # driver adds the field, at which point this begins working.
+          expr: sum by (hostname) (increase(DCGM_FI_DEV_XID_ERRORS[1h])) > 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "XID error reported on {{ $labels.hostname }}"
+            description: >-
+              An XID indicates a GPU fault (bad memory, fallen-off-bus, or a
+              crashed kernel). Inspect dmesg on the node.
