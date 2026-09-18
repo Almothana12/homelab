@@ -21,4 +21,6 @@ spec:
       driverInstallDir: /usr/local
     devicePlugin:
       config:
-        name: time-slicing-config-fine
+        name: time-slicing-config-shared
+        # Apply sharing to all GPU nodes unless a node explicitly selects another key.
+        default: shared

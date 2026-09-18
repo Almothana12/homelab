@@ -6,8 +6,8 @@ resources:
   - helmrelease.yaml
 
 configMapGenerator:
-  - name: time-slicing-config-fine
+  - name: time-slicing-config-shared
     files:
-      - gpu-2=time-slicing-config-gpu-2.yaml
+      - shared=time-slicing-config.yaml
     options:
       disableNameSuffixHash: true
