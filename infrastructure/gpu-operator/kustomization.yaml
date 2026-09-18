@@ -4,6 +4,7 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - rbac-hermes-portforward.yaml
 
 configMapGenerator:
   - name: time-slicing-config-shared

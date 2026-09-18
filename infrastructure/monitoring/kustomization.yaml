@@ -8,3 +8,4 @@ resources:
   - PrometheusRule-pvc-usage.yaml
   - PrometheusRule-hubble-policy-drops.yaml
   - PrometheusRule-volsync.yaml
+  - Role-hermes-portforward.yaml
