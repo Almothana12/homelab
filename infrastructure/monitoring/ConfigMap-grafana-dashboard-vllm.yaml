@@ -1,0 +1,1712 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-vllm
+  labels:
+    # Discovered by the Grafana sidecar in kube-prometheus-stack.
+    grafana_dashboard: "1"
+data:
+  vllm.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "graphTooltip": 1,
+      "links": [],
+      "panels": [
+        {
+          "id": 1,
+          "type": "row",
+          "title": "KV cache — live config and occupancy (all values from Prometheus)",
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "panels": []
+        },
+        {
+          "id": 2,
+          "type": "table",
+          "title": "Live engine config (read from vllm:cache_config_info labels)",
+          "description": "vLLM publishes its cache configuration as LABELS on an Info-style gauge. This table prints them verbatim, so KV capacity, block count and gpu_memory_utilization are always today's real values — nothing here is written into the dashboard. After changing any serving flag, this table updates on the next scrape.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 14,
+            "x": 0,
+            "y": 1
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:cache_config_info{job=\"$job\"}",
+              "legendFormat": "",
+              "range": false,
+              "instant": true,
+              "refId": "R1",
+              "format": "table"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {
+                "mode": "columns"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "__name__": true,
+                  "endpoint": true,
+                  "container": true,
+                  "service": true,
+                  "Value": true,
+                  "namespace": true,
+                  "instance": true,
+                  "job": true,
+                  "engine": true,
+                  "calculate_kv_scales": true,
+                  "is_attention_free": true,
+                  "mamba_block_size": true,
+                  "mamba_cache_dtype": true,
+                  "mamba_cache_mode": true,
+                  "mamba_page_size_padded": true,
+                  "mamba_ssm_cache_dtype": true,
+                  "num_cpu_blocks": true,
+                  "prefix_caching_hash_algo": true,
+                  "skip_page_size_padded": true,
+                  "sliding_window": true,
+                  "use_kda_recoverssm": true,
+                  "use_replayssm": true,
+                  "replayssm_buffer_len": true,
+                  "kv_sharing_fast_prefill": true,
+                  "user_specified_block_size": true,
+                  "user_specified_mamba_block_size": true,
+                  "kv_cache_dtype_skip_layers": true,
+                  "kv_cache_layout": true,
+                  "prefix_match_unit": true,
+                  "kv_offloading_backend": true,
+                  "kv_offloading_size": true,
+                  "_block_size_resolved": true,
+                  "prefix_cache_retention_interval": true,
+                  "num_gpu_blocks_override": true
+                },
+                "renameByName": {
+                  "kv_cache_size_tokens": "KV capacity (tokens)",
+                  "num_gpu_blocks": "GPU blocks",
+                  "block_size": "Block size (tokens)",
+                  "gpu_memory_utilization": "--gpu-memory-utilization",
+                  "cache_dtype": "KV dtype",
+                  "kv_cache_memory_bytes": "--kv-cache-memory",
+                  "kv_cache_max_concurrency": "Max concurrency",
+                  "enable_prefix_caching": "Prefix caching",
+                  "pod": "Pod"
+                },
+                "indexByName": {}
+              }
+            }
+          ],
+          "options": {
+            "showHeader": true,
+            "cellHeight": "sm",
+            "footer": {
+              "show": false,
+              "reducer": [
+                "sum"
+              ],
+              "countRows": false,
+              "fields": ""
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 3,
+          "type": "stat",
+          "title": "KV in use now",
+          "description": "Fraction OF THE RESERVED CACHE currently holding tokens — not a fraction of the GPU. Pair it with the capacity table on the left to convert to tokens.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 5,
+            "x": 14,
+            "y": 1
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:kv_cache_usage_perc{job=\"$job\"} * 100",
+              "legendFormat": "{{model_name}}",
+              "range": false,
+              "instant": true,
+              "refId": "R2"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 92
+                  }
+                ]
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 4,
+          "type": "stat",
+          "title": "Peak KV over 7d",
+          "description": "THE sizing number. If the 7-day peak sits far below 100%, the cache is larger than the workload has ever needed. Being a ratio, it needs no constants and stays correct after resizing.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 5,
+            "x": 19,
+            "y": 1
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "max_over_time(vllm:kv_cache_usage_perc{job=\"$job\"}[7d]) * 100",
+              "legendFormat": "peak",
+              "range": false,
+              "instant": true,
+              "refId": "R3"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 92
+                  }
+                ]
+              },
+              "decimals": 2
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 5,
+          "type": "stat",
+          "title": "Preemptions (24h)",
+          "description": "Zero means the cache has never been too small. Non-zero means vLLM evicted and recomputed requests — enlarge the cache. This counter, not the usage %, is the authority on whether the current size is safe.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 5,
+            "x": 14,
+            "y": 5
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(increase(vllm:num_preemptions_total{job=\"$job\"}[24h]))",
+              "legendFormat": "",
+              "range": false,
+              "instant": true,
+              "refId": "R4"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 6,
+          "type": "stat",
+          "title": "Requests queued now",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 5,
+            "x": 19,
+            "y": 5
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(vllm:num_requests_waiting{job=\"$job\"})",
+              "legendFormat": "",
+              "range": false,
+              "instant": true,
+              "refId": "R5"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "KV cache occupancy",
+          "description": "Headroom is the gap to 100%. Persistent low occupancy with zero preemptions is the signal to lower --gpu-memory-utilization (or pin the size with --kv-cache-memory, which vLLM prints at startup).",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:kv_cache_usage_perc{job=\"$job\"} * 100",
+              "legendFormat": "{{model_name}} in use",
+              "range": true,
+              "instant": false,
+              "refId": "R6"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "max_over_time(vllm:kv_cache_usage_perc{job=\"$job\"}[24h]) * 100",
+              "legendFormat": "24h peak",
+              "range": true,
+              "instant": false,
+              "refId": "R7"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 92
+                  }
+                ]
+              },
+              "max": 100,
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 8,
+          "type": "timeseries",
+          "title": "KV occupancy with live capacity in the legend",
+          "description": "Same occupancy series, joined to vllm:cache_config_info so the legend carries the engine's ACTUAL capacity and utilisation setting. When you change the config, the legend changes with it — this is the dynamic replacement for a hardcoded capacity note.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:kv_cache_usage_perc{job=\"$job\"} * on(job, instance, pod, engine) group_left(kv_cache_size_tokens, num_gpu_blocks, block_size, gpu_memory_utilization, cache_dtype) vllm:cache_config_info{job=\"$job\"} * 100",
+              "legendFormat": "{{model_name}} — capacity {{kv_cache_size_tokens}} tok @ gpu_mem_util={{gpu_memory_utilization}}",
+              "range": true,
+              "instant": false,
+              "refId": "R8"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 92
+                  }
+                ]
+              },
+              "max": 100,
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 9,
+          "type": "timeseries",
+          "title": "Preemptions",
+          "description": "vLLM V1 preempts by RECOMPUTE: the evicted request redoes its prefill, so any non-zero rate hurts latency and throughput at once.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 16
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(vllm:num_preemptions_total{job=\"$job\"}[5m]))",
+              "legendFormat": "preemptions/s",
+              "range": true,
+              "instant": false,
+              "refId": "R9"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.001
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 10,
+          "type": "timeseries",
+          "title": "Prompt length (p50/p95/p99)",
+          "description": "KV bytes scale with resident tokens. Compare p99 against the KV capacity in the table above to judge whether the reservation is proportionate to real traffic.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 16
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.50, sum by (le) (rate(vllm:request_prompt_tokens_bucket{job=\"$job\"}[30m])))",
+              "legendFormat": "p50",
+              "range": true,
+              "instant": false,
+              "refId": "R10"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:request_prompt_tokens_bucket{job=\"$job\"}[30m])))",
+              "legendFormat": "p95",
+              "range": true,
+              "instant": false,
+              "refId": "R11"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:request_prompt_tokens_bucket{job=\"$job\"}[30m])))",
+              "legendFormat": "p99",
+              "range": true,
+              "instant": false,
+              "refId": "R12"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 11,
+          "type": "timeseries",
+          "title": "Concurrency",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 16
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:num_requests_running{job=\"$job\"}",
+              "legendFormat": "running",
+              "range": true,
+              "instant": false,
+              "refId": "R13"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "vllm:num_requests_waiting{job=\"$job\"}",
+              "legendFormat": "waiting",
+              "range": true,
+              "instant": false,
+              "refId": "R14"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 12,
+          "type": "row",
+          "title": "Latency",
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 23
+          },
+          "panels": []
+        },
+        {
+          "id": 13,
+          "type": "timeseries",
+          "title": "Time to first token",
+          "description": "Queueing hides here: a TTFT spike with a non-empty queue means saturation, not a slow model.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 24
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.50, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p50",
+              "range": true,
+              "instant": false,
+              "refId": "R15"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p95",
+              "range": true,
+              "instant": false,
+              "refId": "R16"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p99",
+              "range": true,
+              "instant": false,
+              "refId": "R17"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 14,
+          "type": "timeseries",
+          "title": "Inter-token latency",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 24
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.50, sum by (le) (rate(vllm:inter_token_latency_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p50",
+              "range": true,
+              "instant": false,
+              "refId": "R18"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:inter_token_latency_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p95",
+              "range": true,
+              "instant": false,
+              "refId": "R19"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 15,
+          "type": "timeseries",
+          "title": "End-to-end latency",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 24
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.50, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p50",
+              "range": true,
+              "instant": false,
+              "refId": "R20"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p95",
+              "range": true,
+              "instant": false,
+              "refId": "R21"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.99, sum by (le) (rate(vllm:e2e_request_latency_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p99",
+              "range": true,
+              "instant": false,
+              "refId": "R22"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 16,
+          "type": "timeseries",
+          "title": "Queue time (p95)",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 0,
+            "y": 31
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:request_queue_time_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "p95",
+              "range": true,
+              "instant": false,
+              "refId": "R23"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 17,
+          "type": "timeseries",
+          "title": "Prefill vs decode (p95)",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 8,
+            "y": 31
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:request_prefill_time_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "prefill",
+              "range": true,
+              "instant": false,
+              "refId": "R24"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.95, sum by (le) (rate(vllm:request_decode_time_seconds_bucket{job=\"$job\"}[5m])))",
+              "legendFormat": "decode",
+              "range": true,
+              "instant": false,
+              "refId": "R25"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 18,
+          "type": "timeseries",
+          "title": "Token throughput",
+          "description": "",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 16,
+            "y": 31
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(vllm:prompt_tokens_total{job=\"$job\"}[5m]))",
+              "legendFormat": "prompt tok/s",
+              "range": true,
+              "instant": false,
+              "refId": "R26"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(vllm:generation_tokens_total{job=\"$job\"}[5m]))",
+              "legendFormat": "generation tok/s",
+              "range": true,
+              "instant": false,
+              "refId": "R27"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 19,
+          "type": "row",
+          "title": "Caching and speculative decoding",
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 37
+          },
+          "panels": []
+        },
+        {
+          "id": 20,
+          "type": "timeseries",
+          "title": "Prefix cache hit rate",
+          "description": "Computed from the hits/queries counters as the vLLM docs recommend, so the window is yours to choose.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 38
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "100 * sum(rate(vllm:prefix_cache_hits_total{job=\"$job\"}[30m])) / clamp_min(sum(rate(vllm:prefix_cache_queries_total{job=\"$job\"}[30m])), 1)",
+              "legendFormat": "hit rate",
+              "range": true,
+              "instant": false,
+              "refId": "R28"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "max": 100,
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 21,
+          "type": "timeseries",
+          "title": "Speculative decoding acceptance",
+          "description": "The draft model costs GPU memory and runs every decode step. Low acceptance means it may be a net loss.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 38
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "100 * sum(rate(vllm:spec_decode_num_accepted_tokens_total{job=\"$job\"}[30m])) / clamp_min(sum(rate(vllm:spec_decode_num_draft_tokens_total{job=\"$job\"}[30m])), 1)",
+              "legendFormat": "acceptance",
+              "range": true,
+              "instant": false,
+              "refId": "R29"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 40
+                  },
+                  {
+                    "color": "green",
+                    "value": 60
+                  }
+                ]
+              },
+              "max": 100,
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 22,
+          "type": "timeseries",
+          "title": "Requests by finish reason",
+          "description": "finished_reason=length means output was truncated at max_tokens.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 38
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum by (finished_reason) (rate(vllm:request_success_total{job=\"$job\"}[5m]))",
+              "legendFormat": "{{finished_reason}}",
+              "range": true,
+              "instant": false,
+              "refId": "R30"
+            }
+          ],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "calcs": [
+                "mean",
+                "max"
+              ]
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "fillOpacity": 8,
+                "showPoints": "never",
+                "spanNulls": true,
+                "gradientMode": "opacity"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "text",
+                    "value": null
+                  }
+                ]
+              },
+              "min": 0
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 23,
+          "type": "text",
+          "title": "How to size the KV cache from this dashboard",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 45
+          },
+          "options": {
+            "mode": "markdown",
+            "content": "\nThis dashboard contains **no hardcoded numbers** — capacity comes from\n`vllm:cache_config_info` labels, occupancy from `vllm:kv_cache_usage_perc`.\n\n**To decide whether the cache is too large**, use ratios only:\n\n1. **Peak KV over 7d** — if it reads *P%*, the cache is roughly `100/P`x larger\n   than the workload has ever required.\n2. **Preemptions (24h)** — must be **0**. Non-zero means the cache is already\n   too small, regardless of what the usage percentage says.\n3. **Prompt length p99** vs **KV capacity (tokens)** in the config table — the\n   capacity should be proportionate to real traffic plus the concurrency you\n   intend to support.\n\n**To apply a new size**, prefer pinning it explicitly over guessing at a\nutilisation fraction. vLLM computes and prints the exact value at startup:\n\n```bash\nkubectl -n ai logs <pod> | grep gpu_worker.py:860\n```\n\nIt emits a ready-to-use `--kv-cache-memory=<bytes>` for both \"fit the current\nrequest\" and \"use all memory\". Setting that flag makes the reservation explicit\nin Git rather than an emergent property of a percentage. After the change, this\ndashboard's config table shows the new capacity automatically — nothing to edit\nhere.\n\n*Why there is no \"weights vs KV vs activation\" pie chart:* vLLM does not export\nthat split as metrics in any released version (checked against\n`vllm/v1/metrics/loggers.py`). It is printed once at startup only. A pie chart\nwould therefore have to hardcode numbers that silently go stale, so this\ndashboard deliberately shows the live config table instead.\n"
+          }
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "tags": [
+        "vllm",
+        "inference",
+        "gpu",
+        "llm"
+      ],
+      "templating": {
+        "list": [
+          {
+            "name": "datasource",
+            "label": "Data source",
+            "type": "datasource",
+            "query": "prometheus",
+            "current": {},
+            "hide": 0,
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false
+          },
+          {
+            "name": "job",
+            "label": "vLLM job",
+            "type": "query",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "definition": "label_values(vllm:kv_cache_usage_perc, job)",
+            "query": {
+              "query": "label_values(vllm:kv_cache_usage_perc, job)",
+              "refId": "job"
+            },
+            "current": {},
+            "includeAll": false,
+            "multi": false,
+            "refresh": 2,
+            "sort": 1,
+            "hide": 0,
+            "skipUrlSync": false,
+            "options": []
+          }
+        ]
+      },
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "Asia/Riyadh",
+      "title": "vLLM - KV cache and serving",
+      "uid": "vllm-inference-memory",
+      "weekStart": "",
+      "description": "vLLM serving telemetry. KV capacity is read live from vllm:cache_config_info labels; sizing decisions are made on ratios so no value is ever hardcoded."
+    }

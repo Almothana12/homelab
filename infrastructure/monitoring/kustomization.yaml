@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ConfigMap-grafana-dashboard-cilium-drops.yaml
   - ConfigMap-grafana-dashboard-gpu-nodes.yaml
+  - ConfigMap-grafana-dashboard-vllm.yaml
   - PodMonitor-flux-system.yaml
   - PrometheusRule-standard-cluster-monitoring.yaml
   - PrometheusRule-standard-namespace-monitoring.yaml
@@ -10,3 +11,4 @@ resources:
   - PrometheusRule-hubble-policy-drops.yaml
   - PrometheusRule-volsync.yaml
   - PrometheusRule-gpu-nodes.yaml
+  - PrometheusRule-vllm.yaml

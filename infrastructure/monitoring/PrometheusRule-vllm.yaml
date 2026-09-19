@@ -1,0 +1,101 @@
+---
+# Alerting for vLLM inference engines.
+#
+# The KV cache is pre-allocated at startup, so a *high* utilisation figure is
+# not itself an incident and a *low* one is not an outage -- it is a sizing
+# signal. The rule that matters operationally is preemption: vLLM V1 preempts by
+# RECOMPUTE, redoing the evicted request's prefill from scratch, which degrades
+# latency and throughput together.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vllm
+spec:
+  groups:
+    - name: vllm-serving
+      rules:
+        # --- capacity ------------------------------------------------------
+        - alert: VllmPreemptionOccurring
+          expr: sum by (job, model_name) (rate(vllm:num_preemptions_total[10m])) > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "vLLM is preempting requests ({{ $labels.model_name }})"
+            description: >-
+              The KV cache is too small for the offered load, so vLLM is
+              evicting requests and recomputing their prefill. Raise
+              --gpu-memory-utilization, or lower --max-num-seqs /
+              --max-model-len.
+
+        - alert: VllmKvCacheNearlyFull
+          expr: vllm:kv_cache_usage_perc > 0.95
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "vLLM KV cache above 95% ({{ $labels.model_name }})"
+            description: >-
+              Sustained near-full KV cache. Preemption is imminent if load
+              rises further.
+
+        - alert: VllmRequestsQueueing
+          expr: sum by (job, model_name) (vllm:num_requests_waiting) > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "vLLM requests queueing ({{ $labels.model_name }})"
+            description: >-
+              Requests have been waiting for admission for 15 minutes; the
+              engine is saturated. Time-to-first-token is degraded for users.
+
+        # --- latency --------------------------------------------------------
+        - alert: VllmTtftDegraded
+          # Only meaningful while traffic is flowing, hence the rate() guard.
+          expr: >-
+            histogram_quantile(0.95,
+              sum by (job, le) (rate(vllm:time_to_first_token_seconds_bucket[10m]))
+            ) > 30
+            and
+            sum by (job) (rate(vllm:time_to_first_token_seconds_count[10m])) > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "vLLM p95 time-to-first-token above 30s ({{ $labels.job }})"
+            description: >-
+              Users wait more than 30s before the first token. Check queue depth
+              and preemptions on the vLLM dashboard to tell saturation apart
+              from a slow prefill.
+
+        # --- availability -----------------------------------------------------
+        - alert: VllmEngineDown
+          expr: up{job=~"vllm.*"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "vLLM engine unreachable ({{ $labels.instance }})"
+            description: >-
+              Prometheus cannot scrape the vLLM engine. The model is likely not
+              serving.
+
+        # --- efficiency (informational, not paging) ---------------------------
+        - alert: VllmSpeculativeDecodingIneffective
+          expr: >-
+            100 * sum by (job) (rate(vllm:spec_decode_num_accepted_tokens_total[6h]))
+            / clamp_min(sum by (job) (rate(vllm:spec_decode_num_draft_tokens_total[6h])), 1)
+            < 30
+            and
+            sum by (job) (rate(vllm:spec_decode_num_draft_tokens_total[6h])) > 0
+          for: 6h
+          labels:
+            severity: info
+          annotations:
+            summary: "Speculative decoding acceptance below 30% ({{ $labels.job }})"
+            description: >-
+              The draft model consumes GPU memory and runs on every decode step
+              but most of its tokens are rejected, so it may be a net loss.
+              Consider lowering num_speculative_tokens or removing
+              --speculative-config, and compare generation throughput either way.
