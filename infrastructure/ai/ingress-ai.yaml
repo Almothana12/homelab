@@ -10,7 +10,7 @@ spec:
       paths:
       - backend:
           service:
-            name:  vllm-tp
+            name: vllm-tp-api
             port:
               number: 8000
         path: /
