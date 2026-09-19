@@ -43,7 +43,7 @@ spec:
           - name: vllm
             image: vllm/vllm-openai:v0.29.0
             imagePullPolicy: IfNotPresent
-            command: [vllm, serve]
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py] # Vibe coded launcher to set up environment variables. without it, I would have to hard code IP addresses.
             args:
               - nvidia/Qwen3.8-27B-NVFP4
               - --distributed-executor-backend
@@ -56,13 +56,10 @@ spec:
               - $(LWS_GROUP_SIZE) # 2
               - --node-rank
               - $(LWS_WORKER_INDEX) # 0
-              - --master-addr
-              - "10.100.217.2"
               - --master-port
               - "29501"
-              # API/Service traffic uses the management address, not the TP rail.
               - --host
-              - 192.168.0.64
+              - $(POD_IP)
               - --port
               - "8000"
               - --gpu-memory-utilization
@@ -93,12 +90,14 @@ spec:
                 value: /data/nv-compute-cache
               - name: VLLM_USE_V2_MODEL_RUNNER
                 value: "1"
-              - name: VLLM_HOST_IP
-                value: 10.100.217.2
-              - name: NCCL_SOCKET_IFNAME
-                value: "=enP2p1s0f0np0"
-              - name: GLOO_SOCKET_IFNAME
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
                 value: enP2p1s0f0np0
+              - name: API_PORT
+                value: "8000"
               - name: NCCL_SOCKET_FAMILY
                 value: AF_INET
               # Deliberate TCP baseline. RDMA device exposure is a separate change.
@@ -122,6 +121,9 @@ spec:
               capabilities:
                 drop: [ALL]
             volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
               - name: cache
                 mountPath: /data
               - name: shm
@@ -148,6 +150,9 @@ spec:
               timeoutSeconds: 10
               failureThreshold: 6
         volumes:
+          - name: bootstrap
+            configMap:
+              name: vllm-tp-bootstrap
           - name: cache
             persistentVolumeClaim:
               claimName: vllm-tp-leader-cache
@@ -184,7 +189,7 @@ spec:
           - name: vllm
             image: vllm/vllm-openai:v0.29.0
             imagePullPolicy: IfNotPresent
-            command: [vllm, serve]
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
               - nvidia/Qwen3.8-27B-NVFP4
               - --distributed-executor-backend
@@ -197,8 +202,6 @@ spec:
               - $(LWS_GROUP_SIZE) # 2
               - --node-rank
               - $(LWS_WORKER_INDEX) # 1,2,3,4
-              - --master-addr
-              - "10.100.217.2"
               - --master-port
               - "29501"
               - --headless
@@ -230,12 +233,14 @@ spec:
                 value: /data/nv-compute-cache
               - name: VLLM_USE_V2_MODEL_RUNNER
                 value: "1"
-              - name: VLLM_HOST_IP
-                value: 10.100.217.1
-              - name: NCCL_SOCKET_IFNAME
-                value: "=enP2p1s0f0np0"
-              - name: GLOO_SOCKET_IFNAME
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
                 value: enP2p1s0f0np0
+              - name: API_PORT
+                value: "8000"
               - name: NCCL_SOCKET_FAMILY
                 value: AF_INET
               - name: NCCL_IB_DISABLE
@@ -254,6 +259,9 @@ spec:
               capabilities:
                 drop: [ALL]
             volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
               - name: cache
                 mountPath: /data
               - name: shm
@@ -265,12 +273,15 @@ spec:
               exec:
                 command:
                   - python3
-                  - -c
-                  - "import urllib.request; urllib.request.build_opener(urllib.request.ProxyHandler({})).open('http://192.168.0.64:8000/health', timeout=3).close()"
+                  - /opt/vllm-bootstrap/bootstrap.py
+                  - --check-leader-health
               periodSeconds: 10
               timeoutSeconds: 5
               failureThreshold: 3
         volumes:
+          - name: bootstrap
+            configMap:
+              name: vllm-tp-bootstrap
           - name: cache
             persistentVolumeClaim:
               claimName: vllm-tp-worker-cache

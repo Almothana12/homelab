@@ -6,3 +6,11 @@ resources:
   - service.yaml
   - PVC.yaml
   - servicemonitor.yaml
+configMapGenerator:
+  - name: vllm-tp-bootstrap
+    files:
+      - bootstrap.py
+    options:
+      immutable: true
+configurations:
+  - kustomizeconfig.yaml

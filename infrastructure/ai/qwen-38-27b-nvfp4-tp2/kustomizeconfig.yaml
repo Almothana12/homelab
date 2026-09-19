@@ -1,0 +1,13 @@
+# Teach Kustomize where ConfigMap volume references occur in this custom resource.
+nameReference:
+  - kind: ConfigMap
+    version: v1
+    fieldSpecs:
+      - group: leaderworkerset.x-k8s.io
+        version: v1
+        kind: LeaderWorkerSet
+        path: spec/leaderWorkerTemplate/leaderTemplate/spec/volumes/configMap/name
+      - group: leaderworkerset.x-k8s.io
+        version: v1
+        kind: LeaderWorkerSet
+        path: spec/leaderWorkerTemplate/workerTemplate/spec/volumes/configMap/name
