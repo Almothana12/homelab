@@ -100,9 +100,21 @@ spec:
                 value: "8000"
               - name: NCCL_SOCKET_FAMILY
                 value: AF_INET
-              # Deliberate TCP baseline. RDMA device exposure is a separate change.
+              # RoCE over the direct rail. NCCL_NET=IB makes a broken RDMA path
+              # fail loudly instead of silently falling back to TCP sockets.
               - name: NCCL_IB_DISABLE
-                value: "1"
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              # Leading "=" is NCCL's exact-match prefix; without it mlx5_2 would
+              # also match mlx5_20+. mlx5_2 port 1 is enP2p1s0f0np0 on both nodes.
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              # Pick the IPv4 RoCE GID on the rail instead of pinning a GID index.
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
               - name: NCCL_DEBUG
                 value: INFO
             ports:
@@ -114,12 +126,17 @@ spec:
                 cpu: "6"
                 memory: 16Gi
                 nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
               limits:
                 nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
                 drop: [ALL]
+                # RDMA memory registration must not be capped by the default
+                # locked-memory limit. The container stays unprivileged.
+                add: [IPC_LOCK]
             volumeMounts:
               - name: bootstrap
                 mountPath: /opt/vllm-bootstrap
@@ -243,8 +260,17 @@ spec:
                 value: "8000"
               - name: NCCL_SOCKET_FAMILY
                 value: AF_INET
+              # Must match the leader's transport settings exactly.
               - name: NCCL_IB_DISABLE
-                value: "1"
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
               - name: NCCL_DEBUG
                 value: INFO
             resources:
@@ -252,12 +278,15 @@ spec:
                 cpu: "6"
                 memory: 16Gi
                 nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
               limits:
                 nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
                 drop: [ALL]
+                add: [IPC_LOCK]
             volumeMounts:
               - name: bootstrap
                 mountPath: /opt/vllm-bootstrap
