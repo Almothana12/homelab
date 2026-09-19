@@ -16,28 +16,29 @@ spec:
       rules:
         # --- capacity ------------------------------------------------------
         - alert: VllmPreemptionOccurring
-          expr: sum by (job, model_name) (rate(vllm:num_preemptions_total[10m])) > 0
-          for: 10m
+          expr: sum by (job, model_name) (rate(vllm:num_preemptions_total[5m])) > 0
+          for: 5m
           labels:
             severity: warning
           annotations:
             summary: "vLLM is preempting requests ({{ $labels.model_name }})"
             description: >-
               The KV cache is too small for the offered load, so vLLM is
-              evicting requests and recomputing their prefill. Raise
-              --gpu-memory-utilization, or lower --max-num-seqs /
-              --max-model-len.
+              evicting requests and recomputing their prefill, which degrades
+              latency and throughput together. Raise --kv-cache-memory (the
+              engine prints a suggested value at startup, see gpu_worker.py:860
+              in the pod log), or lower --max-num-seqs / --max-model-len.
 
         - alert: VllmKvCacheNearlyFull
-          expr: vllm:kv_cache_usage_perc > 0.95
+          expr: max_over_time(vllm:kv_cache_usage_perc[10m]) > 0.85
           for: 15m
           labels:
             severity: warning
           annotations:
-            summary: "vLLM KV cache above 95% ({{ $labels.model_name }})"
+            summary: "vLLM KV cache peaked above 85% ({{ $labels.model_name }})"
             description: >-
-              Sustained near-full KV cache. Preemption is imminent if load
-              rises further.
+              The pinned KV cache is approaching capacity. Preemption is likely
+              if load rises further; consider raising --kv-cache-memory.
 
         - alert: VllmRequestsQueueing
           expr: sum by (job, model_name) (vllm:num_requests_waiting) > 0
