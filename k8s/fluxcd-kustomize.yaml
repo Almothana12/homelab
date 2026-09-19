@@ -688,6 +688,26 @@ spec:
     name: flux-system
   targetNamespace: lws-system
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: rdma
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: gpu-operator
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/rdma
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: rdma-system
+  wait: true
+  timeout: 5m
+
+---
 
 
 ##################
