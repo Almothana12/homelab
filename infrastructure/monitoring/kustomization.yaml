@@ -10,4 +10,3 @@ resources:
   - PrometheusRule-hubble-policy-drops.yaml
   - PrometheusRule-volsync.yaml
   - PrometheusRule-gpu-nodes.yaml
-  - Role-hermes-portforward.yaml
