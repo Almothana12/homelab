@@ -1,0 +1,15 @@
+{
+  "periodicUpdateInterval": 60,
+  "configList": [
+    {
+      "resourceName": "direct_rail",
+      "resourcePrefix": "rdma",
+      "rdmaHcaMax": 4,
+      "selectors": {
+        "vendors": ["15b3"],
+        "ifNames": ["enP2p1s0f0np0"],
+        "linkTypes": ["ether"]
+      }
+    }
+  ]
+}

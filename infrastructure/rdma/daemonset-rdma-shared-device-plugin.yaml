@@ -1,0 +1,67 @@
+# https://github.com/Mellanox/k8s-rdma-shared-dev-plugin/blob/master/deployment/k8s/base/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rdma-shared-device-plugin
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rdma-shared-device-plugin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rdma-shared-device-plugin
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      automountServiceAccountToken: false
+      priorityClassName: system-node-critical
+      nodeSelector:
+        kubernetes.io/arch: arm64
+        nvidia.com/gpu.present: "true"
+        feature.node.kubernetes.io/rdma.capable: "true"
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: device-plugin
+          image: ghcr.io/mellanox/k8s-rdma-shared-dev-plugin:v1.5.4
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: plugins-registry
+              mountPath: /var/lib/kubelet/plugins_registry
+            - name: config
+              mountPath: /k8s-rdma-shared-dev-plugin
+              readOnly: true
+            - name: devs
+              mountPath: /dev
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+            type: Directory
+        - name: plugins-registry
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry
+            type: Directory
+        - name: config
+          configMap:
+            name: rdma-devices
+            items:
+              - key: config.json
+                path: config.json
+        - name: devs
+          hostPath:
+            path: /dev
+            type: Directory

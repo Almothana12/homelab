@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: rdma-system
+resources:
+  - namespace.yaml
+  - daemonset-rdma-shared-device-plugin.yaml
+configMapGenerator:
+  - name: rdma-devices
+    files:
+      - config.json
