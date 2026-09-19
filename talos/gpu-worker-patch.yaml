@@ -14,3 +14,12 @@ name: nvidia_drm
 apiVersion: v1alpha1
 kind: KernelModuleConfig
 name: nvidia_modeset
+---
+# RDMA and infiniband
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: ib_umad
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: rdma_ucm
