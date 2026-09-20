@@ -23,3 +23,24 @@ name: ib_umad
 apiVersion: v1alpha1
 kind: KernelModuleConfig
 name: rdma_ucm
+---
+# since GPU nodes are unified memory, reserve some memory for the system and kubelet to avoid node becoming unresponsive when GPU memory is allocated
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  systemReserved:
+    memory: 3Gi
+    cpu: 500m
+  kubeReserved:
+    memory: 1Gi
+    cpu: 500m
+  # Evict before the node becomes unresponsive.
+  evictionHard:
+    memory.available: 4Gi
+    nodefs.available: 10%
+  evictionSoft:
+    memory.available: 6Gi
+  evictionSoftGracePeriod:
+    memory.available: 1m30s
+  # Give a terminating pod time to release GPU memory cleanly.
+  evictionMaxPodGracePeriod: 60
