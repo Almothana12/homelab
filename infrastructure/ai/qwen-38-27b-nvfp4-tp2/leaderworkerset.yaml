@@ -62,11 +62,13 @@ spec:
               - $(POD_IP)
               - --port
               - "8000"
-              - --gpu-memory-utilization
-              - "0.72"
+              # - --gpu-memory-utilization # this is not respected when --kv-cache-memory-bytes is set
+              # - "0.72"
+              - --kv-cache-memory-bytes
+              - 16G
               - --enable-prefix-caching
               - --max-num-seqs
-              - "16"
+              - "8"
               - --kv-cache-dtype
               - fp8
               - --enable-auto-tool-choice
@@ -124,10 +126,12 @@ spec:
             resources:
               requests:
                 cpu: "6"
-                memory: 16Gi
+                memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
               limits:
+                cpu: "6"
+                memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
             securityContext:
@@ -222,11 +226,13 @@ spec:
               - --master-port
               - "29501"
               - --headless
-              - --gpu-memory-utilization
-              - "0.72"
+              # - --gpu-memory-utilization # this is not respected when --kv-cache-memory-bytes is set
+              # - "0.72"
+              - --kv-cache-memory-bytes
+              - 16G
               - --enable-prefix-caching
               - --max-num-seqs
-              - "16"
+              - "8"
               - --kv-cache-dtype
               - fp8
               - --enable-auto-tool-choice
@@ -276,10 +282,12 @@ spec:
             resources:
               requests:
                 cpu: "6"
-                memory: 16Gi
+                memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
               limits:
+                cpu: "6"
+                memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
             securityContext:
