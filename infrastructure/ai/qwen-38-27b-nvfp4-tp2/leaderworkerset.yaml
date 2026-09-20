@@ -62,10 +62,10 @@ spec:
               - $(POD_IP)
               - --port
               - "8000"
-              # - --gpu-memory-utilization # this is not respected when --kv-cache-memory-bytes is set
-              # - "0.72"
+              - --gpu-memory-utilization
+              - "0.30"
               - --kv-cache-memory-bytes
-              - 16G
+              - 16G # Reserve 16 GiB for KV cache
               - --enable-prefix-caching
               - --max-num-seqs
               - "8"
@@ -226,8 +226,22 @@ spec:
               - --master-port
               - "29501"
               - --headless
-              # - --gpu-memory-utilization # this is not respected when --kv-cache-memory-bytes is set
-              # - "0.72"
+              # Startup precondition gate ONLY -- this does NOT allocate or
+              # reserve 30% of the GPU. With --kv-cache-memory-bytes set, the
+              # sole remaining use of this fraction is request_memory() in
+              # v1/worker/utils.py, which refuses to start when
+              # free_memory < total * fraction. Every other use (the profiling
+              # path, the sizing suggestion) is gated on kv_cache_memory_bytes
+              # being None, so it is skipped here.
+              # 0.30 = 36.5 GiB, just above what vLLM actually needs
+              # (~14.8 weights + ~4.8 activation + 16 KV + ~0.1 graphs = ~35.7),
+              # so it still catches a genuinely starved node but leaves ~73 GiB
+              # of the GPU free for other AI workloads at vLLM start.
+              # It must not be omitted: the vLLM default is 0.92 = 111.9 GiB,
+              # which exceeds free memory on this node and fails at startup.
+              # The real memory size knob is --kv-cache-memory-bytes below.
+              - --gpu-memory-utilization
+              - "0.30"
               - --kv-cache-memory-bytes
               - 16G
               - --enable-prefix-caching
