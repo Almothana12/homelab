@@ -45,7 +45,7 @@ spec:
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py] # Vibe coded launcher to set up environment variables. without it, I would have to hard code IP addresses.
             args:
-              - nvidia/Qwen3.8-27B-NVFP4
+              - ukisai/Swift-Qwen3.8-27B-NVFP4
               - --distributed-executor-backend
               - mp
               - --tensor-parallel-size
@@ -212,7 +212,7 @@ spec:
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
-              - nvidia/Qwen3.8-27B-NVFP4
+              - ukisai/Swift-Qwen3.8-27B-NVFP4
               - --distributed-executor-backend
               - mp
               - --tensor-parallel-size
