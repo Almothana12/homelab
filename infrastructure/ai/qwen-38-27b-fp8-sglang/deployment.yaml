@@ -31,7 +31,7 @@ spec:
           sizeLimit: "10Gi"
       containers:
       - name: sglang
-        image: lmsysorg/sglang:v0.5.19
+        image: lmsysorg/sglang:v0.5.20
         # https://lmsysorg.mintlify.app/cookbook/autoregressive/Qwen/Qwen3.8-27B#hw=dgx-spark&variant=default&quant=fp8&nodes=single&spec=dflash&tier=low-latency&ssmDtype=float32
         command: ["sglang", "serve"]
         args:
