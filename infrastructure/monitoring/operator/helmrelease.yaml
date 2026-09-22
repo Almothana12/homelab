@@ -52,7 +52,7 @@ spec:
         # bypasses Grafana login screen
         GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
         # Required if Grafana is running behind a reverse proxy
-        GF_SERVER_ROOT_URL: https://grafana.almothana.xyz
+        GF_SERVER_ROOT_URL: https://grafana.almothana.sa
       # Use an existing secret for the admin user.
       admin:
         ## Name of the secret. Can be templated.
@@ -63,11 +63,11 @@ spec:
         enabled: true
         ingressClassName: cilium
         hosts:
-          - grafana.almothana.xyz
+          - grafana.almothana.sa
         tls:
-          - secretName: almothana-xyz-tls
+          - secretName: almothana-sa-tls
             hosts:
-            - grafana.almothana.xyz
+            - grafana.almothana.sa
       persistence:
         enabled: true
         type: sts
