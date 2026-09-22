@@ -87,5 +87,14 @@ spec:
             k8s:app.kubernetes.io/name: grafana
       toPorts:
         - ports:
+            - port: "3000"
+              protocol: TCP
+    # To Open Web-UI
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: open-webui
+            k8s:app.kubernetes.io/name: open-webui
+      toPorts:
+        - ports:
             - port: "80"
               protocol: TCP
