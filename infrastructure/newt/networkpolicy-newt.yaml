@@ -53,3 +53,39 @@ spec:
         - ports:
             - port: "9000"
               protocol: TCP
+    # To Audiobookshelf
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: plex
+            k8s:app: audiobookshelf
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # To oCIS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ocis
+            k8s:app: proxy
+      toPorts:
+        - ports:
+            - port: "9200"
+              protocol: TCP
+    # To XorMon
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: xormon
+            k8s:app: xormon
+      toPorts:
+        - ports:
+            - port: "8443"
+              protocol: TCP
+    # To Grafana
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            k8s:app.kubernetes.io/name: grafana
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
