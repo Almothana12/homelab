@@ -82,4 +82,4 @@ spec:
             claimName: xormon
         - name: xormon-ssl
           secret:
-            secretName: almothana-xyz-tls
+            secretName: almothana-sa-tls
