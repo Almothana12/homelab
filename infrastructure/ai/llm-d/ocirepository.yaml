@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: llm-d-router-gateway
+spec:
+  interval: 24h
+  url: oci://ghcr.io/llm-d/charts/llm-d-router-gateway
+  ref:
+    tag: v0.10.0

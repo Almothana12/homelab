@@ -686,6 +686,7 @@ metadata:
 spec:
   dependsOn:
     - name: lws
+    - name: istio
   decryption:
     provider: sops
     secretRef:
