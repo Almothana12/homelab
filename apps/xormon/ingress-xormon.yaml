@@ -17,7 +17,3 @@ spec:
               number: 8443
         path: /
         pathType: Prefix
-  tls:
-    - hosts:
-        - xormon.almothana.sa
-      secretName: almothana-sa-tls
