@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: payload-processor
+spec:
+  interval: 24h
+  url: oci://ghcr.io/llm-d/charts/payload-processor
+  ref:
+    tag: v0.1.0

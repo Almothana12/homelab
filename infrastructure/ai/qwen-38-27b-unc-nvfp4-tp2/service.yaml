@@ -1,0 +1,18 @@
+# Client-facing Service. The name must NOT equal the LeaderWorkerSet name:
+# LWS owns a headless discovery Service called vllm-unc-tp for per-pod DNS.
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-unc-tp-api
+  labels:
+    app.kubernetes.io/name: vllm-unc-tp
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: vllm-unc-tp
+    app.kubernetes.io/component: leader
+  ports:
+    - name: http
+      port: 8000
+      # The engine listens on host port 8001 to avoid colliding with vllm-tp.
+      targetPort: http

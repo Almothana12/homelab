@@ -1,0 +1,26 @@
+# Model registry for IPP's base-model-to-header plugin. The plugin watches
+# ConfigMaps carrying the inference.llm-d.ai/ipp-managed label and only emits
+# X-Gateway-Base-Model-Name for a model registered here; anything else gets an
+# empty header, matches no HTTPRoute, and is rejected instead of being sent to
+# an arbitrary backend.
+#
+# data.baseModel must be byte-identical to the id the engine reports at
+# /v1/models, because that is the value clients put in the request body.
+# An `adapters:` list can be added later to map LoRA names onto a base model.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qwen-38-27b-nvfp4-mapping
+  labels:
+    inference.llm-d.ai/ipp-managed: "true"
+data:
+  baseModel: "ukisai/Swift-Qwen3.8-27B-NVFP4"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qwen-38-27b-unc-nvfp4-mapping
+  labels:
+    inference.llm-d.ai/ipp-managed: "true"
+data:
+  baseModel: "orcarouter/Qwen3.8-27B-Uncensored-NVFP4"

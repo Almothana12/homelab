@@ -8,3 +8,4 @@ resources:
   - qwen-38-27b-fp8-sglang
   - qwen-38-27b-nvfp4-sglang
   - qwen-38-27b-nvfp4-tp2
+  - qwen-38-27b-unc-nvfp4-tp2

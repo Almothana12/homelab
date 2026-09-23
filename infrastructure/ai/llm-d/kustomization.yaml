@@ -3,4 +3,9 @@ kind: Kustomization
 resources:
   - ocirepository.yaml
   - helmrelease.yaml
+  - helmrelease-unc.yaml
+  - ocirepository-ipp.yaml
+  - helmrelease-ipp.yaml
+  - configmap-ipp-model-mappings.yaml
+  - httproute-model-discovery.yaml
   - gateway.yaml

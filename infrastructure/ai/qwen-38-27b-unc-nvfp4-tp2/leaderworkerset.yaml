@@ -1,0 +1,340 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: vllm-unc-tp
+spec:
+  replicas: 1
+  # LeaderReady would deadlock: the leader needs its worker to initialize TP.
+  startupPolicy: LeaderCreated
+  rolloutStrategy:
+    type: RollingUpdate
+    rollingUpdateConfiguration:
+      maxSurge: 0
+      maxUnavailable: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: vllm-unc-tp
+          app.kubernetes.io/component: leader
+      spec:
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Don't schedule the pods on the same node if they have the same label AND the value of the label is the same.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: vllm-unc-tp
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.29.0
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py]
+            args:
+              - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
+              # Pin the served id so the llm-d header match is stable and does not
+              # follow the repo path. This exact string is what clients must send.
+              - --served-model-name
+              - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 0
+              # Distinct from the vllm-tp group's 29501: both run on the host
+              # network of the same two nodes, so every port must be unique.
+              - --master-port
+              - "29502"
+              - --host
+              - $(POD_IP)
+              - --port
+              - "8001"
+              # Startup gate only (it allocates nothing once
+              # --kv-cache-memory-bytes is set): demands 36.5 GiB free of the
+              # 121.6 GiB unified pool, which both nodes clear alongside vllm-tp.
+              - --gpu-memory-utilization
+              - "0.30"
+              - --kv-cache-memory-bytes
+              - 12G # Reserve 12 GiB for KV cache
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "8"
+              - --kv-cache-dtype
+              - fp8
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+              - --speculative-config
+              - '{"method":"mtp","num_speculative_tokens":3}'
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
+                value: enP2p1s0f0np0
+              # bootstrap.py's --check-leader-health probes this port.
+              - name: API_PORT
+                value: "8001"
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              # RoCE over the direct rail. NCCL_NET=IB makes a broken RDMA path
+              # fail loudly instead of silently falling back to TCP sockets.
+              - name: NCCL_IB_DISABLE
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              # Leading "=" is NCCL's exact-match prefix; without it mlx5_2 would
+              # also match mlx5_20+. mlx5_2 port 1 is enP2p1s0f0np0 on both nodes.
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              # Pick the IPv4 RoCE GID on the rail instead of pinning a GID index.
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
+              - name: NCCL_DEBUG
+                value: INFO
+            ports:
+              - name: http
+                containerPort: 8001
+                protocol: TCP
+            resources:
+              requests:
+                cpu: "6"
+                memory: 24Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+              limits:
+                cpu: "6"
+                memory: 24Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+                # RDMA memory registration must not be capped by the default
+                # locked-memory limit. The container stays unprivileged.
+                add: [IPC_LOCK]
+            volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            startupProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 360
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 6
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: vllm-unc-tp-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: vllm-unc-tp-leader-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
+    workerTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: vllm-unc-tp
+          app.kubernetes.io/component: worker
+      spec:
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Don't schedule the pods on the same node if they have the same label AND the value of the label is the same.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: vllm-unc-tp
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.29.0
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py]
+            args:
+              - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
+              - --served-model-name
+              - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 1
+              - --master-port
+              - "29502"
+              - --headless
+              - --gpu-memory-utilization
+              - "0.30"
+              - --kv-cache-memory-bytes
+              - 12G
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "8"
+              - --kv-cache-dtype
+              - fp8
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+              - --speculative-config
+              - '{"method":"mtp","num_speculative_tokens":3}'
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
+                value: enP2p1s0f0np0
+              - name: API_PORT
+                value: "8001"
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              # Must match the leader's transport settings exactly.
+              - name: NCCL_IB_DISABLE
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
+              - name: NCCL_DEBUG
+                value: INFO
+            resources:
+              requests:
+                cpu: "6"
+                memory: 24Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+              limits:
+                cpu: "6"
+                memory: 24Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+                add: [IPC_LOCK]
+            volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            # Headless workers expose no HTTP API. Gate readiness on the group's
+            # leader health, not a fictitious local port. This is not an independent
+            # worker health check; process exit triggers LWS group recreation.
+            readinessProbe:
+              exec:
+                command:
+                  - python3
+                  - /opt/vllm-bootstrap/bootstrap.py
+                  - --check-leader-health
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: vllm-unc-tp-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: vllm-unc-tp-worker-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi

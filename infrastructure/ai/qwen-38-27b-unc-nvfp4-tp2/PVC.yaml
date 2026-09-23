@@ -1,0 +1,27 @@
+# Node-local caches, one per rank. openebs-hostpath is RWO and pins each PV to
+# the node it first binds on, so leader and worker cannot share one claim.
+# Sized for the 23.4 GB checkpoint plus VLLM_CACHE_ROOT compile artifacts;
+# allowVolumeExpansion is false on this StorageClass, so it cannot be grown later.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-unc-tp-leader-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 80Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-unc-tp-worker-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 80Gi
