@@ -35,6 +35,20 @@ spec:
               protocol: UDP
             - port: "21820"
               protocol: UDP
+    # To Pangolin clients (Olm) for direct peer-to-peer WireGuard.
+    # Newt sends from its WireGuard listen port to each client's PUBLIC address
+    # on an ephemeral port, so neither the destination IP nor the port is known
+    # in advance: clients roam across arbitrary internet addresses. Without this
+    # the P2P data path is silently POLICY_DENIED and private resources time out.
+    # The egressDeny block above still takes precedence, so host, remote-node,
+    # ingress and kube-apiserver remain denied even though "world" is allowed.
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "0"
+              endPort: 65535
+              protocol: UDP
     # To FreshRSS
     - toEndpoints:
         - matchLabels:
