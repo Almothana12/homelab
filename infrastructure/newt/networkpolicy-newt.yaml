@@ -98,3 +98,12 @@ spec:
         - ports:
             - port: "80"
               protocol: TCP
+    # To RomM
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: emulation
+            k8s:app: romm
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
