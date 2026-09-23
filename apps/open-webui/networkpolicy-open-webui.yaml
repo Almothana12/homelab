@@ -48,12 +48,7 @@ spec:
         - ports:
             - port: "8000"
               protocol: TCP
-    # if the model is in host netowrk
-    - toEntities:
-        - remote-node
-      toPorts:
-        - ports:
-            - port: "8000"
+            - port: "443"
               protocol: TCP
     # To Authentik
     - toServices:
