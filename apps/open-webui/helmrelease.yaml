@@ -38,9 +38,9 @@ spec:
     ingress:
       enabled: true
       class: cilium
-      host: chat.almothana.sa
+      host: chat.almothana.xyz
       tls: true
-      existingSecret: almothana-sa-tls
+      existingSecret: almothana-xyz-tls
 
     # Only seeds the connection on first start; afterwards connections are
     # stored in the database and managed under Admin Settings > Connections.
@@ -83,7 +83,7 @@ spec:
       - name: VECTOR_DB
         value: pgvector
       - name: OPENID_REDIRECT_URI
-        value: https://chat.almothana.sa/oauth/oidc/callback
+        value: https://chat.almothana.xyz/oauth/oidc/callback
       # No local sign-ups; accounts come from Authentik
       - name: ENABLE_SIGNUP
         value: "False"
