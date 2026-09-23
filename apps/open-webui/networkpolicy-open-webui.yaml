@@ -14,6 +14,15 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
+    # From Newt
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: newt
+            k8s:app.kubernetes.io/component: newt
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
 
   egress:
     # To DNS
