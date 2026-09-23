@@ -94,9 +94,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: open-webui
             k8s:app.kubernetes.io/name: open-webui
+            k8s:app.kubernetes.io/component: open-webui
       toPorts:
         - ports:
-            - port: "80"
+            - port: "8080"
               protocol: TCP
     # To RomM
     - toEndpoints:
