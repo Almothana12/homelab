@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+  labels:
+    # Istio is used only as an inference gateway, not as a mesh data plane.
+    istio-injection: disabled
