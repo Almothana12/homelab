@@ -61,6 +61,7 @@ spec:
         - matchName: secure.gravatar.com
         - matchName: www.gravatar.com
         - matchName: api-0167bfea.duosecurity.com # DUO MFA
+        - matchName: api.pwnedpasswords.com # Pwned Passwords
       toPorts:
         - ports:
             - port: "443"
