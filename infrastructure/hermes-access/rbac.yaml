@@ -61,6 +61,17 @@ rules:
   - apiGroups: [nvidia.com]
     resources: [clusterpolicies, nvidiadrivers]
     verbs: [get, list, watch]
+  - apiGroups: [cilium.io]
+    resources:
+      - ciliumnetworkpolicies
+      - ciliumclusterwidenetworkpolicies
+      - ciliumendpoints
+      - ciliumidentities
+      - ciliumnodes
+    verbs: [get, list, watch]
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    verbs: [get, list, watch]
   - apiGroups: [""]
     resources: [pods/portforward]
     verbs: [create]
