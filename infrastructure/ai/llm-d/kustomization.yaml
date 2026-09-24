@@ -10,3 +10,4 @@ resources:
   - httproute-model-discovery.yaml
   - gateway.yaml
   - authorizationpolicy-benchmark-maintenance.yaml
+  - rbac-benchmark-gate.yaml
