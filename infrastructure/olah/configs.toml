@@ -1,0 +1,39 @@
+# Served from the Deployment as /etc/olah/configs.toml.
+
+[basic]
+host = "localhost"
+port = 8090
+ssl-key = ""
+ssl-cert = ""
+repos-path = "/data/repos"
+# no limit on cache size
+cache-size-limit = ""
+cache-clean-strategy = "LRU"
+cache-compression = "none"
+hf-scheme = "https"
+hf-netloc = "huggingface.co"
+hf-lfs-netloc = "cdn-lfs.huggingface.co"
+mirror-scheme = "http"
+mirror-netloc = "localhost:8090"
+mirror-lfs-netloc = "localhost:8090"
+mirrors-path = ["/data/mirrors"]
+
+[accessibility]
+offline = false # When we set this to true, it will only serve models that are already cached.
+
+# Whitelist mode: allow everything, no exclusions.
+[[accessibility.proxy]]
+repo = "*"
+allow = true
+
+[[accessibility.proxy]]
+repo = "*/*"
+allow = true
+
+[[accessibility.cache]]
+repo = "*"
+allow = true
+
+[[accessibility.cache]]
+repo = "*/*"
+allow = true

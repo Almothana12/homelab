@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: olah-hf-cache
+  labels:
+    app: olah
+spec:
+  volumeName: olah-hf-cache
+  storageClassName: nfs
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Ti

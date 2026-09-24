@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: olah
+  labels:
+    app: olah
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: olah
+  template:
+    metadata:
+      labels:
+        app: olah
+    spec:
+      containers:
+      - name: olah
+        image: ghcr.io/vtuber-plan/olah:0.5.1
+        imagePullPolicy: IfNotPresent
+        args:
+        - --config
+        - /etc/olah/configs.toml
+        ports:
+        - name: http
+          containerPort: 8090
+        resources:
+          requests:
+            cpu: "100m"
+            memory: 256Mi
+          limits:
+            cpu: "4"
+            memory: 4Gi
+        readinessProbe:
+          tcpSocket:
+            port: http
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: http
+          periodSeconds: 30
+        volumeMounts:
+        - name: config
+          mountPath: /etc/olah
+          readOnly: true
+        - name: repos
+          mountPath: /data/repos
+      volumes:
+      - name: config
+        configMap:
+          name: olah-config
+      - name: repos
+        persistentVolumeClaim:
+          claimName: olah-hf-cache
