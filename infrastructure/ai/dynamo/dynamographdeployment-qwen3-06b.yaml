@@ -113,6 +113,8 @@ spec:
               args:
                 - --model
                 - Qwen/Qwen3-0.6B
+                - --gpu-memory-utilization
+                - "0.30"
               env:
                 - name: HF_HOME
                   value: /home/dynamo/.cache/huggingface
