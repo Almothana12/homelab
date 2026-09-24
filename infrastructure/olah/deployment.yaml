@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: olah
-        image: ghcr.io/vtuber-plan/olah:0.5.1
+        image: xiahan2019/olah:0.5.1
         imagePullPolicy: IfNotPresent
         args:
         - --config
