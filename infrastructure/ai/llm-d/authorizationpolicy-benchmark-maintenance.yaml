@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: llm-benchmark-maintenance
+  namespace: ai
+  annotations:
+    # The benchmark wrapper owns this one field at runtime. Flux creates the
+    # policy once but must not reopen traffic during a long benchmark.
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      # A nonexistent target leaves the persistent policy safely disabled.
+      name: llm-benchmark-maintenance-disabled
+  action: DENY
+  rules:
+    - {}

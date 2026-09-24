@@ -9,3 +9,4 @@ resources:
   - configmap-ipp-model-mappings.yaml
   - httproute-model-discovery.yaml
   - gateway.yaml
+  - authorizationpolicy-benchmark-maintenance.yaml
