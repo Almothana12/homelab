@@ -1,0 +1,176 @@
+apiVersion: nvidia.com/v1beta1
+kind: DynamoGraphDeployment
+metadata:
+  name: dynamo-qwen3-06b
+  annotations:
+    nvidia.com/kai-scheduler-queue: dynamo
+spec:
+  components:
+    - name: Frontend
+      type: frontend
+      replicas: 1
+      podTemplate:
+        metadata:
+          labels:
+            app.kubernetes.io/name: dynamo-qwen3-06b
+            app.kubernetes.io/component: frontend
+        spec:
+          nodeSelector:
+            kubernetes.io/arch: amd64
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 0
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: main
+              image: nvcr.io/nvidia/ai-dynamo/vllm-runtime:1.4.2
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: http
+                  containerPort: 8000
+              env:
+                - name: HF_HOME
+                  value: /home/dynamo/.cache/huggingface
+                - name: HF_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: hf-token
+                      key: token
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+                limits:
+                  cpu: "2"
+                  memory: 4Gi
+              startupProbe:
+                httpGet:
+                  path: /health
+                  port: http
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 180
+              readinessProbe:
+                httpGet:
+                  path: /health
+                  port: http
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 6
+              livenessProbe:
+                httpGet:
+                  path: /live
+                  port: http
+                periodSeconds: 30
+                timeoutSeconds: 10
+                failureThreshold: 3
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+
+    - name: VllmWorker
+      type: worker
+      replicas: 1
+      podTemplate:
+        metadata:
+          labels:
+            app.kubernetes.io/name: dynamo-qwen3-06b
+            app.kubernetes.io/component: worker
+        spec:
+          runtimeClassName: nvidia
+          nodeSelector:
+            kubernetes.io/arch: arm64
+            node-role.kubernetes.io/gpu: ""
+          tolerations:
+            - key: nvidia.com/gpu
+              operator: Exists
+              effect: NoSchedule
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: main
+              image: nvcr.io/nvidia/ai-dynamo/vllm-runtime:1.4.2
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: health
+                  containerPort: 9090
+              workingDir: /workspace/examples/backends/vllm
+              command:
+                - python3
+                - -m
+                - dynamo.vllm
+              args:
+                - --model
+                - Qwen/Qwen3-0.6B
+              env:
+                - name: HF_ENDPOINT
+                  value: http://olah.olah.svc.cluster.local
+                - name: HF_HOME
+                  value: /home/dynamo/.cache/huggingface
+                - name: HF_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: hf-token
+                      key: token
+              resources:
+                requests:
+                  cpu: "4"
+                  memory: 16Gi
+                  ephemeral-storage: 4Gi
+                  nvidia.com/gpu: "1"
+                limits:
+                  cpu: "4"
+                  memory: 16Gi
+                  ephemeral-storage: 20Gi
+                  nvidia.com/gpu: "1"
+              startupProbe:
+                httpGet:
+                  path: /health
+                  port: health
+                initialDelaySeconds: 120
+                periodSeconds: 30
+                timeoutSeconds: 10
+                failureThreshold: 60
+              readinessProbe:
+                httpGet:
+                  path: /health
+                  port: health
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 6
+              livenessProbe:
+                httpGet:
+                  path: /live
+                  port: health
+                periodSeconds: 30
+                timeoutSeconds: 10
+                failureThreshold: 3
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
+                - name: shm
+                  mountPath: /dev/shm
+          volumes:
+            - name: model-cache
+              persistentVolumeClaim:
+                claimName: dynamo-qwen3-06b-cache
+            - name: shm
+              emptyDir:
+                medium: Memory
+                sizeLimit: 8Gi

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dynamo
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: dynamo.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dynamo-qwen3-06b-frontend
+                port:
+                  number: 8000
+  tls:
+    - hosts:
+        - dynamo.almothana.xyz
+      secretName: almothana-xyz-tls

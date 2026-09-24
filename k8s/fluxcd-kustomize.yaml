@@ -661,6 +661,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: dynamo-platform
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: gpu-operator
+    - name: kube-prometheus-stack
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/dynamo
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: dynamo-system
+  timeout: 20m
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: vllm-production-stack
   namespace: flux-system
 spec:
@@ -699,6 +719,26 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: ai
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dynamo
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: ai
+    - name: dynamo-platform
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/ai/dynamo
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: ai
+  timeout: 2h
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
