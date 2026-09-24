@@ -36,6 +36,9 @@ spec:
           "vllm serve Qwen/Qwen3.8-27B-FP8  --tensor-parallel-size 1  --gpu-memory-utilization 0.6  --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3  --mm-encoder-tp-mode data"
         ]
         env:
+        # use local proxy
+        - name: HF_ENDPOINT
+          value: http://olah.olah.svc.cluster.local
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:

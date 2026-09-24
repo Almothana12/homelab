@@ -53,6 +53,9 @@ spec:
         - --mamba-ssm-dtype=float32
         - --max-running-requests=16
         env:
+        # use local proxy
+        - name: HF_ENDPOINT
+          value: http://olah.olah.svc.cluster.local
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:

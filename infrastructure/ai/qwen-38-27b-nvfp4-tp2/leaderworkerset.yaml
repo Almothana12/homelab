@@ -84,6 +84,9 @@ spec:
                   secretKeyRef:
                     name: hf-token
                     key: token
+              # use local proxy
+              - name: HF_ENDPOINT
+                value: http://olah.olah.svc.cluster.local
               - name: HF_HOME
                 value: /data/huggingface
               - name: VLLM_CACHE_ROOT
@@ -248,6 +251,9 @@ spec:
                   secretKeyRef:
                     name: hf-token
                     key: token
+              # use local proxy
+              - name: HF_ENDPOINT
+                value: http://olah.olah.svc.cluster.local
               - name: HF_HOME
                 value: /data/huggingface
               - name: VLLM_CACHE_ROOT
