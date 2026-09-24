@@ -114,8 +114,6 @@ spec:
                 - --model
                 - Qwen/Qwen3-0.6B
               env:
-                - name: HF_ENDPOINT
-                  value: http://olah.olah.svc.cluster.local
                 - name: HF_HOME
                   value: /home/dynamo/.cache/huggingface
                 - name: HF_TOKEN
