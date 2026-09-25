@@ -3,7 +3,7 @@ kind: LeaderWorkerSet
 metadata:
   name: vllm-tp
 spec:
-  replicas: 0
+  replicas: 1
   # LeaderReady would deadlock: the leader needs its worker to initialize TP.
   startupPolicy: LeaderCreated
   rolloutStrategy:
