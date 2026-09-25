@@ -17,7 +17,7 @@ spec:
       repo: Almothana12/homelab
       manifestRoot: "."
     watcher:
-      stabilisationWindowSeconds: 1800 # finding must persist for 30 minutes before dispatching
+      stabilisationWindowSeconds: 3600 # finding must persist for 60 minutes before dispatching
     agent:
       resources:
         requests:
