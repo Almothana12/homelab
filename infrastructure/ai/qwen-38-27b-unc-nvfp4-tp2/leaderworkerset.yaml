@@ -46,10 +46,6 @@ spec:
             command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
               - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
-              # Pin the served id so the llm-d header match is stable and does not
-              # follow the repo path. This exact string is what clients must send.
-              - --served-model-name
-              - orcarouter/Qwen3.8-27B-Uncensored-NVFP4
               - --distributed-executor-backend
               - mp
               - --tensor-parallel-size

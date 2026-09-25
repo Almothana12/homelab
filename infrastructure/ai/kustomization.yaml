@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - namespace-ai.yaml
   - secret-hf-token.yaml
-  - llm-d
   - qwen-38-27b-fp8
   - qwen-38-27b-fp8-sglang
   - qwen-38-27b-nvfp4-sglang
