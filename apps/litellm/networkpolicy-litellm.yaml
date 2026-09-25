@@ -15,6 +15,15 @@ spec:
         - ports:
             - port: "4000"
               protocol: TCP
+    # From Open WebUI
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: open-webui
+            k8s:app.kubernetes.io/component: open-webui
+      toPorts:
+        - ports:
+            - port: "4000"
+              protocol: TCP
 
   egress:
     # To DNS

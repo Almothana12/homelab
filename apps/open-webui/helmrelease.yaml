@@ -87,6 +87,10 @@ spec:
       # No local sign-ups; accounts come from Authentik
       - name: ENABLE_SIGNUP
         value: "False"
+      # Send X-OpenWebUI-User-* headers so LiteLLM attributes spend per user
+      # behind the single Open WebUI key.
+      - name: ENABLE_FORWARD_USER_INFO_HEADERS
+        value: "True"
 
     startupProbe:
       httpGet:

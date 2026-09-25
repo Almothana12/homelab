@@ -68,6 +68,8 @@ spec:
         store_model_in_db: false
         alerting: ["email"]
         disable_env_credential_login: true
+        # Open WebUI shares one key; attribute spend to the end user it forwards.
+        user_header_name: X-OpenWebUI-User-Email
 
     ingress:
       enabled: true
