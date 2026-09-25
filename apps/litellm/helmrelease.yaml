@@ -36,6 +36,10 @@ spec:
       # Use the cost map bundled in the image instead of fetching it from
       # GitHub at startup; egress to the Internet is not allowed.
       LITELLM_LOCAL_MODEL_COST_MAP: "True"
+      # UI blog panel uses the copy bundled in the image instead of fetching docs.litellm.ai
+      LITELLM_LOCAL_BLOG_POSTS: "True"
+      # Prisma update check / telemetry to checkpoint.prisma.io
+      CHECKPOINT_DISABLE: "1"
 
     proxy_config:
       model_list:
