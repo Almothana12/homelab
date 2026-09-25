@@ -71,10 +71,11 @@ spec:
                 - "8"
                 - --kv-cache-dtype
                 - fp8
-                - --enable-auto-tool-choice
-                - --tool-call-parser
+                # Publish model-specific parser names through Dynamo runtime
+                # metadata; these are not native vLLM API-server options.
+                - --dyn-tool-call-parser
                 - qwen3_coder
-                - --reasoning-parser
+                - --dyn-reasoning-parser
                 - qwen3
                 - --speculative-config
                 - '{"method":"mtp","num_speculative_tokens":3}'
