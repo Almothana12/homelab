@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - pvc-dynamo-qwen3-06b-cache.yaml
-  - dynamographdeployment-qwen3-06b.yaml
+  - dynamographdeployment-router.yaml
+  - dynamographdeployment-swift-qwen38-nvfp4.yaml
   - ingress-dynamo.yaml

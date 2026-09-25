@@ -12,7 +12,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: dynamo-qwen3-06b-frontend
+                name: dynamo-router-frontend
                 port:
                   number: 8000
   tls:
