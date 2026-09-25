@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-  - secret-litellm.yaml
+  - secret-litellm-masterkey.yaml
+  - secret-litellm-env.yaml
   - helmrelease-litellm-cluster.yaml
   - ocirepository.yaml
   - helmrelease.yaml
