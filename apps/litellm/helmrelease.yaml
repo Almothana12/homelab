@@ -73,12 +73,17 @@ spec:
       enabled: true
       className: cilium
       hosts:
+        - host: ai.almothana.xyz
+          paths:
+            - path: /
+              pathType: Prefix
         - host: litellm.almothana.xyz
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
+            - ai.almothana.xyz
             - litellm.almothana.xyz
           secretName: almothana-xyz-tls
 
