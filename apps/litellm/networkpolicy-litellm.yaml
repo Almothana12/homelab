@@ -44,3 +44,17 @@ spec:
               protocol: TCP
             - port: "8001"
               protocol: TCP
+    # To Stalwart SMTP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: stalwart
+            k8s:app.kubernetes.io/name: stalwart
+      toPorts:
+        - ports:
+            - port: "587"
+              protocol: TCP
+    # To Authentik
+    - toServices:
+        - k8sService:
+            serviceName: authentik-server
+            namespace: authentik
