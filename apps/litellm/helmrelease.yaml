@@ -40,6 +40,8 @@ spec:
       LITELLM_LOCAL_BLOG_POSTS: "True"
       # Prisma update check / telemetry to checkpoint.prisma.io
       CHECKPOINT_DISABLE: "1"
+      # Base URL for SSO redirects
+      PROXY_BASE_URL: https://litellm.almothana.xyz
 
     proxy_config:
       model_list:
