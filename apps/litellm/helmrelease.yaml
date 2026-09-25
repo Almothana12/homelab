@@ -51,6 +51,7 @@ spec:
         # One replica per model: a retry lands on the same engine, so it only
         # adds load while the engine is struggling.
         num_retries: 0
+        callbacks: ["smtp_email"]
       general_settings:
         # Models are managed here in git only, not added through the UI.
         store_model_in_db: false
