@@ -59,6 +59,7 @@ spec:
       general_settings:
         # Models are managed here in git only, not added through the UI.
         store_model_in_db: false
+        alerting: ["email"]
 
     ingress:
       enabled: true
