@@ -38,9 +38,14 @@ spec:
             - key: nvidia.com/gpu
               operator: Exists
               effect: NoSchedule
+          # NCCL's RoCE transport registers pinned memory through ibverbs.
+          # The Dynamo image defaults to UID 1000, where Kubernetes cannot set
+          # an unlimited RLIMIT_MEMLOCK. Run as root with only IPC_LOCK retained
+          # below so ibv_reg_mr can bypass that limit, matching the proven llm-d
+          # TP=2 pods on these nodes.
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
+            runAsNonRoot: false
+            runAsUser: 0
             runAsGroup: 0
             fsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
