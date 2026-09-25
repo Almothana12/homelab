@@ -1,7 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: dynamo-platform
-spec:
-  interval: 24h
-  url: https://helm.ngc.nvidia.com/nvidia/ai-dynamo
