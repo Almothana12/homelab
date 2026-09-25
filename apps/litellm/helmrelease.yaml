@@ -49,10 +49,14 @@ spec:
           litellm_params:
             model: hosted_vllm/ukisai/Swift-Qwen3.8-27B-NVFP4
             api_base: http://vllm-tp-api.ai.svc.cluster.local:8000/v1
+            input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
+            output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
         - model_name: orcarouter/Qwen3.8-27B-Uncensored-NVFP4
           litellm_params:
             model: hosted_vllm/orcarouter/Qwen3.8-27B-Uncensored-NVFP4
             api_base: http://vllm-unc-tp-api.ai.svc.cluster.local:8000/v1
+            input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
+            output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
       router_settings:
         model_group_alias:
           default: ukisai/Swift-Qwen3.8-27B-NVFP4
