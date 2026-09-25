@@ -724,26 +724,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dynamo
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: ai
-    - name: dynamo-platform
-  force: false
-  interval: 5m0s
-  path: ./infrastructure/ai/dynamo
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  targetNamespace: ai
-  timeout: 2h
-
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: spegel
   namespace: flux-system
 spec:
