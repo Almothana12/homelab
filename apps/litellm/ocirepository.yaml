@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: litellm
+spec:
+  interval: 24h
+  url: oci://ghcr.io/berriai/litellm-helm
+  ref:
+    tag: 1.102.1

@@ -1,0 +1,46 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: litellm
+spec:
+  # Proxy pods and the migrations Job
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: litellm
+  ingress:
+    # From Ingress
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "4000"
+              protocol: TCP
+
+  egress:
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To pods in the same namespace (CNPG)
+    - toEndpoints:
+        - {}
+    # To vLLM. The engines run with hostNetwork, so Cilium sees the node's
+    # identity rather than pod labels; a toEndpoints rule on the ai namespace
+    # would never match. vllm-tp listens on 8000, vllm-unc-tp on 8001.
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
+            - port: "8001"
+              protocol: TCP
