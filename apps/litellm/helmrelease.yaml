@@ -60,6 +60,7 @@ spec:
         # Models are managed here in git only, not added through the UI.
         store_model_in_db: false
         alerting: ["email"]
+        disable_env_credential_login: true
 
     ingress:
       enabled: true
