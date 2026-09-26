@@ -45,7 +45,11 @@ spec:
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py] # Vibe coded launcher to set up environment variables. without it, I would have to hard code IP addresses.
             args:
-              - ukisai/Swift-Qwen3.8-27B-NVFP4
+              - ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+              - --revision
+              - 25482027debd5485e8108897ba9fed8d3ba16595
+              - --dtype
+              - bfloat16
               - --distributed-executor-backend
               - mp
               - --tensor-parallel-size
@@ -70,7 +74,9 @@ spec:
               - --max-num-seqs
               - "8"
               - --kv-cache-dtype
-              - fp8
+              - auto
+              - --mamba-ssm-cache-dtype
+              - float32
               - --enable-auto-tool-choice
               - --tool-call-parser
               - qwen3_coder
@@ -215,7 +221,11 @@ spec:
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
-              - ukisai/Swift-Qwen3.8-27B-NVFP4
+              - ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+              - --revision
+              - 25482027debd5485e8108897ba9fed8d3ba16595
+              - --dtype
+              - bfloat16
               - --distributed-executor-backend
               - mp
               - --tensor-parallel-size
@@ -237,7 +247,9 @@ spec:
               - --max-num-seqs
               - "8"
               - --kv-cache-dtype
-              - fp8
+              - auto
+              - --mamba-ssm-cache-dtype
+              - float32
               - --enable-auto-tool-choice
               - --tool-call-parser
               - qwen3_coder
