@@ -87,9 +87,9 @@ spec:
               - --max-num-batched-tokens
               - "2048"
               # Allow default compilation/CUDA graphs; verify capture after rollout.
-              # Start with one verified MTP draft token to limit overhead.
+              # MTP depth must match the worker: mismatched depths can stall TP startup.
               - --speculative-config
-              - '{"method":"mtp","num_speculative_tokens":1}'
+              - '{"method":"mtp","num_speculative_tokens":2}'
               # Qwen4Exp MTP does not support Mamba cache mode 'all'.
               - --mamba-cache-mode
               - align
