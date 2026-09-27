@@ -1,0 +1,370 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: qwen38-flash-next
+spec:
+  replicas: 1
+  # LeaderReady would deadlock: the leader needs its worker to initialize TP.
+  startupPolicy: LeaderCreated
+  rolloutStrategy:
+    type: RollingUpdate
+    rollingUpdateConfiguration:
+      maxSurge: 0
+      maxUnavailable: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: qwen38-flash-next
+          app.kubernetes.io/component: leader
+      spec:
+        nodeSelector:
+          kubernetes.io/arch: arm64
+          nvidia.com/gpu.product: NVIDIA-GB10-SHARED
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
+          seccompProfile:
+            type: RuntimeDefault
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Keep leader and worker of this group on separate nodes.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: qwen38-flash-next
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.30.0
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py]
+            args:
+              - nvidia/Qwen3.8-Flash-Next-NVFP4
+              - --revision
+              - fc694b54fb0174e0913e6adf86691ef85a4ead47
+              - --dtype
+              - bfloat16
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 0
+              - --master-port
+              - "29503"
+              - --host
+              - $(POD_IP)
+              - --port
+              - "8100"
+              - --gpu-memory-utilization
+              - "0.75" # Boot precondition gate only; KV is sized explicitly below.
+              - --kv-cache-memory-bytes
+              - 16G # Per GPU; validate usable token capacity in startup logs.
+              - --max-model-len
+              - "65536" # Conservative baseline; native ceiling is 262144.
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "4"
+              - --max-num-batched-tokens
+              - "2048"
+              - --enforce-eager
+              - --kv-cache-dtype
+              - auto
+              - --no-enable-flashinfer-autotune
+              - --mamba-ssm-cache-dtype
+              - float32
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              # use local proxy
+              - name: HF_ENDPOINT
+                value: http://olah.olah.svc.cluster.local
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
+                value: enP2p1s0f0np0
+              - name: API_PORT
+                value: "8100"
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              # RoCE over the direct rail. NCCL_NET=IB makes a broken RDMA path
+              # fail loudly instead of silently falling back to TCP sockets.
+              - name: NCCL_IB_DISABLE
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
+              - name: NCCL_DEBUG
+                value: INFO
+            ports:
+              - name: http
+                containerPort: 8100
+                protocol: TCP
+            resources:
+              requests:
+                cpu: "6"
+                memory: 96Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+              limits:
+                cpu: "6"
+                memory: 96Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+                # RDMA memory registration must not be capped by the default
+                # locked-memory limit. The container stays unprivileged.
+                add: [IPC_LOCK]
+            volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            startupProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              # Cold download through Olah can take hours across two caches.
+              # Four-hour budget, not an expected warm-start duration.
+              failureThreshold: 1440
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 6
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: qwen38-flash-next-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: qwen38-flash-next-leader-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
+    workerTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: qwen38-flash-next
+          app.kubernetes.io/component: worker
+      spec:
+        nodeSelector:
+          kubernetes.io/arch: arm64
+          nvidia.com/gpu.product: NVIDIA-GB10-SHARED
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
+          seccompProfile:
+            type: RuntimeDefault
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Keep leader and worker of this group on separate nodes.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: qwen38-flash-next
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm
+            image: vllm/vllm-openai:v0.30.0
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/vllm-bootstrap/bootstrap.py]
+            args:
+              - nvidia/Qwen3.8-Flash-Next-NVFP4
+              - --revision
+              - fc694b54fb0174e0913e6adf86691ef85a4ead47
+              - --dtype
+              - bfloat16
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --pipeline-parallel-size
+              - "1"
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 1
+              - --master-port
+              - "29503"
+              - --headless
+              - --gpu-memory-utilization
+              - "0.75"
+              - --kv-cache-memory-bytes
+              - 16G
+              - --max-model-len
+              - "65536"
+              - --enable-prefix-caching
+              - --max-num-seqs
+              - "4"
+              - --max-num-batched-tokens
+              - "2048"
+              - --enforce-eager
+              - --kv-cache-dtype
+              - auto
+              - --no-enable-flashinfer-autotune
+              - --mamba-ssm-cache-dtype
+              - float32
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - qwen3_coder
+              - --reasoning-parser
+              - qwen3
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              # use local proxy
+              - name: HF_ENDPOINT
+                value: http://olah.olah.svc.cluster.local
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: VLLM_USE_V2_MODEL_RUNNER
+                value: "1"
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
+                value: enP2p1s0f0np0
+              - name: API_PORT
+                value: "8100"
+              - name: NCCL_SOCKET_FAMILY
+                value: AF_INET
+              # Must match the leader's transport settings exactly.
+              - name: NCCL_IB_DISABLE
+                value: "0"
+              - name: NCCL_NET
+                value: IB
+              - name: NCCL_IB_HCA
+                value: "=mlx5_2:1"
+              - name: NCCL_IB_ADDR_FAMILY
+                value: AF_INET
+              - name: NCCL_IB_ADDR_RANGE
+                value: 10.100.217.0/24
+              - name: NCCL_DEBUG
+                value: INFO
+            resources:
+              requests:
+                cpu: "6"
+                memory: 96Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+              limits:
+                cpu: "6"
+                memory: 96Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+                add: [IPC_LOCK]
+            volumeMounts:
+              - name: bootstrap
+                mountPath: /opt/vllm-bootstrap
+                readOnly: true
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+            # Headless workers expose no HTTP API. Gate readiness on the group's
+            # leader health, not a fictitious local port.
+            readinessProbe:
+              exec:
+                command:
+                  - python3
+                  - /opt/vllm-bootstrap/bootstrap.py
+                  - --check-leader-health
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: qwen38-flash-next-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: qwen38-flash-next-worker-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
