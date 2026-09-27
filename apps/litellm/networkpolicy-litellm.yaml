@@ -41,9 +41,7 @@ spec:
     # To pods in the same namespace (CNPG)
     - toEndpoints:
         - {}
-    # To vLLM. The engines run with hostNetwork, so Cilium sees the node's
-    # identity rather than pod labels; a toEndpoints rule on the ai namespace
-    # would never match. vllm-tp listens on 8000, vllm-unc-tp on 8001.
+    # To LLM engine pods.
     - toEntities:
         - host
         - remote-node
@@ -52,6 +50,8 @@ spec:
             - port: "8000"
               protocol: TCP
             - port: "8001"
+              protocol: TCP
+            - port: "8100"
               protocol: TCP
     # To Stalwart SMTP
     - toEndpoints:

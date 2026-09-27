@@ -45,23 +45,17 @@ spec:
 
     proxy_config:
       model_list:
-        - model_name: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+        - model_name: nvidia/Qwen3.8-Flash-Next-NVFP4
           litellm_params:
-            model: hosted_vllm/ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-            api_base: http://vllm-tp-api.ai.svc.cluster.local:8000/v1
-            input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
-            output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
-        - model_name: orcarouter/Qwen3.8-27B-Uncensored-NVFP4
-          litellm_params:
-            model: hosted_vllm/orcarouter/Qwen3.8-27B-Uncensored-NVFP4
-            api_base: http://vllm-unc-tp-api.ai.svc.cluster.local:8000/v1
+            model: hosted_vllm/nvidia/Qwen3.8-Flash-Next-NVFP4
+            api_base: http://qwen38-flash-next-api.ai.svc.cluster.local:8100/v1
             input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
             output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
       router_settings:
         model_group_alias:
-          default: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-          coder: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-          fast: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+          default: nvidia/Qwen3.8-Flash-Next-NVFP4
+          coder: nvidia/Qwen3.8-Flash-Next-NVFP4
+          fast: nvidia/Qwen3.8-Flash-Next-NVFP4
       litellm_settings:
         # One replica per model: a retry lands on the same engine, so it only
         # adds load while the engine is struggling.
