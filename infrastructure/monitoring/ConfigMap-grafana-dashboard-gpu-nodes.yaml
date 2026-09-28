@@ -249,7 +249,6 @@ data:
           "id": 5,
           "type": "stat",
           "title": "Unified memory used",
-          "description": "GB10 has no discrete VRAM: this single LPDDR5X pool is both system RAM and GPU memory, so it is the closest available VRAM signal.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -321,7 +320,6 @@ data:
           "id": 6,
           "type": "stat",
           "title": "Disk used (/var)",
-          "description": "/var holds containerd images and all local volumes on Talos.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -478,7 +476,6 @@ data:
           "id": 9,
           "type": "timeseries",
           "title": "GPU utilization",
-          "description": "Time-slicing note: the 4 advertised nvidia.com/gpu replicas share one physical GB10, so this is one curve per node, not per replica. DCGM cannot attribute compute to individual pods on GB10.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -1870,5 +1867,5 @@ data:
       "title": "NVIDIA DGX Spark (GB10)",
       "uid": "dgx-spark-gb10-gpu",
       "weekStart": "",
-      "description": "GPU, memory, disk, thermal and power telemetry for the two DGX Spark (GB10) Talos nodes. Built for Grace-Blackwell unified memory, where DCGM exports no framebuffer fields."
+      "description": "GPU, memory, disk, thermal and power telemetry for two DGX Sparks (GB10) . Built for Grace-Blackwell unified memory, where DCGM exports no framebuffer fields."
     }
