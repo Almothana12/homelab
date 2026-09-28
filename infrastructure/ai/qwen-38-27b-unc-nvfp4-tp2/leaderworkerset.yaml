@@ -71,9 +71,11 @@ spec:
               - "0.30"
               - --kv-cache-memory-bytes
               - 8G # Reserve 8 GiB for KV cache
+              - --max-model-len # 128K context
+              - "131072"
               - --enable-prefix-caching
               - --max-num-seqs
-              - "8"
+              - "4"
               - --kv-cache-dtype
               - fp8
               - --enable-auto-tool-choice
@@ -241,9 +243,11 @@ spec:
               - "0.30"
               - --kv-cache-memory-bytes
               - 8G
+              - --max-model-len # 128K context
+              - "131072"
               - --enable-prefix-caching
               - --max-num-seqs
-              - "8"
+              - "4"
               - --kv-cache-dtype
               - fp8
               - --enable-auto-tool-choice
