@@ -3,7 +3,7 @@ kind: LeaderWorkerSet
 metadata:
   name: vllm-tp
 spec:
-  replicas: 0
+  replicas: 1
   # LeaderReady would deadlock: the leader needs its worker to initialize TP.
   startupPolicy: LeaderCreated
   rolloutStrategy:
@@ -69,7 +69,7 @@ spec:
               - --gpu-memory-utilization
               - "0.30"
               - --kv-cache-memory-bytes
-              - 16G # Reserve 16 GiB for KV cache
+              - 8G # Reserve 8 GiB for KV cache
               - --enable-prefix-caching
               - --max-num-seqs
               - "8"
@@ -242,7 +242,7 @@ spec:
               - --gpu-memory-utilization
               - "0.30"
               - --kv-cache-memory-bytes
-              - 16G
+              - 8G
               - --enable-prefix-caching
               - --max-num-seqs
               - "8"
