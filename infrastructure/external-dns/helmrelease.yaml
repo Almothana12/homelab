@@ -13,6 +13,7 @@ spec:
         name: external-dns
       interval: 5m
   values:
+    policy: upsert-only
     # use the adguard provider
     # https://github.com/muhlba91/external-dns-provider-adguard#kubernetes-deployment
     provider: 
