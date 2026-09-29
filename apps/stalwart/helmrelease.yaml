@@ -84,7 +84,7 @@ spec:
     service:
       type: LoadBalancer
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: mail.almothana.sa
+        external-dns.kubernetes.io/hostname: mail.almothana.sa
       ports:
         smtp: 25
         smtps: 465
