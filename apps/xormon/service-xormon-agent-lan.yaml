@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: xormon-agent-lan
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: xormon-agent.almothana.xyz
+    external-dns.kubernetes.io/hostname: xormon-agent.almothana.xyz
 spec:
   type: LoadBalancer
   selector:
