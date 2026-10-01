@@ -19,7 +19,9 @@ spec:
       containers:
         - image: ghcr.io/kieraneglin/pinchflat:latest@sha256:01b4f98aabaf3f5fe394213f7a32578c9e84e42080f52e2f8334021a4473b202  # because there is no alternative to latest tag. prject is not actively maintained.
           name: pinchflat
-          resources: {}
+          resources:
+            requests:
+              memory: 220Mi
           env: 
             - name: TZ
               value: "Asia/Riyadh"

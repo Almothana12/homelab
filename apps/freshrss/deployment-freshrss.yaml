@@ -19,7 +19,9 @@ spec:
       containers:
         - image: freshrss/freshrss:1.30.0
           name: freshrss
-          resources: {}
+          resources:
+            requests:
+              memory: 120Mi
           envFrom:
             - secretRef:
                 name: freshrss

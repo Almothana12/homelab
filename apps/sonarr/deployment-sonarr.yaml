@@ -19,7 +19,9 @@ spec:
       containers:
         - image: linuxserver/sonarr:4.0.20
           name: sonarr
-          resources: {}
+          resources:
+            requests:
+              memory: 220Mi
           ports:
             - containerPort: 8989
               protocol: TCP

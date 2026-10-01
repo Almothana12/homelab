@@ -19,7 +19,9 @@ spec:
       containers:
         - image: ghcr.io/techsquidtv/cliparr:2.0
           name: cliparr
-          resources: {}
+          resources:
+            requests:
+              memory: 40Mi
           env:
             - name: APP_KEY
               valueFrom:

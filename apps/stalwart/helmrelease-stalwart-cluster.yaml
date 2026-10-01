@@ -34,6 +34,9 @@ spec:
     cluster:
       instances: 3
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 130Mi
       storage:
         size: 10Gi
       pg_hba:

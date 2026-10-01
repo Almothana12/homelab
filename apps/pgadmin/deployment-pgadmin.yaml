@@ -17,7 +17,9 @@ spec:
       containers:
         - name: pgadmin
           image: dpage/pgadmin4:9.18.0
-          resources: {}
+          resources:
+            requests:
+              memory: 200Mi
           ports:
             - containerPort: 80
               protocol: TCP

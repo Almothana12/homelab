@@ -22,7 +22,9 @@ spec:
       containers:
         - image: ghcr.io/seriousm4x/upsnap:5.7.2
           name: upsnap
-          resources: {}
+          resources:
+            requests:
+              memory: 15Mi
           env: []
           ports:
             - containerPort: 8090

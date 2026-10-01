@@ -19,7 +19,9 @@ spec:
       containers:
         - image: ghcr.io/javedh-dev/tracktor:2.1.0
           name: tracktor-1
-          resources: {}
+          resources:
+            requests:
+              memory: 40Mi
           envFrom:
           - configMapRef:
               name: tracktor-1-config

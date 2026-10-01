@@ -20,6 +20,9 @@ spec:
         enabled: true
         forceConflicts: true
     grafana:
+      resources:
+        requests:
+          memory: 400Mi
       defaultDashboardsTimezone: Asia/Riyadh
       additionalDataSources:
         - name: Loki

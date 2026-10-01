@@ -24,6 +24,9 @@ spec:
     cluster:
       instances: 2
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 64Mi
       storage:
         size: 2Gi
       initdb:

@@ -19,7 +19,9 @@ spec:
       containers:
         - image: ghcr.io/c4illin/convertx:v0.19.0
           name: convertx
-          resources: {}
+          resources:
+            requests:
+              memory: 20Mi
           env:
             - name: JWT_SECRET
               valueFrom:

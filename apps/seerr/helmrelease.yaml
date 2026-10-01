@@ -13,6 +13,9 @@ spec:
         name: seerr
       interval: 5m
   values: 
+    resources:
+      requests:
+        memory: 200Mi
     image:
       repository: seerr-team/seerr
     podSecurityContext:

@@ -20,7 +20,9 @@ spec:
       containers:
         - image: cloudflare/cloudflared:latest
           name: cloudflared
-          resources: {}
+          resources:
+            requests:
+              memory: 20Mi
           env:
             # Defines an environment variable for the tunnel token.
             - name: TUNNEL_TOKEN

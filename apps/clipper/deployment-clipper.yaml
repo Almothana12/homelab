@@ -20,7 +20,9 @@ spec:
       containers:
         - image: paveyry/mediaserver-clipper:latest
           name: clipper
-          resources: {}
+          resources:
+            requests:
+              memory: 5Mi
           env:
             - name: SEARCH_DIRS
               value: /library

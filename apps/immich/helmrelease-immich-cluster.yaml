@@ -36,6 +36,9 @@ spec:
       instances: 2
       imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 150Mi
       storage:
         size: 5Gi
       postgresql:

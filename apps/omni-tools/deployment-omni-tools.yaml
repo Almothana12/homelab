@@ -20,5 +20,7 @@ spec:
       containers:
         - image: iib0011/omni-tools:0.6.0
           name: omni-tools
-          resources: {}
+          resources:
+            requests:
+              memory: 5Mi
           env: []

@@ -44,6 +44,13 @@ spec:
     valkey:
       enabled: true
     server:
+      controllers:
+        main:
+          containers:
+            main:
+              resources:
+                requests:
+                  memory: 600Mi
       persistence:
         extrapv:
           enabled: true
@@ -61,6 +68,13 @@ spec:
               hosts:
               - immich.almothana.xyz
     machine-learning:
+      controllers:
+        main:
+          containers:
+            main:
+              resources:
+                requests:
+                  memory: 256Mi
       persistence:
         cache:
           enabled: true

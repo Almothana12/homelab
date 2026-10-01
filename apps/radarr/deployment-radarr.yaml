@@ -19,7 +19,9 @@ spec:
       containers:
         - image: linuxserver/radarr:6.4.4
           name: radarr
-          resources: {}
+          resources:
+            requests:
+              memory: 166Mi
           ports:
             - containerPort: 7878
               protocol: TCP

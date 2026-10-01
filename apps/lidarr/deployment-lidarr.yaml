@@ -19,7 +19,9 @@ spec:
       containers:
         - image: linuxserver/lidarr:latest
           name: lidarr
-          resources: {}
+          resources:
+            requests:
+              memory: 110Mi
           env:
             - name: TZ
               value: Asia/Riyadh

@@ -19,7 +19,9 @@ spec:
       containers:
         - image: tautulli/tautulli:v2.18.2
           name: tautulli
-          resources: {}
+          resources:
+            requests:
+              memory: 72Mi
           env:
             - name: PGID
               value: "1000"

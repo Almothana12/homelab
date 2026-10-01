@@ -36,6 +36,9 @@ spec:
       # imageName: ghcr.io/clevyr/cloudnativepg-timescale:16
       instances: 3
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 270Mi
       storage:
         size: 5Gi
       # pg_hba:

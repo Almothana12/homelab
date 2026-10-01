@@ -20,7 +20,9 @@ spec:
       containers:
         - image: linuxserver/prowlarr:2.6.5
           name: prowlarr
-          resources: {}
+          resources:
+            requests:
+              memory: 150Mi
           ports:
             - containerPort: 9696
               protocol: TCP

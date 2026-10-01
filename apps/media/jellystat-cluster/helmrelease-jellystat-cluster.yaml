@@ -41,6 +41,9 @@ spec:
       #     - CREATE DATABASE jellystat_nas OWNER jellystat_nas
       instances: 2
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 128i
       storage:
         size: 2Gi
       pg_hba:

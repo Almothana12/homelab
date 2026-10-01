@@ -49,7 +49,9 @@ spec:
                 secretKeyRef:
                   name: mariadb
                   key: password
-          resources: {}
+          resources:
+            requests:
+              memory: 1Gi
           readinessProbe:
             tcpSocket:
               port: 8080

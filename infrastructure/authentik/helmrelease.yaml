@@ -18,6 +18,9 @@ spec:
       existingSecret:
         secretName: authentik-secret
     server:
+      resources:
+        requests:
+          memory: 632Mi
       ingress:
         enabled: true
         ingressClassName: cilium
@@ -27,6 +30,11 @@ spec:
           - secretName: almothana-sa-tls
             hosts:          
               - sso.almothana.sa
+
+    worker:
+      resources:
+        requests:
+          memory: 304Mi
 
     postgresql:
       enabled: false # will use cnpg instead of the built-in postgresql chart

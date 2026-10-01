@@ -34,6 +34,9 @@ spec:
     cluster:
       instances: 2
       primaryUpdateStrategy: unsupervised
+      resources:
+        requests:
+          memory: 128Mi
       # Keys, teams and spend logs only; model config lives in git.
       storage:
         size: 5Gi

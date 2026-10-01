@@ -20,7 +20,9 @@ spec:
       containers:
         - image: linuxserver/bazarr:1.6.2
           name: bazarr
-          resources: {}
+          resources:
+            requests:
+              memory: 200Mi
           ports:
             - containerPort: 6767
               protocol: TCP

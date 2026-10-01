@@ -40,7 +40,9 @@ spec:
                   name: mariadb
                   key: username
           image: mariadb:latest
-          resources: {}
+          resources:
+            requests:
+              memory: 290Mi
           livenessProbe:
             exec:
               command:
