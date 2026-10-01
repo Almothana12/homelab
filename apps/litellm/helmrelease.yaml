@@ -42,6 +42,13 @@ spec:
       CHECKPOINT_DISABLE: "1"
       # Base URL for SSO redirects
       PROXY_BASE_URL: https://litellm.almothana.xyz
+      # Cilium Ingress is an L7 Envoy proxy: it opens a new connection to the
+      # pod from its own reserved:ingress IP (10.244.x.x) and passes the client
+      # in X-Forwarded-For. Uvicorn only honours XFF from 127.0.0.1 by default,
+      # so trust the pod CIDR (the CNP limits :4000 to ingress, Newt and Open
+      # WebUI). Uvicorn takes the rightmost untrusted hop, so a client-forged
+      # XFF cannot spoof its address.
+      FORWARDED_ALLOW_IPS: "10.244.0.0/16,fd00:10:244::/48"
 
     proxy_config:
       model_list:
