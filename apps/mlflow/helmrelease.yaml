@@ -10,6 +10,7 @@ spec:
     kind: OCIRepository
     name: mlflow
   values:
+    fullnameOverride: "mlflow" # Avoid "mlflow-mlflow" names
     image:
       repository: ghcr.io/mlflow/mlflow
       tag: v3.16.1-full
