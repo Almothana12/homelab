@@ -136,12 +136,12 @@ spec:
                 protocol: TCP
             resources:
               requests:
-                cpu: "6"
+                cpu: "2"
                 memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
               limits:
-                cpu: "6"
+                cpu: "2"
                 memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
@@ -303,12 +303,12 @@ spec:
                 value: INFO
             resources:
               requests:
-                cpu: "6"
+                cpu: "2"
                 memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
               limits:
-                cpu: "6"
+                cpu: "2"
                 memory: 24Gi
                 nvidia.com/gpu: "1"
                 rdma/direct_rail: "1"
