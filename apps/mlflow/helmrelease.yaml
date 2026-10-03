@@ -56,6 +56,8 @@ spec:
           secretKeyRef:
             name: backup-s3-credentials
             key: ACCESS_SECRET_KEY
+      - name: MLFLOW_SERVER_ENABLE_JOB_EXECUTION
+        value: "false"
 
     extraInitContainers:
       - name: db-upgrade
