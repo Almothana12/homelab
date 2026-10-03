@@ -215,4 +215,12 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
-
+    # To Stalwart
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: stalwart
+            k8s:app.kubernetes.io/name: stalwart
+      toPorts:
+        - ports:
+            - port: "465"
+              protocol: TCP
