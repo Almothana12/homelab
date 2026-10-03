@@ -16,7 +16,7 @@ spec:
 
     server:
       value_options:
-        workers: 2
+        workers: 1
         # The security middleware rejects any API call whose Host header is not
         # listed here (DNS-rebinding guard); setting it REPLACES the defaults.
         #  - mlflow.almothana.xyz: browser traffic via the Authentik proxy outpost
@@ -36,18 +36,6 @@ spec:
       artifactsDestination: s3://mlflow-artifacts
 
 
-    ingress:
-      enabled: true
-      className: cilium
-      hosts:
-        - host: mlflow.almothana.xyz
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - secretName: almothana-xyz-tls
-          hosts:
-            - mlflow.almothana.xyz
     env:
       - name: HOME
         value: /tmp
@@ -110,7 +98,9 @@ spec:
     resources:
       requests:
         cpu: 50m
-        memory: 300Mi
+        memory: 1Gi
+      limits:
+        memory: 2Gi
 
     garbageCollection:
       enabled: true

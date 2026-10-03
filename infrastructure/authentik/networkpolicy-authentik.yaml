@@ -112,6 +112,9 @@ spec:
         - k8sService:
             serviceName: kube-prometheus-stack-alertmanager
             namespace: monitoring
+        - k8sService:
+            serviceName: mlflow
+            namespace: mlflow
 # Authentik Outpost RAC
 ---
 apiVersion: cilium.io/v2
