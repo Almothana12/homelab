@@ -1,0 +1,59 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mlflow
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: mlflow
+  ingress:
+    # From the Authentik
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: authentik
+            k8s:app.kubernetes.io/name: authentik
+            k8s:app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+    # From EvalHub
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: evalhub
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+    # From Prometheus
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+
+  egress:
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # To pods in the same namespace (CNPG)
+    - toEndpoints:
+        - {}
+    # To MinIO
+    - toCIDRSet:
+        - cidr: 192.168.0.109/32
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP

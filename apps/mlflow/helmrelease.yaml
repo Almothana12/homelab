@@ -1,0 +1,118 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mlflow
+spec:
+  dependsOn:
+    - name: mlflow-cluster-v00
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: mlflow
+  values:
+    image:
+      repository: ghcr.io/mlflow/mlflow
+      tag: v3.16.1-full
+
+    server:
+      value_options:
+        workers: 2
+        # The security middleware rejects any API call whose Host header is not
+        # listed here (DNS-rebinding guard); setting it REPLACES the defaults.
+        #  - mlflow.almothana.xyz: browser traffic via the Authentik proxy outpost
+        #  - mlflow.mlflow*: the outpost upstream and in-cluster clients (EvalHub)
+        #  - 10.244.*: kubelet probes hit the pod IP
+        allowed_hosts: "mlflow.almothana.xyz,mlflow.mlflow.svc.cluster.local:5000,mlflow.mlflow.svc:5000,mlflow.mlflow:5000,10.244.*"
+      # Clients upload/download artifacts THROUGH the server, so they need no S3
+      # credentials of their own; only this pod talks to MinIO.
+      flag_options:
+        - serve_artifacts
+
+    mlflow:
+      backendStoreUriFrom:
+        secretKeyRef:
+          name: mlflow-cluster-v00-app
+          key: uri
+      artifactsDestination: s3://mlflow-artifacts
+
+
+    ingress:
+      enabled: true
+      className: cilium
+      hosts:
+        - host: mlflow.almothana.xyz
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: almothana-xyz-tls
+          hosts:
+            - mlflow.almothana.xyz
+    env:
+      - name: HOME
+        value: /tmp
+      - name: MLFLOW_DISABLE_TELEMETRY
+        value: "true"
+      - name: MLFLOW_S3_ENDPOINT_URL
+        value: http://192.168.0.109:9000
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: backup-s3-credentials
+            key: ACCESS_KEY_ID
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: backup-s3-credentials
+            key: ACCESS_SECRET_KEY
+
+    extraInitContainers:
+      - name: db-upgrade
+        image: ghcr.io/mlflow/mlflow:v3.16.1-full
+        command: ["sh", "-c", 'exec mlflow db upgrade "$MLFLOW_BACKEND_STORE_URI"']
+        env:
+          - name: HOME
+            value: /tmp
+          - name: MLFLOW_DISABLE_TELEMETRY
+            value: "true"
+          - name: MLFLOW_BACKEND_STORE_URI
+            valueFrom:
+              secretKeyRef:
+                name: mlflow-cluster-v00-app
+                key: uri
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        volumeMounts:
+          - name: tmp
+            mountPath: /tmp
+
+    metrics:
+      enabled: true
+      path: /metrics
+    serviceMonitor:
+      enabled: true
+
+    networkPolicy:
+      enabled: false
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 300Mi
+
+    garbageCollection:
+      enabled: true
+      schedule: "0 2 * * 0" # weekly at 2 AM on Sunday
+      olderThan: "30d" # only remove resources soft-deleted for 30+ days
