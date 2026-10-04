@@ -6,4 +6,4 @@ spec:
   interval: 24h
   url: oci://ghcr.io/berriai/litellm-helm
   ref:
-    tag: 1.103.0
+    tag: 1.104.0
