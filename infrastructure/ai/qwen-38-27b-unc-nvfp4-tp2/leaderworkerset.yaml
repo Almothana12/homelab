@@ -41,7 +41,7 @@ spec:
             effect: NoSchedule
         containers:
           - name: vllm
-            image: vllm/vllm-openai:v0.30.0
+            image: vllm/vllm-openai:v0.31.0
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
@@ -219,7 +219,7 @@ spec:
             effect: NoSchedule
         containers:
           - name: vllm
-            image: vllm/vllm-openai:v0.30.0
+            image: vllm/vllm-openai:v0.31.0
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/vllm-bootstrap/bootstrap.py]
             args:
