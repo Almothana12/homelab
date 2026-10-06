@@ -35,6 +35,14 @@ spec:
               protocol: UDP
             - port: "21820"
               protocol: UDP
+    - toFQDNs:
+        - matchName: wg.almothana.sa
+      toPorts:
+        - ports:
+            - port: "51820"
+              protocol: UDP
+            - port: "21820"
+              protocol: UDP
     # To Pangolin clients (Olm) for direct peer-to-peer WireGuard.
     # Newt sends from its WireGuard listen port to each client's PUBLIC address
     # on an ephemeral port, so neither the destination IP nor the port is known
