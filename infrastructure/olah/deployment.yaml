@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: olah
-        image: xiahan2019/olah:0.5.2
+        image: xiahan2019/olah:0.5.3
         imagePullPolicy: IfNotPresent
         args:
         - --config
