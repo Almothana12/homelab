@@ -13,7 +13,7 @@ spec:
     fullnameOverride: "mlflow" # Avoid "mlflow-mlflow" names
     image:
       repository: ghcr.io/mlflow/mlflow
-      tag: v3.16.1-full
+      tag: v3.17.0-full
 
     server:
       value_options:
@@ -61,7 +61,7 @@ spec:
 
     extraInitContainers:
       - name: db-upgrade
-        image: ghcr.io/mlflow/mlflow:v3.16.1-full
+        image: ghcr.io/mlflow/mlflow:v3.17.0-full
         command: ["sh", "-c", 'exec mlflow db upgrade "$MLFLOW_BACKEND_STORE_URI"']
         env:
           - name: HOME
