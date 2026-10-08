@@ -47,3 +47,10 @@ spec:
               protocol: TCP
             - port: "8001"
               protocol: TCP
+    # To getbifrost.ai
+    - toFQDNs:
+        - matchName: getbifrost.ai
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
