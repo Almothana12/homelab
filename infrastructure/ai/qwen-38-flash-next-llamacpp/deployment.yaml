@@ -35,10 +35,10 @@ spec:
         - name: llama-server
           image: ghcr.io/ggml-org/llama.cpp:server-cuda13-b11515
           imagePullPolicy: IfNotPresent
-          env:
-            # Cache Hub downloads through Olah
-            - name: HF_ENDPOINT
-              value: http://olah.olah.svc.cluster.local
+          # env:
+          #   # Cache Hub downloads through Olah
+          #   - name: HF_ENDPOINT
+          #     value: http://olah.olah.svc.cluster.local
           args:
             - -hf
             - unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
