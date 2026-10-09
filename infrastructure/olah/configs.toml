@@ -14,8 +14,8 @@ hf-scheme = "https"
 hf-netloc = "huggingface.co"
 hf-lfs-netloc = "cdn-lfs.huggingface.co"
 mirror-scheme = "http"
-mirror-netloc = "0.0.0.0:8090"
-mirror-lfs-netloc = "0.0.0.0:8090"
+mirror-netloc = "olah.olah.svc.cluster.local"
+mirror-lfs-netloc = "olah.olah.svc.cluster.local"
 mirrors-path = ["/data/mirrors"]
 
 [accessibility]
