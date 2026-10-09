@@ -62,7 +62,13 @@ spec:
               protocol: TCP
             - port: "8100"
               protocol: TCP
-            - port: "8200"
+    # To llama.cpp
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ai
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
     # To Stalwart SMTP
     - toEndpoints:

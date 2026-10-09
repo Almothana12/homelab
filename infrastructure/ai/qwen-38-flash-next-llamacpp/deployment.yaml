@@ -38,9 +38,23 @@ spec:
           args:
             - -hf
             - unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+            - --host
+            - 0.0.0.0
+            - --alias
+            - unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+            - --ctx-size
+            - "131072"
+            - --parallel
+            - "1"
+            # GB10's integrated GPU makes auto keep the large PLE tables resident.
+            - --lazy-mode
+            - "on"
+            - --min-p
+            - "0.0"
+            - --metrics
           ports:
             - name: http
-              containerPort: 8200
+              containerPort: 8080
               protocol: TCP
           resources:
             requests:
@@ -57,8 +71,8 @@ spec:
               drop: [ALL]
           volumeMounts:
             - name: cache
-              mountPath: /data
-              readOnly: true
+              mountPath: /root/.cache/llama.cpp
+              readOnly: false
           readinessProbe:
             httpGet:
               path: /health

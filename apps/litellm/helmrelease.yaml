@@ -64,15 +64,15 @@ spec:
         - model_name: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
           litellm_params:
             model: hosted_vllm/unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
-            api_base: http://qwen38-flash-next-llamacpp.ai.svc.cluster.local:8200/v1
+            api_base: http://qwen38-flash-next-llamacpp.ai.svc.cluster.local:8080/v1
           model_info:
             max_input_tokens: 131072 # Keep in sync with --ctx-size
             max_output_tokens: 131072
       router_settings:
         model_group_alias:
-          default: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-          coder: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-          fast: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+          default: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+          coder: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+          fast: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
       litellm_settings:
         callbacks: ["smtp_email"]
       general_settings:
