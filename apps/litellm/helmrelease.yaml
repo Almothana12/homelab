@@ -61,6 +61,13 @@ spec:
           model_info:
             max_input_tokens: 131072 # Keep in sync with --max-model-len in
             max_output_tokens: 131072
+        - model_name: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+          litellm_params:
+            model: hosted_vllm/unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+            api_base: http://qwen38-flash-next-llamacpp.ai.svc.cluster.local:8200/v1
+          model_info:
+            max_input_tokens: 131072 # Keep in sync with --ctx-size
+            max_output_tokens: 131072
       router_settings:
         model_group_alias:
           default: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4

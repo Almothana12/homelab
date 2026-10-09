@@ -62,6 +62,8 @@ spec:
               protocol: TCP
             - port: "8100"
               protocol: TCP
+            - port: "8200"
+              protocol: TCP
     # To Stalwart SMTP
     - toEndpoints:
         - matchLabels:
