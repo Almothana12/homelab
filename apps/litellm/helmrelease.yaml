@@ -52,15 +52,15 @@ spec:
 
     proxy_config:
       model_list:
-        - model_name: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-          litellm_params:
-            model: hosted_vllm/ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
-            api_base: http://vllm-tp-api.ai.svc.cluster.local:8000/v1
-            input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
-            output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
-          model_info:
-            max_input_tokens: 131072 # Keep in sync with --max-model-len in
-            max_output_tokens: 131072
+        # - model_name: ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+        #   litellm_params:
+        #     model: hosted_vllm/ukisai/Swift-1.5-Qwen3.8-27b-NVFP4
+        #     api_base: http://vllm-tp-api.ai.svc.cluster.local:8000/v1
+        #     input_cost_per_token: 0.00000001    # $0.01 per 1M input tokens
+        #     output_cost_per_token: 0.00000015   # $0.15 per 1M output tokens
+        #   model_info:
+        #     max_input_tokens: 131072 # Keep in sync with --max-model-len in
+        #     max_output_tokens: 131072
         - model_name: unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
           litellm_params:
             model: hosted_vllm/unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
