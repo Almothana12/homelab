@@ -41,11 +41,15 @@ spec:
           #     value: http://olah.olah.svc.cluster.local
           args:
             - -hf
-            - unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+            - ukisai/Swift-1.5-Qwen3.8-Flash-Next-GGUF:IQ4_XS
+            - -hfd
+            - unsloth/Qwen3.8-Flash-Next-GGUF
+            - -md
+            - mtp-Qwen3.8-Flash-Next-Q8_0.gguf
             - --host
             - 0.0.0.0
             - --alias
-            - unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL
+            - ukisai/Swift-1.5-Qwen3.8-Flash-Next-GGUF:IQ4_XS
             - --ctx-size
             - "131072"
             # GB10's integrated GPU makes auto keep the large PLE tables resident.
