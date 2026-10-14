@@ -13,6 +13,12 @@
       ],
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      "description": "llama.cpp tags are <flavor>-<cuda>-b<build>. Docker versioning cannot parse 'server-cuda13-b11515' (skipReason=invalid-value, so no PRs ever), so parse the build number as the comparable part",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/ggml-org/llama.cpp"],
+      "versioning": "regex:^(?<compatibility>.*)b(?<major>\\d+)$"
     }
   ],
   "flux": {
