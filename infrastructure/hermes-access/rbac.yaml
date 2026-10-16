@@ -41,7 +41,27 @@ rules:
     resources: [events]
     verbs: [get, list, watch]
   - apiGroups: [storage.k8s.io]
-    resources: [storageclasses, csidrivers, csinodes, volumeattachments]
+    resources: [storageclasses, csidrivers, csinodes, volumeattachments, csistoragecapacities]
+    verbs: [get, list, watch]
+  - apiGroups: [volsync.backube]
+    resources: [replicationsources, replicationdestinations]
+    verbs: [get, list, watch]
+  - apiGroups: [postgresql.cnpg.io]
+    resources:
+      - clusters
+      - scheduledbackups
+      - backups
+      - poolers
+      - databases
+      - databaseroles
+      - imagecatalogs
+      - clusterimagecatalogs
+    verbs: [get, list, watch]
+  - apiGroups: [snapshot.storage.k8s.io]
+    resources: [volumesnapshotclasses]
+    verbs: [get, list, watch]
+  - apiGroups: [groupsnapshot.storage.k8s.io]
+    resources: [volumegroupsnapshotclasses]
     verbs: [get, list, watch]
   - apiGroups: [metrics.k8s.io]
     resources: [nodes, pods]
