@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-plex-config
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:se1qEfo+EZLsAl5vi86FYan30aPiKWm+XzcDreinlubhLtGe1XRkiKSdf2r7V7s=,iv:HZA28kOt6TMD1qRmbX4GKDZiJJdoip9u1zmXUi4qriY=,tag:UOHrpjNewIXHD6gh/ktuSA==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:KTLmRLXk2lF+iBdPEotKplLA,iv:z0wMy4uwWyycMeWjYBZmsNXy320ZzDaycyun/Sphj3U=,tag:T0dI8SqqjQHZ9J9tyngf9Q==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:f4g+120D,iv:opFUOkQwbvf8On69ssLWZ+xHTQ/0zCYEduHlhpceNp0=,tag:rH40g/zzlA6gqeCXkHQhPQ==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:H7iSHMW1xTTzM/MH,iv:8DuFR50eNusicTPUePJBRipfUcRDYW6J45WzyMkeYRI=,tag:7nXEdDfI7mjUkW/+eNWn9A==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHVTdBd1BoR3RHdm9xK1ZE
+            ZVBuYWtzT3lqSWtRd2VGWldxNzBQVXdJZWhVCi9RbE80SzVSV2hPbldjTkd2Q1B3
+            RTZrNkpLVmFGd1VEZ0lxM2NvN2ZtZHcKLS0tIDhoeXZLQU1nZC9uOTFwTEc3aXZj
+            S0pUOGhSUTNnanZkRFpRNWtsdzlIZlkK1m/brpWzmQTYpvmJMypHPMN1hyoc+KCJ
+            0UTyYX9lK2XVucggEmxMrvyzgIhE6Mgi1Is54jMxF1t54xHgfjUqXw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-16T13:14:21Z"
+    mac: ENC[AES256_GCM,data:PhOqGC6Y2jEIY3ORBFu6QBtVH5fO7byU2pPyz0FE7eoKIjFw0MIDBopE4avz4L0I2kDuT8VlFoIr6LyKtBZU3mJJ+Ssqk0R2ngOx+TvTPEooMYyIED1ZoRDhUxJKmb8WLyqYDynLJZTx4spPxcvEEjebO5U3nTGyDuIy4j5Usxk=,iv:9xkNwrlVnTGslOoYWtq3CiB0XN5IbF06ixTPHnMLUiA=,tag:I5wx1SxVXSACLh71sMybFw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: plex-config
+spec:
+    sourcePVC: pms-config-plex-plex-media-server-0
+    trigger:
+        schedule: 0 3 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-plex-config
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+        moverSecurityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHVTdBd1BoR3RHdm9xK1ZE
+            ZVBuYWtzT3lqSWtRd2VGWldxNzBQVXdJZWhVCi9RbE80SzVSV2hPbldjTkd2Q1B3
+            RTZrNkpLVmFGd1VEZ0lxM2NvN2ZtZHcKLS0tIDhoeXZLQU1nZC9uOTFwTEc3aXZj
+            S0pUOGhSUTNnanZkRFpRNWtsdzlIZlkK1m/brpWzmQTYpvmJMypHPMN1hyoc+KCJ
+            0UTyYX9lK2XVucggEmxMrvyzgIhE6Mgi1Is54jMxF1t54xHgfjUqXw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-16T13:14:21Z"
+    mac: ENC[AES256_GCM,data:PhOqGC6Y2jEIY3ORBFu6QBtVH5fO7byU2pPyz0FE7eoKIjFw0MIDBopE4avz4L0I2kDuT8VlFoIr6LyKtBZU3mJJ+Ssqk0R2ngOx+TvTPEooMYyIED1ZoRDhUxJKmb8WLyqYDynLJZTx4spPxcvEEjebO5U3nTGyDuIy4j5Usxk=,iv:9xkNwrlVnTGslOoYWtq3CiB0XN5IbF06ixTPHnMLUiA=,tag:I5wx1SxVXSACLh71sMybFw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1

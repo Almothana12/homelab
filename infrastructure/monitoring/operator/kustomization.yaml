@@ -7,3 +7,4 @@ resources:
   - secret-grafana-env.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - volsync.yaml

@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-lubelogger-data
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:kcMMDyZXXHN0bsf6gWJuBqe7H6X8chTMkIq0L3/+8sfxfnvI2UX3oDAgSO7VPqcZOVbZ,iv:C017J1ZO6W5pEqf1cKeyw2geZgFJpru5UNlwkqSsNKc=,tag:JQyEUtwD5OFYL8z2GNVNng==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:l0OdMs20ZoFBaYH/rC3MH0oP,iv:0h7ELorPGobCT1sPON++Rre9zG687UWQ736WO+YAkAg=,tag:nB1ImCZw+rmGCU0RglkkHA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:aBnF2qk7,iv:YjfDIGGMQ929aieOrfOsuYRoo3Rqfm6XuzyOuZqAUqA=,tag:LBgOmbFF/uaomFnVj3DQag==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:pCurDxi7Hw8R/eO4,iv:/OoxG+dfxuwXBDo/MHAPuJJuV8Oi9HDBaJEhYN8Wz+8=,tag:M+H5nkfAUdUS3Tz4CnV9mw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJR0RYWDVVdFNhWkFLU1dp
+            ajlDeWJYeXJNelA1QzM1bmZjOC9vdjJmTmdVCkE5SFBMQnI2ZGRPSFd3OHlpSmUx
+            Ti9vbjVzZkI0WXNqS0Uxa1BEQXNXSmcKLS0tIDl5R25FOXlWOXJibUY4aFg1TUZV
+            VGM2ZmRDb3A4aEQzN1RuekZteEVIaDAKTKvLJ+0Zod9l0WV3Q8qXUZu6BcKRTOw+
+            bmOXv0l3bZZtdAcfvQsOtrh1DPoHjkQ76B3e387M3YI1sJTNtYuxUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-16T13:14:42Z"
+    mac: ENC[AES256_GCM,data:REMopcqjyfb3/wy63TV/iwQlrWrCb44tzfwUaRmgAWVFGyQbH+L6jwKOYTbyLAermPRmu5meOcyOKzBLOmsvlSWIWbGy2HNoJz3F09GH60OtCqC3IrE2EeEN6GooUtpjwxMaVA+Z7DkEMy/pX26rfowjtKai2QIRskASqWwcAKc=,iv:M0vpsvWec02p5sw1HDnrMyPpFCyae9Srz/3PvzPzN5Q=,tag:y9aXF+Eyu9hJ8d+JQD4Zfw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: lubelogger-data
+spec:
+    sourcePVC: lubelogger-data-lubelogger-0
+    trigger:
+        schedule: 0 5 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-lubelogger-data
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJR0RYWDVVdFNhWkFLU1dp
+            ajlDeWJYeXJNelA1QzM1bmZjOC9vdjJmTmdVCkE5SFBMQnI2ZGRPSFd3OHlpSmUx
+            Ti9vbjVzZkI0WXNqS0Uxa1BEQXNXSmcKLS0tIDl5R25FOXlWOXJibUY4aFg1TUZV
+            VGM2ZmRDb3A4aEQzN1RuekZteEVIaDAKTKvLJ+0Zod9l0WV3Q8qXUZu6BcKRTOw+
+            bmOXv0l3bZZtdAcfvQsOtrh1DPoHjkQ76B3e387M3YI1sJTNtYuxUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-16T13:14:42Z"
+    mac: ENC[AES256_GCM,data:REMopcqjyfb3/wy63TV/iwQlrWrCb44tzfwUaRmgAWVFGyQbH+L6jwKOYTbyLAermPRmu5meOcyOKzBLOmsvlSWIWbGy2HNoJz3F09GH60OtCqC3IrE2EeEN6GooUtpjwxMaVA+Z7DkEMy/pX26rfowjtKai2QIRskASqWwcAKc=,iv:M0vpsvWec02p5sw1HDnrMyPpFCyae9Srz/3PvzPzN5Q=,tag:y9aXF+Eyu9hJ8d+JQD4Zfw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1

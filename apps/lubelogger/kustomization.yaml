@@ -6,6 +6,7 @@ resources:
   - secret-helm-values.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - volsync.yaml
 
 configMapGenerator:
   - name: helm-values

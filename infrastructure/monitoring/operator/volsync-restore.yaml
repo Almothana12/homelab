@@ -1,0 +1,18 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+    name: grafana
+spec:
+    trigger:
+        manual: restore-once
+    restic:
+        repository: restic-config-grafana
+        destinationPVC: storage-kube-prometheus-stack-grafana-0
+        copyMethod: Direct
+        cleanupCachePVC: true
+        cleanupTempPVC: true
+        moverSecurityContext:
+            runAsUser: 472
+            runAsGroup: 472
+            fsGroup: 472
+            fsGroupChangePolicy: OnRootMismatch

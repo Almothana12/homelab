@@ -8,3 +8,4 @@ resources:
   - helmrelease.yaml
   - networkpolicy-open-webui.yaml
   - ../../infrastructure/cnpg/networkpolicy
+  - volsync.yaml

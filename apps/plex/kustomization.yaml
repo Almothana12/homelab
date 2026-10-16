@@ -7,3 +7,4 @@ resources:
   - PVC-plex-library.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - volsync.yaml

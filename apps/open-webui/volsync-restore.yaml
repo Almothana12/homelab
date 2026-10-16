@@ -1,0 +1,18 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+    name: open-webui
+spec:
+    trigger:
+        manual: restore-once
+    restic:
+        repository: restic-config-open-webui
+        destinationPVC: open-webui
+        copyMethod: Direct
+        cleanupCachePVC: true
+        cleanupTempPVC: true
+        moverSecurityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
