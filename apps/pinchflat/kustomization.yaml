@@ -5,3 +5,4 @@ resources:
   - deployment-pinchflat.yaml
   - service-pinchflat.yaml
   - ingress-pinchflat.yaml
+  - volsync.yaml

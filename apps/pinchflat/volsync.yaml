@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-pinchflat
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:87N/nayYx9XGrydaqGwmZK/GXn7xr3/bBYfqN9s8l5iZgatxb5/fBkkRPUsS,iv:GzJNpTQ35fjLb4YpWURyyTdS6yKS2cpkgSm6u8A2YUc=,tag:KwOmidYiNMoypWeXKe8UBQ==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:V3LvqMUgO4TLlw4Ti7rWZUwJ,iv:X+c9KYfeIEg80W6lk45/CzxyQqA9zY2Nt5TSsRU/IBY=,tag:FR+niB0c/2TlZQWBHgDAZw==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:T1DBTuC/,iv:dg1Lw5xj6PviUMAcoO7sdUKeT76aGfv5zn4624o4ydk=,tag:61EKSVagPRO/i4V0XyoLxw==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:YfB2VNpuhQO+BPOK,iv:PyR+ndazUXSy1GTCMDq0/rYMxJPlYBn3AptzsIQ4i0U=,tag:FH1VMh/VC35O6k9G35mDyA==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNdjluS1FxeWVONGhzZFdL
+            MXcyYmJVbGkxc3VkWjdoSy9QQVdCUWRDSGd3CktnVDlUQ3hrR3JqTHRGNEducEEr
+            VHJQYkpHQ3hNeCtSZjdwdmpRcExCaTQKLS0tIEVYU2YyQ1FoZm1FUlUrdE1ZN3RB
+            WE5mekkwNXdUWVJ5SXRhRnAzNEtrQ28KEvLpzV9kfqZgBJO7AT5E2t/V4pKG5VRz
+            s7HtYYIVRhlW8pm+xdt0Bt+7W1X12tm90R3DRnNpqeYQvR2nuMRKFQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:35:41Z"
+    mac: ENC[AES256_GCM,data:vpkXeq/vuVg8MERols+CYh+n0ds7hBRqKUgNWvtIxH8oMFdH0hoOdU6UCpC6nrI603y6tHKuexyRhFFnyl2GpIA/Z8i/GK51bibdIhSLRNwl+hJU+FQed1DJ236i7q2Uvp5rxTzL0EueDQcIDXsNX98LLCvBwFXg4fnVCi5kuPE=,iv:Lxpa6OC/k+4H6X/55MjDybIP2OeVQ/OMEATGZriP3qA=,tag:VPCYemPWNHS5XL5oefpm3A==,type:str]
+    version: 3.13.3
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: pinchflat
+spec:
+    sourcePVC: pinchflat
+    trigger:
+        schedule: 0 21 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-pinchflat
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNdjluS1FxeWVONGhzZFdL
+            MXcyYmJVbGkxc3VkWjdoSy9QQVdCUWRDSGd3CktnVDlUQ3hrR3JqTHRGNEducEEr
+            VHJQYkpHQ3hNeCtSZjdwdmpRcExCaTQKLS0tIEVYU2YyQ1FoZm1FUlUrdE1ZN3RB
+            WE5mekkwNXdUWVJ5SXRhRnAzNEtrQ28KEvLpzV9kfqZgBJO7AT5E2t/V4pKG5VRz
+            s7HtYYIVRhlW8pm+xdt0Bt+7W1X12tm90R3DRnNpqeYQvR2nuMRKFQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:35:41Z"
+    mac: ENC[AES256_GCM,data:vpkXeq/vuVg8MERols+CYh+n0ds7hBRqKUgNWvtIxH8oMFdH0hoOdU6UCpC6nrI603y6tHKuexyRhFFnyl2GpIA/Z8i/GK51bibdIhSLRNwl+hJU+FQed1DJ236i7q2Uvp5rxTzL0EueDQcIDXsNX98LLCvBwFXg4fnVCi5kuPE=,iv:Lxpa6OC/k+4H6X/55MjDybIP2OeVQ/OMEATGZriP3qA=,tag:VPCYemPWNHS5XL5oefpm3A==,type:str]
+    version: 3.13.3

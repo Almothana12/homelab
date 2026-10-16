@@ -8,3 +8,4 @@ resources:
   - deployment-freshrss.yaml
   - service-freshrss.yaml
   - ingress-freshrss.yaml
+  - volsync.yaml

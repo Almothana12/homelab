@@ -6,3 +6,4 @@ resources:
   - deployment-audiobookshelf.yaml
   - service-audiobookshelf.yaml
   - ingress-audiobookshelf.yaml
+  - volsync.yaml

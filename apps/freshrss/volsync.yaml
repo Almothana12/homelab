@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-freshrss
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:anvljjMO/YCLz2ie7B/aoEZ/acRLad/5Hb+XSnQJOmSfbV42MNSu1KlDowE=,iv:6Xgksdn95WlyYD5BvD6N0LzvxWVrxz8JWImcKFKy2iI=,tag:S51/8zg/3i4H8kaYhpQfFQ==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:H+aXiiAl6maqkOE/1B2qqAbB,iv:5b4yQdQxq7js4APtSsQlZ4cBL2FnDUF/ob9XH0cTZLc=,tag:+SGG9IcRqvaA/WbG6AOv6Q==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:k1pAnBD+,iv:5FcVW0FGYz1T1esA9W/oKS08nKxFMJa8G8GfRfMstDY=,tag:l+oj5pxOS9WIdvHOW7fJig==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:JPdoNHLL8EzmM1nH,iv:jCMZHfgIPMkTAXRiXG+IiuIs7MyMFw+eDPigFTTIOvI=,tag:ZefJ4duY6815/azGwambKw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTQkMwS3lod0t2Y2x0cDNv
+            dmh1L3hza091aDFSaUZGTXVaQ3pvd1dkZlEwCjBPeHl5d2hwdC9YcTdWU2RYTXFE
+            dkozcnphMEZLVldBdTA1b2RDVHZxZ0EKLS0tIEFHa2psS2l6Nk1FOGQxelY3c0t2
+            NG52MjZvYUxTVHgxQ0NucC8wUEwyWTAKPm43egvWrOBdD8BsEuWkRliqZkyHtlgJ
+            P/ILLevjSulVwK/gHJZzUfb7wbU4llP+6Kua/vLd8xucjlwQfLGixg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:35:20Z"
+    mac: ENC[AES256_GCM,data:ETOlZUfPziKPF6b5L8I+gvbc4hsiRkK6HQITG/5H028ulOGZvvqGs0Xgd5XySWYwwUNc6/DtyXNKcRB+U96Yf1CZI3OymEl7Zkg/54nyXNreaELegMRWJz59TDnGI6m33mo+0qN7cqOTmOavVGrvB+43O7I/vZmuQUuB9a1qCYs=,iv:KLXQ+jqz6bg9IG+8bADkORkgma1p4P0fPcfiY62lNYc=,tag:0mhKi5KEm24aTEhVQ4HkIg==,type:str]
+    version: 3.13.3
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: freshrss
+spec:
+    sourcePVC: freshrss
+    trigger:
+        schedule: 0 21 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-freshrss
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTQkMwS3lod0t2Y2x0cDNv
+            dmh1L3hza091aDFSaUZGTXVaQ3pvd1dkZlEwCjBPeHl5d2hwdC9YcTdWU2RYTXFE
+            dkozcnphMEZLVldBdTA1b2RDVHZxZ0EKLS0tIEFHa2psS2l6Nk1FOGQxelY3c0t2
+            NG52MjZvYUxTVHgxQ0NucC8wUEwyWTAKPm43egvWrOBdD8BsEuWkRliqZkyHtlgJ
+            P/ILLevjSulVwK/gHJZzUfb7wbU4llP+6Kua/vLd8xucjlwQfLGixg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:35:20Z"
+    mac: ENC[AES256_GCM,data:ETOlZUfPziKPF6b5L8I+gvbc4hsiRkK6HQITG/5H028ulOGZvvqGs0Xgd5XySWYwwUNc6/DtyXNKcRB+U96Yf1CZI3OymEl7Zkg/54nyXNreaELegMRWJz59TDnGI6m33mo+0qN7cqOTmOavVGrvB+43O7I/vZmuQUuB9a1qCYs=,iv:KLXQ+jqz6bg9IG+8bADkORkgma1p4P0fPcfiY62lNYc=,tag:0mhKi5KEm24aTEhVQ4HkIg==,type:str]
+    version: 3.13.3

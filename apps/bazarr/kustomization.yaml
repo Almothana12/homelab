@@ -5,3 +5,4 @@ resources:
   - PVC-bazarr.yaml
   - deployment-bazarr.yaml
   - service-bazarr.yaml
+  - volsync.yaml

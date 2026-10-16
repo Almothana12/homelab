@@ -5,3 +5,4 @@ resources:
   - PVC-lidarr.yaml
   - deployment-lidarr.yaml
   - service-lidarr.yaml
+  - volsync.yaml

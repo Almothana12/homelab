@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-audiobookshelf-config
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:RlqUjqKr1HGKwXAje+WVQ9EJe45gYPC7YCgKJKlVAC5Z0qW630zjTc5f86jKYOeaM8h5TiMksAhj,iv:ji3MoS9SlCpEM0+WSu5H1/L3U7dxQeQhfnsyowEj5J8=,tag:0mbP8fv0dNxb7FtOiX6QKw==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:3NHjPDmE/v725Qehb1n5/i6Y,iv:X4lVV23JXLXHaURFgXgjotv9z6aAnUsz968pttUfYPg=,tag:n1/jSVDN5rjCeBEdZbYQGA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:kaFqkBAa,iv:6Xe2b7kYEPqeXvNFRjfK8Tlq2rFtWQJhy7n2ZqTslh4=,tag:HOsDRfUZ4Mjm9aRbCLSGTw==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:Ai9ubZzibT2FyLda,iv:FLdN3e/gF4vgQtcp9kWbLfObYYh3SpcgDdQZ883UiTQ=,tag:TErGRuCXnnnTLDVgG6SmjQ==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3M3IyM2hwRmpvSSt0Z0tB
+            RjMxLzRvU0YrUzFjMndYZFZER0tpUlhodVVBCnFoSUE3UlpRc3JuZWt0cW1GSnpa
+            TEp3MkZzRDV5WGQ1OVRjbjhIT0owMG8KLS0tIGxEMmNrMmY1SXlNMDNjYUlPWTQ3
+            dU5mN21EKzlYbzJxdmxXMGhWcHV4L00KFEB1kMbzlgIUjxCBNu+UmrbUV5yO9lGx
+            vf6JzYeaxlQalii9FH1mAZhkh9fFnA0XeDdIouUVPntzXicmj44zVQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:34:58Z"
+    mac: ENC[AES256_GCM,data:q8+yXwF1Xet0xF7SNWV8adJRdl7bgHF5dhBiLM40YQkXzdPWJYjQ3XtsDySDxzO+8qZUZzbLrNMMH6XnLEWkAguFP1vnG8MtzgyVFn2cuM4kxWpflGs0WrcQoOFJe43UARJbfhTgTQMGYUE85MKuKshxOBalk0W6XvcoHaPpRjQ=,iv:/cVyrrGZpX/JPjFM4oPuxwtTfVbobT97dimwR69IkUc=,tag:cys/UU0pN7/yjhBhTquCog==,type:str]
+    version: 3.13.3
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: audiobookshelf-config
+spec:
+    sourcePVC: audiobookshelf-config
+    trigger:
+        schedule: 0 22 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-audiobookshelf-config
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3M3IyM2hwRmpvSSt0Z0tB
+            RjMxLzRvU0YrUzFjMndYZFZER0tpUlhodVVBCnFoSUE3UlpRc3JuZWt0cW1GSnpa
+            TEp3MkZzRDV5WGQ1OVRjbjhIT0owMG8KLS0tIGxEMmNrMmY1SXlNMDNjYUlPWTQ3
+            dU5mN21EKzlYbzJxdmxXMGhWcHV4L00KFEB1kMbzlgIUjxCBNu+UmrbUV5yO9lGx
+            vf6JzYeaxlQalii9FH1mAZhkh9fFnA0XeDdIouUVPntzXicmj44zVQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:34:58Z"
+    mac: ENC[AES256_GCM,data:q8+yXwF1Xet0xF7SNWV8adJRdl7bgHF5dhBiLM40YQkXzdPWJYjQ3XtsDySDxzO+8qZUZzbLrNMMH6XnLEWkAguFP1vnG8MtzgyVFn2cuM4kxWpflGs0WrcQoOFJe43UARJbfhTgTQMGYUE85MKuKshxOBalk0W6XvcoHaPpRjQ=,iv:/cVyrrGZpX/JPjFM4oPuxwtTfVbobT97dimwR69IkUc=,tag:cys/UU0pN7/yjhBhTquCog==,type:str]
+    version: 3.13.3
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-audiobookshelf-metadata
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:TCDiQ2U/E3bx51Jt5dHPtG49/Ecsecqklk9TezUJXluYRHLWFCiFMcI8o6QR91mtupDEQAxZz4h7wHc=,iv:1gp1X42rbRzZMN2F0B50exrRFa4bgl2ijr7PLHN+uz8=,tag:cwuha97fazJSt8HmcQ7g3g==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:3NHjPDmE/v725Qehb1n5/i6Y,iv:X4lVV23JXLXHaURFgXgjotv9z6aAnUsz968pttUfYPg=,tag:n1/jSVDN5rjCeBEdZbYQGA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:kaFqkBAa,iv:6Xe2b7kYEPqeXvNFRjfK8Tlq2rFtWQJhy7n2ZqTslh4=,tag:HOsDRfUZ4Mjm9aRbCLSGTw==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:Ai9ubZzibT2FyLda,iv:FLdN3e/gF4vgQtcp9kWbLfObYYh3SpcgDdQZ883UiTQ=,tag:TErGRuCXnnnTLDVgG6SmjQ==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3M3IyM2hwRmpvSSt0Z0tB
+            RjMxLzRvU0YrUzFjMndYZFZER0tpUlhodVVBCnFoSUE3UlpRc3JuZWt0cW1GSnpa
+            TEp3MkZzRDV5WGQ1OVRjbjhIT0owMG8KLS0tIGxEMmNrMmY1SXlNMDNjYUlPWTQ3
+            dU5mN21EKzlYbzJxdmxXMGhWcHV4L00KFEB1kMbzlgIUjxCBNu+UmrbUV5yO9lGx
+            vf6JzYeaxlQalii9FH1mAZhkh9fFnA0XeDdIouUVPntzXicmj44zVQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:34:58Z"
+    mac: ENC[AES256_GCM,data:q8+yXwF1Xet0xF7SNWV8adJRdl7bgHF5dhBiLM40YQkXzdPWJYjQ3XtsDySDxzO+8qZUZzbLrNMMH6XnLEWkAguFP1vnG8MtzgyVFn2cuM4kxWpflGs0WrcQoOFJe43UARJbfhTgTQMGYUE85MKuKshxOBalk0W6XvcoHaPpRjQ=,iv:/cVyrrGZpX/JPjFM4oPuxwtTfVbobT97dimwR69IkUc=,tag:cys/UU0pN7/yjhBhTquCog==,type:str]
+    version: 3.13.3
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+    name: audiobookshelf-metadata
+spec:
+    sourcePVC: audiobookshelf-metadata
+    trigger:
+        schedule: 0 22 * * *
+    restic:
+        pruneIntervalDays: 7
+        repository: restic-config-audiobookshelf-metadata
+        retain:
+            hourly: 1
+            daily: 7
+            weekly: 4
+            monthly: 2
+            yearly: 1
+        copyMethod: Direct
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3M3IyM2hwRmpvSSt0Z0tB
+            RjMxLzRvU0YrUzFjMndYZFZER0tpUlhodVVBCnFoSUE3UlpRc3JuZWt0cW1GSnpa
+            TEp3MkZzRDV5WGQ1OVRjbjhIT0owMG8KLS0tIGxEMmNrMmY1SXlNMDNjYUlPWTQ3
+            dU5mN21EKzlYbzJxdmxXMGhWcHV4L00KFEB1kMbzlgIUjxCBNu+UmrbUV5yO9lGx
+            vf6JzYeaxlQalii9FH1mAZhkh9fFnA0XeDdIouUVPntzXicmj44zVQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    lastmodified: "2026-10-16T07:34:58Z"
+    mac: ENC[AES256_GCM,data:q8+yXwF1Xet0xF7SNWV8adJRdl7bgHF5dhBiLM40YQkXzdPWJYjQ3XtsDySDxzO+8qZUZzbLrNMMH6XnLEWkAguFP1vnG8MtzgyVFn2cuM4kxWpflGs0WrcQoOFJe43UARJbfhTgTQMGYUE85MKuKshxOBalk0W6XvcoHaPpRjQ=,iv:/cVyrrGZpX/JPjFM4oPuxwtTfVbobT97dimwR69IkUc=,tag:cys/UU0pN7/yjhBhTquCog==,type:str]
+    version: 3.13.3
