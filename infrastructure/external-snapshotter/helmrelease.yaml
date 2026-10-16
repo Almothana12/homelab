@@ -13,3 +13,9 @@ spec:
         name: external-snapshotter
         namespace: external-snapshotter
       interval: 24h
+  values:
+    controller:
+      args:
+        # Node-local CSI drivers (Rawfile LocalPV) take snapshots on the node that owns the
+        # volume, so the controller has to route them per node.
+        enableDistributedSnapshotting: true
