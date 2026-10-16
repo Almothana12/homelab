@@ -1370,6 +1370,10 @@ metadata:
   name: audiobookshelf
   namespace: flux-system
 spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   force: false
   interval: 5m0s
   path: ./apps/audiobookshelf
@@ -1406,6 +1410,10 @@ metadata:
   name: pinchflat
   namespace: flux-system
 spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   force: false
   interval: 5m0s
   path: ./apps/pinchflat
