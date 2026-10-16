@@ -16,3 +16,22 @@ spec:
             runAsGroup: 472
             fsGroup: 472
             fsGroupChangePolicy: OnRootMismatch
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: restic-config-alertmanager
+    destinationPVC: alertmanager-kube-prometheus-stack-alertmanager-db-alertmanager-kube-prometheus-stack-alertmanager-0
+    copyMethod: Direct
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 2000
+      fsGroup: 2000
