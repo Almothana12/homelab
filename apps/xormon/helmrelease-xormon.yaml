@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: xormon-cluster-v00
+  name: xormon-cluster-v01
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -18,7 +18,18 @@ spec:
       interval: 5m
   values:
     type: timescaledb
-    mode: standalone
+    mode: recovery
+    recovery:
+      method: object_store
+      clusterName: xormon-cluster-v00
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "xormon-backup"
+        path: "/v2"
     version:
       postgresql: "16"
       timescaledb: "2.26"
@@ -40,7 +51,7 @@ spec:
         requests:
           memory: 270Mi
       storage:
-        size: 5Gi
+        size: 15Gi
       # pg_hba:
       #   - host all xormon 10.244.0.0/16 md5
       monitoring:

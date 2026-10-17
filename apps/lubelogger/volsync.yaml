@@ -4,10 +4,10 @@ metadata:
     name: restic-config-lubelogger-data
 type: Opaque
 stringData:
-    RESTIC_REPOSITORY: ENC[AES256_GCM,data:kcMMDyZXXHN0bsf6gWJuBqe7H6X8chTMkIq0L3/+8sfxfnvI2UX3oDAgSO7VPqcZOVbZ,iv:C017J1ZO6W5pEqf1cKeyw2geZgFJpru5UNlwkqSsNKc=,tag:JQyEUtwD5OFYL8z2GNVNng==,type:str]
-    RESTIC_PASSWORD: ENC[AES256_GCM,data:l0OdMs20ZoFBaYH/rC3MH0oP,iv:0h7ELorPGobCT1sPON++Rre9zG687UWQ736WO+YAkAg=,tag:nB1ImCZw+rmGCU0RglkkHA==,type:str]
-    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:aBnF2qk7,iv:YjfDIGGMQ929aieOrfOsuYRoo3Rqfm6XuzyOuZqAUqA=,tag:LBgOmbFF/uaomFnVj3DQag==,type:str]
-    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:pCurDxi7Hw8R/eO4,iv:/OoxG+dfxuwXBDo/MHAPuJJuV8Oi9HDBaJEhYN8Wz+8=,tag:M+H5nkfAUdUS3Tz4CnV9mw==,type:str]
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:ud+hRc9BanYftctJVZC+jrq8DUiEcB5aJKIN2QkZdbMRG8eHDdRNe5vN1TCQBQWLBw9C,iv:MiQ9RG+VBdBS/nCjIeywgSF1kJ3f0lOozB5Pk7GS0wM=,tag:nY2gXluKOPNjqSulOYSx/g==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:xO3F5oKW3U0l+d0uY0Dar5Bn,iv:w9XuJKbCMqBz3+HL6PoFwmFMtWoUjjMQoPwi80hK87c=,tag:vbpAThkcHTG9aINmdu/U4Q==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:YLTjcIM4,iv:zLFK7U/16Gonz3cSKRvPWhh8sRIv4bISsEXGkXTlGBE=,tag:StfxllBNLe8Xdu6zs24GRA==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:un+yMmpHg02fwQXC,iv:6j4z71n3nxj02pLGd18POtuhJFMwo6Cv3cwjT8wL4gw=,tag:o72tW9tPIsnQ1qZCZSYANQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -17,14 +17,14 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJR0RYWDVVdFNhWkFLU1dp
-            ajlDeWJYeXJNelA1QzM1bmZjOC9vdjJmTmdVCkE5SFBMQnI2ZGRPSFd3OHlpSmUx
-            Ti9vbjVzZkI0WXNqS0Uxa1BEQXNXSmcKLS0tIDl5R25FOXlWOXJibUY4aFg1TUZV
-            VGM2ZmRDb3A4aEQzN1RuekZteEVIaDAKTKvLJ+0Zod9l0WV3Q8qXUZu6BcKRTOw+
-            bmOXv0l3bZZtdAcfvQsOtrh1DPoHjkQ76B3e387M3YI1sJTNtYuxUw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvRlRod0Q2dkR6WGxsRUNu
+            RGpYOW9HSGZ1aXRlUjRlWjVUc3RUYVR6ZTFZCkMzTTlYeXl1a0xKa3hmaXJtaHN6
+            bkR0QlpicVBCdDFxZXowQWxoVDJuWEkKLS0tIEpCbUJXbE05YllnTnh2V3lRb2xN
+            QVJnVytJL1J1amlUU05UcnhlTXRCNU0K9QTi5thcwexs7s/wLDaRrpKdTHm+x4FF
+            IJfWQisdpEmgcdwapufVRif6XP6mSzl5g33xYkZfailuoqUNF9+vZQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-16T13:14:42Z"
-    mac: ENC[AES256_GCM,data:REMopcqjyfb3/wy63TV/iwQlrWrCb44tzfwUaRmgAWVFGyQbH+L6jwKOYTbyLAermPRmu5meOcyOKzBLOmsvlSWIWbGy2HNoJz3F09GH60OtCqC3IrE2EeEN6GooUtpjwxMaVA+Z7DkEMy/pX26rfowjtKai2QIRskASqWwcAKc=,iv:M0vpsvWec02p5sw1HDnrMyPpFCyae9Srz/3PvzPzN5Q=,tag:y9aXF+Eyu9hJ8d+JQD4Zfw==,type:str]
+    lastmodified: "2026-10-17T04:48:24Z"
+    mac: ENC[AES256_GCM,data:v7EeG83WbzfLHCTjRy23mmyUQGHoDXRB9QGkVOtJbeuSnKVqoyxODOXcwr706PfOWjxC0hHsdf4k95welzJVQyz6DurNLROch/zH8umfXUF7fBHQzwtTIFexDYDPpwHV/HWNzj/ipX5m+SXZtWQavlvbQ9Djkh+Xfk3jO5VbaAs=,iv:9BsZRCd9Wb8AsZqIY/k7AtxC8ubNamZwajSsLAbotps=,tag:lM6hF0jyogCZjjl/p5SuAw==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1
@@ -46,7 +46,8 @@ spec:
             weekly: 4
             monthly: 2
             yearly: 1
-        copyMethod: Direct
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
 sops:
     kms: []
     gcp_kms: []
@@ -56,14 +57,101 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJR0RYWDVVdFNhWkFLU1dp
-            ajlDeWJYeXJNelA1QzM1bmZjOC9vdjJmTmdVCkE5SFBMQnI2ZGRPSFd3OHlpSmUx
-            Ti9vbjVzZkI0WXNqS0Uxa1BEQXNXSmcKLS0tIDl5R25FOXlWOXJibUY4aFg1TUZV
-            VGM2ZmRDb3A4aEQzN1RuekZteEVIaDAKTKvLJ+0Zod9l0WV3Q8qXUZu6BcKRTOw+
-            bmOXv0l3bZZtdAcfvQsOtrh1DPoHjkQ76B3e387M3YI1sJTNtYuxUw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvRlRod0Q2dkR6WGxsRUNu
+            RGpYOW9HSGZ1aXRlUjRlWjVUc3RUYVR6ZTFZCkMzTTlYeXl1a0xKa3hmaXJtaHN6
+            bkR0QlpicVBCdDFxZXowQWxoVDJuWEkKLS0tIEpCbUJXbE05YllnTnh2V3lRb2xN
+            QVJnVytJL1J1amlUU05UcnhlTXRCNU0K9QTi5thcwexs7s/wLDaRrpKdTHm+x4FF
+            IJfWQisdpEmgcdwapufVRif6XP6mSzl5g33xYkZfailuoqUNF9+vZQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-16T13:14:42Z"
-    mac: ENC[AES256_GCM,data:REMopcqjyfb3/wy63TV/iwQlrWrCb44tzfwUaRmgAWVFGyQbH+L6jwKOYTbyLAermPRmu5meOcyOKzBLOmsvlSWIWbGy2HNoJz3F09GH60OtCqC3IrE2EeEN6GooUtpjwxMaVA+Z7DkEMy/pX26rfowjtKai2QIRskASqWwcAKc=,iv:M0vpsvWec02p5sw1HDnrMyPpFCyae9Srz/3PvzPzN5Q=,tag:y9aXF+Eyu9hJ8d+JQD4Zfw==,type:str]
+    lastmodified: "2026-10-17T04:48:24Z"
+    mac: ENC[AES256_GCM,data:v7EeG83WbzfLHCTjRy23mmyUQGHoDXRB9QGkVOtJbeuSnKVqoyxODOXcwr706PfOWjxC0hHsdf4k95welzJVQyz6DurNLROch/zH8umfXUF7fBHQzwtTIFexDYDPpwHV/HWNzj/ipX5m+SXZtWQavlvbQ9Djkh+Xfk3jO5VbaAs=,iv:9BsZRCd9Wb8AsZqIY/k7AtxC8ubNamZwajSsLAbotps=,tag:lM6hF0jyogCZjjl/p5SuAw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: lubelogger-data-lubelogger-0
+    namespace: lubelogger
+    annotations:
+        # The StatefulSet adopts this PVC. Never let Flux delete it.
+        kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 3Gi
+    dataSourceRef:
+        apiGroup: volsync.backube
+        kind: ReplicationDestination
+        name: lubelogger-data
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvRlRod0Q2dkR6WGxsRUNu
+            RGpYOW9HSGZ1aXRlUjRlWjVUc3RUYVR6ZTFZCkMzTTlYeXl1a0xKa3hmaXJtaHN6
+            bkR0QlpicVBCdDFxZXowQWxoVDJuWEkKLS0tIEpCbUJXbE05YllnTnh2V3lRb2xN
+            QVJnVytJL1J1amlUU05UcnhlTXRCNU0K9QTi5thcwexs7s/wLDaRrpKdTHm+x4FF
+            IJfWQisdpEmgcdwapufVRif6XP6mSzl5g33xYkZfailuoqUNF9+vZQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-17T04:48:24Z"
+    mac: ENC[AES256_GCM,data:v7EeG83WbzfLHCTjRy23mmyUQGHoDXRB9QGkVOtJbeuSnKVqoyxODOXcwr706PfOWjxC0hHsdf4k95welzJVQyz6DurNLROch/zH8umfXUF7fBHQzwtTIFexDYDPpwHV/HWNzj/ipX5m+SXZtWQavlvbQ9Djkh+Xfk3jO5VbaAs=,iv:9BsZRCd9Wb8AsZqIY/k7AtxC8ubNamZwajSsLAbotps=,tag:lM6hF0jyogCZjjl/p5SuAw==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+    name: lubelogger-data
+    namespace: lubelogger
+    labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+    trigger:
+        manual: restore-once
+    restic:
+        repository: restic-config-lubelogger-data
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
+        storageClassName: rawfile-localpv
+        accessModes:
+            - ReadWriteOnce
+        capacity: 3Gi
+        cleanupCachePVC: true
+        cleanupTempPVC: true
+        moverSecurityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvRlRod0Q2dkR6WGxsRUNu
+            RGpYOW9HSGZ1aXRlUjRlWjVUc3RUYVR6ZTFZCkMzTTlYeXl1a0xKa3hmaXJtaHN6
+            bkR0QlpicVBCdDFxZXowQWxoVDJuWEkKLS0tIEpCbUJXbE05YllnTnh2V3lRb2xN
+            QVJnVytJL1J1amlUU05UcnhlTXRCNU0K9QTi5thcwexs7s/wLDaRrpKdTHm+x4FF
+            IJfWQisdpEmgcdwapufVRif6XP6mSzl5g33xYkZfailuoqUNF9+vZQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-17T04:48:24Z"
+    mac: ENC[AES256_GCM,data:v7EeG83WbzfLHCTjRy23mmyUQGHoDXRB9QGkVOtJbeuSnKVqoyxODOXcwr706PfOWjxC0hHsdf4k95welzJVQyz6DurNLROch/zH8umfXUF7fBHQzwtTIFexDYDPpwHV/HWNzj/ipX5m+SXZtWQavlvbQ9Djkh+Xfk3jO5VbaAs=,iv:9BsZRCd9Wb8AsZqIY/k7AtxC8ubNamZwajSsLAbotps=,tag:lM6hF0jyogCZjjl/p5SuAw==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1

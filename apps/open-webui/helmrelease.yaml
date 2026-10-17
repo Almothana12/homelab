@@ -4,7 +4,7 @@ metadata:
   name: open-webui
 spec:
   dependsOn:
-    - name: open-webui-cluster-v00
+    - name: open-webui-cluster-v01
   interval: 5m
   chart:
     spec:
@@ -70,12 +70,12 @@ spec:
       - name: CNPG_APP_USER
         valueFrom:
           secretKeyRef:
-            name: open-webui-cluster-v00-app
+            name: open-webui-cluster-v01-app
             key: username
       - name: CNPG_APP_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: open-webui-cluster-v00-app
+            name: open-webui-cluster-v01-app
             key: password
       - name: DATABASE_URL
         value: postgresql://$(CNPG_APP_USER):$(CNPG_APP_PASSWORD)@open-webui-cluster-rw:5432/app
@@ -115,3 +115,18 @@ spec:
         memory: 1Gi
       limits:
         memory: 4Gi
+  # VolSync volume populator (restore in volsync.yaml): the PVC stays Pending until its restore
+  # finished, so neither the app nor its backup runs on an empty volume.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: PersistentVolumeClaim
+              name: open-webui
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: open-webui

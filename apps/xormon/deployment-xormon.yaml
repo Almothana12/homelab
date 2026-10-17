@@ -37,27 +37,27 @@ spec:
             - name: DB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: xormon-cluster-v00-app
+                  name: xormon-cluster-v01-app
                   key: dbname
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: xormon-cluster-v00-app
+                  name: xormon-cluster-v01-app
                   key: password
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: xormon-cluster-v00-app
+                  name: xormon-cluster-v01-app
                   key: user
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: xormon-cluster-v00-app
+                  name: xormon-cluster-v01-app
                   key: host
             - name: DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: xormon-cluster-v00-app
+                  name: xormon-cluster-v01-app
                   key: port
             - name: TZ
               value: Asia/Riyadh

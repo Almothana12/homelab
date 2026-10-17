@@ -135,7 +135,7 @@ spec:
     extraVolumes:
       - name: db-password
         secret:
-          secretName: stalwart-cluster-v00-app
+          secretName: stalwart-cluster-v01-app
           defaultMode: 0400
       - name: bind-password
         secret:

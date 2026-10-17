@@ -35,17 +35,17 @@ spec:
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: invidious-cluster-v00-app
+                  name: invidious-cluster-v01-app
                   key: dbname
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: invidious-cluster-v00-app
+                  name: invidious-cluster-v01-app
                   key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: invidious-cluster-v00-app
+                  name: invidious-cluster-v01-app
                   key: password
             - name: HMAC_KEY
               valueFrom:

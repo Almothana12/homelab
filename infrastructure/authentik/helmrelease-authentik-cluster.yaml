@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: authentik-cluster-v00
+  name: authentik-cluster-v01
 spec:
   dependsOn:
     - name: cloudnative-pg
@@ -18,7 +18,17 @@ spec:
       interval: 5m
   values:
     type: postgresql
-    mode: standalone
+    mode: recovery
+    recovery:
+      method: object_store
+      clusterName: authentik-cluster-v00
+      provider: s3
+      endpointURL: "http://192.168.0.109:9000"
+      secret:
+        create: false
+        name: backup-s3-credentials
+      s3:
+        bucket: "authentik-backup"
     version:
       postgresql: "16"
     # recovery:
