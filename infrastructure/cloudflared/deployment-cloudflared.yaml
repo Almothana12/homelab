@@ -39,13 +39,23 @@ spec:
             - info
             - --metrics
             - 0.0.0.0:2000
+            # QUIC (UDP 7844) handshakes time out from this network, and the QUIC attempt
+            # plus fallback takes longer than the liveness probe allows. Use HTTP/2 over TCP.
+            - --protocol
+            - http2
             - run
+          # Give the tunnel time to register before liveness starts counting.
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            failureThreshold: 12
+            periodSeconds: 5
           livenessProbe:
             httpGet:
               # Cloudflared has a /ready endpoint which returns 200 if and only if
               # it has an active connection to Cloudflare's network.
               path: /ready
               port: 2000
-            failureThreshold: 1
-            initialDelaySeconds: 10
+            failureThreshold: 3
             periodSeconds: 10

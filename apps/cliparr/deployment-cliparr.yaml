@@ -16,6 +16,11 @@ spec:
       labels:
         app: cliparr
     spec:
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
       containers:
         - image: ghcr.io/techsquidtv/cliparr:3.0
           name: cliparr

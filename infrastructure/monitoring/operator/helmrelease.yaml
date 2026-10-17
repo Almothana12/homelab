@@ -120,6 +120,10 @@ spec:
           - smtp-secret
         storage:
           volumeClaimTemplate:
+            # Short name, so the PVC name (<this>-<pod>) fits in 63 bytes. The VolSync populator
+            # copies the PVC name into a label value and fails on the default 100-char name.
+            metadata:
+              name: am-db
             spec:
               accessModes: ["ReadWriteOnce"]
               resources:
