@@ -4,7 +4,7 @@ metadata:
   name: xormon
 rules:
 - apiGroups: ["","metrics.k8s.io","apps","batch"]
-  resources: ["pods","nodes","services","nodes/proxy", "endpoints", "namespaces", "replicasets", "jobs","cronjobs", "statefulsets", "events","deployments"]
+  resources: ["pods","nodes","services","nodes/proxy", "endpoints", "namespaces", "replicasets", "jobs","cronjobs", "statefulsets", "daemonsets", "events","deployments"]
   verbs: ["get", "watch", "list"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
