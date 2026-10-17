@@ -43,7 +43,7 @@ spec:
       primaryUpdateStrategy: unsupervised
       resources:
         requests:
-          memory: 128i
+          memory: 128Mi
       storage:
         size: 2Gi
       pg_hba:
