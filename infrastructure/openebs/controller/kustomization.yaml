@@ -5,3 +5,5 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - helmrepo-rawfile.yaml
+  - helmrelease-rawfile.yaml
