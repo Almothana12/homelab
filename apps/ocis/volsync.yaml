@@ -51,9 +51,9 @@ metadata:
 type: Opaque
 stringData:
     RESTIC_REPOSITORY: ENC[AES256_GCM,data:SmYgaf6/EQSIYl93WUr9QDU+g4QsiNQz3YQJk7Hk3ujRUFIgwfQ2dhV8lO0PU2Q7+3N+AQ==,iv:UoX9DqzRrF2fiEgD00eZVHYFECVg1iqPT+F7jk5gJ/U=,tag:K5T/6bwQJi8OG84+lBj79g==,type:str]
-    RESTIC_PASSWORD: ENC[AES256_GCM,data:dDa7iDrrAjJsJXwJSqvsJrjY,iv:k0d9KDZmTwQzeSLu1tx5DKm1CNLR4L+JgRJBhInuXNA=,tag:DtIRKL7kUUtRRTQEhThlEA==,type:str]
-    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:QDa6LeT6,iv:CC6/qSp46F5YCM+AEElymv1xbNoF10ETyiJhHFutg6o=,tag:40d8WUZ8RxnqpescGYn78w==,type:str]
-    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:DU03SkRyEPCS99e9,iv:EZmgPgUfxofk8KONEP3DbytPmy40yaekAXbzF73gAS4=,tag:XuJSPfgrzeFPFrEHkIClMQ==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:yOJiIss3uEq9dpM+BhpCMxWw,iv:nnExkFUSYdhuFErOgHo7PzbexFnJGP0zgI9gXk0s+98=,tag:28GHquzig2K8AtzpVeNDVA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:yIphYG2E,iv:kIRhGfaA/rq/W2X8qZPdifn4CjjVQrjcKCHyy2Rkk34=,tag:K06YUzK7bMwFDQryvBGrsQ==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:ixcZNogZOU4Tbk8m,iv:I0DDwvveR1XSHdlV+IoclZ6QCiFDbe0Lbq+yAZyvhyE=,tag:DNoFnyOCa39/X9FTFArYsg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -69,8 +69,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -94,6 +94,15 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: search
+                      topologyKey: kubernetes.io/hostname
 sops:
     kms: []
     gcp_kms: []
@@ -109,8 +118,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -122,9 +131,9 @@ metadata:
 type: Opaque
 stringData:
     RESTIC_REPOSITORY: ENC[AES256_GCM,data:WsVmd3SEpB0D+KLulzCIQiA0yN3ZPQiXWtw40n++sI4dgfuAQKOfRfGFBEzXAmfy4aB6zy9auyG2kz0=,iv:gz3wEdz4KKVwEFTngatP3GkUBJQjz/hEyQJHRoeJBXI=,tag:bHHAsI5UvqQ6yOvqEjiJKA==,type:str]
-    RESTIC_PASSWORD: ENC[AES256_GCM,data:guv+D1HOF90z2w6NjPDSvW65,iv:5eUgxK2zh354gsNQ92mye2wAde5t4DfMGb0ZOtk6tc4=,tag:f0t+rttI85wHeI08tW1rLQ==,type:str]
-    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:wmrTAI/h,iv:FAPTWcqd89tIlUG2nDNB4ZXc4VtoH2R6rggeEUBSuek=,tag:da4VmvTleHfmGnK8RYDZOg==,type:str]
-    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:vQ4gef35mTGIMQe3,iv:lr/0Ghu+psN0M/OfrdCdZeGNvGkwswP4klc8BStxd/o=,tag:PcL5SSlbGmm1WlxpdZsoeA==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:yOJiIss3uEq9dpM+BhpCMxWw,iv:nnExkFUSYdhuFErOgHo7PzbexFnJGP0zgI9gXk0s+98=,tag:28GHquzig2K8AtzpVeNDVA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:yIphYG2E,iv:kIRhGfaA/rq/W2X8qZPdifn4CjjVQrjcKCHyy2Rkk34=,tag:K06YUzK7bMwFDQryvBGrsQ==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:ixcZNogZOU4Tbk8m,iv:I0DDwvveR1XSHdlV+IoclZ6QCiFDbe0Lbq+yAZyvhyE=,tag:DNoFnyOCa39/X9FTFArYsg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -140,8 +149,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -165,6 +174,15 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: storagesystem
+                      topologyKey: kubernetes.io/hostname
 sops:
     kms: []
     gcp_kms: []
@@ -180,8 +198,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -193,9 +211,9 @@ metadata:
 type: Opaque
 stringData:
     RESTIC_REPOSITORY: ENC[AES256_GCM,data:BCGGJG5WfHLgXM5pTdFOPrnORRHCppioL/7hRq7j9XAROPMG9jgQJF2QFPSc1KT3sj4=,iv:3Vq5Yk5maVAccDmFQ+5Uib1e4Eh0a7D4XTQEBBTZ0jo=,tag:KbO+1Mvo0Yi8z9eRfS/DkA==,type:str]
-    RESTIC_PASSWORD: ENC[AES256_GCM,data:EeaReOdsCgEhPaDIfpn6mCNz,iv:gl8nja8eMErokJTH6/4YPpMXD25OJf5HOKZ0HVybpZs=,tag:w1WD3rrXk5TwAWtjNh/L8g==,type:str]
-    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:U/2W4cGj,iv:MQ8Ba97HDy05RH0sz4TLIYitewx3JdUo7KFm//BKD74=,tag:hCmVDP/7d5GiRELPUuqTUQ==,type:str]
-    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:Uwpp5kvu7cu3GIF6,iv:1NreFwdSeEgXjxdlW1aWkAmTKdqel2IqHYho1MUaNtQ=,tag:969Ccjg0h19L7DdbQHprSA==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:yOJiIss3uEq9dpM+BhpCMxWw,iv:nnExkFUSYdhuFErOgHo7PzbexFnJGP0zgI9gXk0s+98=,tag:28GHquzig2K8AtzpVeNDVA==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:yIphYG2E,iv:kIRhGfaA/rq/W2X8qZPdifn4CjjVQrjcKCHyy2Rkk34=,tag:K06YUzK7bMwFDQryvBGrsQ==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:ixcZNogZOU4Tbk8m,iv:I0DDwvveR1XSHdlV+IoclZ6QCiFDbe0Lbq+yAZyvhyE=,tag:DNoFnyOCa39/X9FTFArYsg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -211,8 +229,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -236,6 +254,15 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: nats
+                      topologyKey: kubernetes.io/hostname
 sops:
     kms: []
     gcp_kms: []
@@ -251,8 +278,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -282,8 +309,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -307,6 +334,16 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: web
+                      topologyKey: kubernetes.io/hostname
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 sops:
     kms: []
     gcp_kms: []
@@ -322,13 +359,12 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
 ---
-# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 # this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
@@ -370,8 +406,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -416,8 +452,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -462,8 +498,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -508,8 +544,8 @@ sops:
             VlYrajdPYXpIOFlPK3phSW1MVjc0MW8KEqHuYYGC1m5oY0Z/TO1RGRTaaJ2ASqu3
             SUP7Lf0a20KQ8nIaF+dJbvdLvEFwok8Po+H8QuDrjbPnpmTcKPTD8A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:24Z"
-    mac: ENC[AES256_GCM,data:s/tntVzkTuFfPPEv6Mvc2CEFbnvMaK6/gz+FmfFYogH4ei04VdvWEJcKC777d/dnsU/WiVqancTLVR1/rcY1Na0mGRzH5K2PJTkR+EdjB//CLm5E/VIxJojbgtM/Zs9us8pq0maVkhhGrsSLMi+C2i8YjqTVSigvuhPAh6+DeUY=,iv:UUqsL2AI9uDLIAm7PgFeSSavTgI0y7rSOxS6WIRn5I0=,tag:gSbMPWXRIo4uRQIq7oqjYw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:kDb10pgRtndnSGgiI6jP0M0EZvmmOBCcVOVycUd2eTDTVLx5wGAfwbFnrV0JJszBzPjEI+oaLYxCZqKEN62v97+LsblATA4m27bxfOZ6ZCXU7eTNedJiQxmFZ9gQOgNSpc+resfSk6o7ZOZaMTaH03jaY3NLU7fdyRA3B+sNJS0=,iv:itPc64xzue5XaaIVGDa3HuwVoQQJP49mkBBzf+ToIok=,tag:DaWUe++Xv8G64CdJhgLfiA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1

@@ -23,8 +23,8 @@ sops:
             Qmswa3RTREI0YmFBSWZocGNNOCttQVUK3lgh7+2o2JTZEOYArixYxEYoJo1pXpjn
             slkm2KBSI1vlnH0GZdYTGH4YCpwfnn8XaMV270CS+/Q4uK2v6R5Obw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:8Mi5ouaFcEIG8Pkad2t986iHV1asTLBvUz2q/ySyfS957/w0CeQmtkURXBfPsceYjZqTu7mVK2JS6sp2tWtWssKdQQpPe0GZ7wTaiZvUoGOvYVPukoqPEIe5L8Nl+ncYWQeafkq7gdLpVTta7OgM4tTWLxacWPqCj7Vj1ZPwtcU=,iv:ENt2wYDqsM3mEULIrgWgF6lm7otZoNsxouIJ/Ugq9XU=,tag:iLzofv8Qi0DarihALXsrpA==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:N4aFQlgehkv9sEGvV3TUzc0npaCl1db4lohXaKFLOQgLm42es47CcEVut9hjnHKllKA6Y+AtraErsr835ggQ+HqjcotEUbrFYKbN4gAOBhAJNG/uSm97BNXMNmMcVNuZF1mzAYcGVMpdKwsHFnYLX90MpRSmdROmJU3B48hPDrY=,iv:2hjMHplkrq7BYvh63on16eJZM3krDlijEbi15COFwpw=,tag:3Sw91IP1gfYI9ZfcjvfHqA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -48,6 +48,15 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: upsnap
+                      topologyKey: kubernetes.io/hostname
         moverSecurityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -72,6 +81,7 @@ spec:
 #             runAsGroup: 0
 #             fsGroup: 0
 #             fsGroupChangePolicy: OnRootMismatch
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 sops:
     kms: []
     gcp_kms: []
@@ -87,13 +97,12 @@ sops:
             Qmswa3RTREI0YmFBSWZocGNNOCttQVUK3lgh7+2o2JTZEOYArixYxEYoJo1pXpjn
             slkm2KBSI1vlnH0GZdYTGH4YCpwfnn8XaMV270CS+/Q4uK2v6R5Obw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:8Mi5ouaFcEIG8Pkad2t986iHV1asTLBvUz2q/ySyfS957/w0CeQmtkURXBfPsceYjZqTu7mVK2JS6sp2tWtWssKdQQpPe0GZ7wTaiZvUoGOvYVPukoqPEIe5L8Nl+ncYWQeafkq7gdLpVTta7OgM4tTWLxacWPqCj7Vj1ZPwtcU=,iv:ENt2wYDqsM3mEULIrgWgF6lm7otZoNsxouIJ/Ugq9XU=,tag:iLzofv8Qi0DarihALXsrpA==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:N4aFQlgehkv9sEGvV3TUzc0npaCl1db4lohXaKFLOQgLm42es47CcEVut9hjnHKllKA6Y+AtraErsr835ggQ+HqjcotEUbrFYKbN4gAOBhAJNG/uSm97BNXMNmMcVNuZF1mzAYcGVMpdKwsHFnYLX90MpRSmdROmJU3B48hPDrY=,iv:2hjMHplkrq7BYvh63on16eJZM3krDlijEbi15COFwpw=,tag:3Sw91IP1gfYI9ZfcjvfHqA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
 ---
-# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 # this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
@@ -135,8 +144,8 @@ sops:
             Qmswa3RTREI0YmFBSWZocGNNOCttQVUK3lgh7+2o2JTZEOYArixYxEYoJo1pXpjn
             slkm2KBSI1vlnH0GZdYTGH4YCpwfnn8XaMV270CS+/Q4uK2v6R5Obw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:8Mi5ouaFcEIG8Pkad2t986iHV1asTLBvUz2q/ySyfS957/w0CeQmtkURXBfPsceYjZqTu7mVK2JS6sp2tWtWssKdQQpPe0GZ7wTaiZvUoGOvYVPukoqPEIe5L8Nl+ncYWQeafkq7gdLpVTta7OgM4tTWLxacWPqCj7Vj1ZPwtcU=,iv:ENt2wYDqsM3mEULIrgWgF6lm7otZoNsxouIJ/Ugq9XU=,tag:iLzofv8Qi0DarihALXsrpA==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:N4aFQlgehkv9sEGvV3TUzc0npaCl1db4lohXaKFLOQgLm42es47CcEVut9hjnHKllKA6Y+AtraErsr835ggQ+HqjcotEUbrFYKbN4gAOBhAJNG/uSm97BNXMNmMcVNuZF1mzAYcGVMpdKwsHFnYLX90MpRSmdROmJU3B48hPDrY=,iv:2hjMHplkrq7BYvh63on16eJZM3krDlijEbi15COFwpw=,tag:3Sw91IP1gfYI9ZfcjvfHqA==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1

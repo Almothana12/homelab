@@ -23,8 +23,8 @@ sops:
             OGhyWWpENzdXeFQyTWJ6NUtLV0RvRU0K5D1haFLqNJu3kZ3GSCqLPVF0FnQjH2Kv
             vbOqSyBKUDpk+NMCcdkUq+BSPddPECrlfZnovS3Y/77GUrJEep1vJg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:23Z"
-    mac: ENC[AES256_GCM,data:I+DO4sLU65IZJGY9QeYkv/vU0QJWyx55RGhMzhVL1UNMXvhbSAU7jTJisFYgq9aQXd62cLe4+kLa/XkmcGKyDn7laxpdVw2+8oXqk2VQ4p5RdQ6Zkd88XXJgs6C3jqSYf7EFA3OpOBwcugP4c3VznMnZolFL1a1LYv4HBr+XJ5E=,iv:ODaHw13FF54qd37X9oM5ZCzDYGnkT6DhrYzEUlJzLnQ=,tag:O1ghOfBy8vXV2hmkL0Pdvw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:mKzzH6pGnoRTduqfDdUgKVM5AcDUrfJ/LkrCzU2OghpZKpryJLKVI8Xgpj4sZBB+V1ZcN2R4gxYliE3nFCVFvTQbg+TqUqOyebqD/CsAnorlnTnO+treIqsO2hekvIwQiqDfOZyrT4Qy0aRG840GvN9Ga0f5/fhpDdg0XpZDW3k=,iv:G8v84sDs8bnKRIcNjPTDLWPqw/tP0MVccrlnTV3f5Xs=,tag:4rmZCp3qoc55jczSsZaWvA==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1
@@ -48,10 +48,20 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: freshrss
+                      topologyKey: kubernetes.io/hostname
         moverSecurityContext:
             runAsUser: 33
             runAsGroup: 33
             fsGroup: 33
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 sops:
     kms: []
     gcp_kms: []
@@ -67,13 +77,12 @@ sops:
             OGhyWWpENzdXeFQyTWJ6NUtLV0RvRU0K5D1haFLqNJu3kZ3GSCqLPVF0FnQjH2Kv
             vbOqSyBKUDpk+NMCcdkUq+BSPddPECrlfZnovS3Y/77GUrJEep1vJg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:23Z"
-    mac: ENC[AES256_GCM,data:I+DO4sLU65IZJGY9QeYkv/vU0QJWyx55RGhMzhVL1UNMXvhbSAU7jTJisFYgq9aQXd62cLe4+kLa/XkmcGKyDn7laxpdVw2+8oXqk2VQ4p5RdQ6Zkd88XXJgs6C3jqSYf7EFA3OpOBwcugP4c3VznMnZolFL1a1LYv4HBr+XJ5E=,iv:ODaHw13FF54qd37X9oM5ZCzDYGnkT6DhrYzEUlJzLnQ=,tag:O1ghOfBy8vXV2hmkL0Pdvw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:mKzzH6pGnoRTduqfDdUgKVM5AcDUrfJ/LkrCzU2OghpZKpryJLKVI8Xgpj4sZBB+V1ZcN2R4gxYliE3nFCVFvTQbg+TqUqOyebqD/CsAnorlnTnO+treIqsO2hekvIwQiqDfOZyrT4Qy0aRG840GvN9Ga0f5/fhpDdg0XpZDW3k=,iv:G8v84sDs8bnKRIcNjPTDLWPqw/tP0MVccrlnTV3f5Xs=,tag:4rmZCp3qoc55jczSsZaWvA==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1
 ---
-# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 # this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
@@ -114,8 +123,8 @@ sops:
             OGhyWWpENzdXeFQyTWJ6NUtLV0RvRU0K5D1haFLqNJu3kZ3GSCqLPVF0FnQjH2Kv
             vbOqSyBKUDpk+NMCcdkUq+BSPddPECrlfZnovS3Y/77GUrJEep1vJg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:23Z"
-    mac: ENC[AES256_GCM,data:I+DO4sLU65IZJGY9QeYkv/vU0QJWyx55RGhMzhVL1UNMXvhbSAU7jTJisFYgq9aQXd62cLe4+kLa/XkmcGKyDn7laxpdVw2+8oXqk2VQ4p5RdQ6Zkd88XXJgs6C3jqSYf7EFA3OpOBwcugP4c3VznMnZolFL1a1LYv4HBr+XJ5E=,iv:ODaHw13FF54qd37X9oM5ZCzDYGnkT6DhrYzEUlJzLnQ=,tag:O1ghOfBy8vXV2hmkL0Pdvw==,type:str]
+    lastmodified: "2026-10-17T10:07:43Z"
+    mac: ENC[AES256_GCM,data:mKzzH6pGnoRTduqfDdUgKVM5AcDUrfJ/LkrCzU2OghpZKpryJLKVI8Xgpj4sZBB+V1ZcN2R4gxYliE3nFCVFvTQbg+TqUqOyebqD/CsAnorlnTnO+treIqsO2hekvIwQiqDfOZyrT4Qy0aRG840GvN9Ga0f5/fhpDdg0XpZDW3k=,iv:G8v84sDs8bnKRIcNjPTDLWPqw/tP0MVccrlnTV3f5Xs=,tag:4rmZCp3qoc55jczSsZaWvA==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1

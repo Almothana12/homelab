@@ -23,8 +23,8 @@ sops:
             RDNRcUM0and4V1o5Zjd5NCtsbTUrZm8KQcQWSWgeisizfx40SFtfHz76yE4mmIOO
             VqH+F4XCegFxsvGumhrLGYO43kGqCuddzC6EZGwsSaGgIPCNkA4RnQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:qaX1BOJdNksmjFv8/BR1ycaH2/XE6wfUjUhC4KmarJlcC846bKPYM2MxRsUXesUOrl8+9xM1Wwg72C4IykIUMec1+lbOU/diBqoYiQWzg2OAfS0CbZGVRHvSxOtr2yBkWYdQJf02YKIzTM9tRpZ5FZmGxda7NlMuj6PfjTtEuLY=,iv:ayHR6iSzbxaHnmpQggXlvCv8T2QYH3T6Vfj4BZ/gygc=,tag:uFaovUdby1qmiQ5IL8zuog==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:uv2bVBhtce0OkjJgp7oods3yfYf3Cw0NvjAC52MQTVjoc0b5EEMRf4R/7InTc5SoBzUHWcwcacHJ+kLJvKvnfLHfdLtqkFiqVG8zlmMbf3ZqXHkhOBveRjlCmBPcud2x8X7tytnHzqTBGGIS4uZWICE/6H/olXXwMSMWFCz2T9A=,iv:F7qUpIUGNxD8fng3Ofq0D/kzaPB5R1dYIm//K8HMEQA=,tag:lCLoudjN5DbOdDLn517L1A==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
@@ -48,6 +48,16 @@ spec:
             yearly: 1
         copyMethod: Snapshot
         volumeSnapshotClassName: rawfile-localpv
+        # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+        # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+        moverAffinity:
+            podAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                            app: xormon
+                      topologyKey: kubernetes.io/hostname
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 sops:
     kms: []
     gcp_kms: []
@@ -63,13 +73,12 @@ sops:
             RDNRcUM0and4V1o5Zjd5NCtsbTUrZm8KQcQWSWgeisizfx40SFtfHz76yE4mmIOO
             VqH+F4XCegFxsvGumhrLGYO43kGqCuddzC6EZGwsSaGgIPCNkA4RnQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:qaX1BOJdNksmjFv8/BR1ycaH2/XE6wfUjUhC4KmarJlcC846bKPYM2MxRsUXesUOrl8+9xM1Wwg72C4IykIUMec1+lbOU/diBqoYiQWzg2OAfS0CbZGVRHvSxOtr2yBkWYdQJf02YKIzTM9tRpZ5FZmGxda7NlMuj6PfjTtEuLY=,iv:ayHR6iSzbxaHnmpQggXlvCv8T2QYH3T6Vfj4BZ/gygc=,tag:uFaovUdby1qmiQ5IL8zuog==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:uv2bVBhtce0OkjJgp7oods3yfYf3Cw0NvjAC52MQTVjoc0b5EEMRf4R/7InTc5SoBzUHWcwcacHJ+kLJvKvnfLHfdLtqkFiqVG8zlmMbf3ZqXHkhOBveRjlCmBPcud2x8X7tytnHzqTBGGIS4uZWICE/6H/olXXwMSMWFCz2T9A=,iv:F7qUpIUGNxD8fng3Ofq0D/kzaPB5R1dYIm//K8HMEQA=,tag:lCLoudjN5DbOdDLn517L1A==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
 ---
-# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
 # this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
@@ -111,8 +120,8 @@ sops:
             RDNRcUM0and4V1o5Zjd5NCtsbTUrZm8KQcQWSWgeisizfx40SFtfHz76yE4mmIOO
             VqH+F4XCegFxsvGumhrLGYO43kGqCuddzC6EZGwsSaGgIPCNkA4RnQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-17T04:48:28Z"
-    mac: ENC[AES256_GCM,data:qaX1BOJdNksmjFv8/BR1ycaH2/XE6wfUjUhC4KmarJlcC846bKPYM2MxRsUXesUOrl8+9xM1Wwg72C4IykIUMec1+lbOU/diBqoYiQWzg2OAfS0CbZGVRHvSxOtr2yBkWYdQJf02YKIzTM9tRpZ5FZmGxda7NlMuj6PfjTtEuLY=,iv:ayHR6iSzbxaHnmpQggXlvCv8T2QYH3T6Vfj4BZ/gygc=,tag:uFaovUdby1qmiQ5IL8zuog==,type:str]
+    lastmodified: "2026-10-17T10:07:45Z"
+    mac: ENC[AES256_GCM,data:uv2bVBhtce0OkjJgp7oods3yfYf3Cw0NvjAC52MQTVjoc0b5EEMRf4R/7InTc5SoBzUHWcwcacHJ+kLJvKvnfLHfdLtqkFiqVG8zlmMbf3ZqXHkhOBveRjlCmBPcud2x8X7tytnHzqTBGGIS4uZWICE/6H/olXXwMSMWFCz2T9A=,iv:F7qUpIUGNxD8fng3Ofq0D/kzaPB5R1dYIm//K8HMEQA=,tag:lCLoudjN5DbOdDLn517L1A==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY
     version: 3.9.1
