@@ -6,6 +6,10 @@ metadata:
     app: prowlarr
   name: prowlarr
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: prowlarr
   accessModes:
     - ReadWriteOnce
   resources:

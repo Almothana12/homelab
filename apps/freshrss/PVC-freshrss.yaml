@@ -6,6 +6,10 @@ metadata:
     app: freshrss
   name: freshrss
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: freshrss
   accessModes:
     - ReadWriteOnce
   resources:

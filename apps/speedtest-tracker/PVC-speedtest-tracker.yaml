@@ -4,6 +4,10 @@ metadata:
   name: speedtest-tracker
   namespace: speedtest-tracker
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: speedtest-tracker
   accessModes:
     - ReadWriteOnce
   resources:

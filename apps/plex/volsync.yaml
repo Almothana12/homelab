@@ -4,10 +4,10 @@ metadata:
     name: restic-config-plex-config
 type: Opaque
 stringData:
-    RESTIC_REPOSITORY: ENC[AES256_GCM,data:se1qEfo+EZLsAl5vi86FYan30aPiKWm+XzcDreinlubhLtGe1XRkiKSdf2r7V7s=,iv:HZA28kOt6TMD1qRmbX4GKDZiJJdoip9u1zmXUi4qriY=,tag:UOHrpjNewIXHD6gh/ktuSA==,type:str]
-    RESTIC_PASSWORD: ENC[AES256_GCM,data:KTLmRLXk2lF+iBdPEotKplLA,iv:z0wMy4uwWyycMeWjYBZmsNXy320ZzDaycyun/Sphj3U=,tag:T0dI8SqqjQHZ9J9tyngf9Q==,type:str]
-    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:f4g+120D,iv:opFUOkQwbvf8On69ssLWZ+xHTQ/0zCYEduHlhpceNp0=,tag:rH40g/zzlA6gqeCXkHQhPQ==,type:str]
-    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:H7iSHMW1xTTzM/MH,iv:8DuFR50eNusicTPUePJBRipfUcRDYW6J45WzyMkeYRI=,tag:7nXEdDfI7mjUkW/+eNWn9A==,type:str]
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:xrbPCUN15JEl8qYiRc3dNki0C/EkolPOj884F3fK7Gx8gEdI6Z8JAo1wXVuEAI4=,iv:UMC/ZpvAyEBZN9Pv/5oY5MDtlQQ/TSSkSt9Nub1DKnE=,tag:ohn55ko30UkZfD0hRDhqLw==,type:str]
+    RESTIC_PASSWORD: ENC[AES256_GCM,data:+COs27/qmuxmIE3WaoaVI40Q,iv:amgvILQjUrm+ooNukfJwstcuRjfJVMtS/Ky4DfDm3Os=,tag:CiHRs5iUpxrBrEHKQywQtw==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:XYzawQX2,iv:IlJa+yKljY2zwpkXJQ1ZVEoGRBzJszriUhmDrQBHQnE=,tag:FxSM47vK7jvzOigXbUFhQw==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:doiwSsh9j9W/yobN,iv:epW9e/M3joxgxhBxvMUBhSyLCRAqbJSVDSUES5f2/vU=,tag:hg1NQMQSTZo1dS86nkpMRQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -17,14 +17,14 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHVTdBd1BoR3RHdm9xK1ZE
-            ZVBuYWtzT3lqSWtRd2VGWldxNzBQVXdJZWhVCi9RbE80SzVSV2hPbldjTkd2Q1B3
-            RTZrNkpLVmFGd1VEZ0lxM2NvN2ZtZHcKLS0tIDhoeXZLQU1nZC9uOTFwTEc3aXZj
-            S0pUOGhSUTNnanZkRFpRNWtsdzlIZlkK1m/brpWzmQTYpvmJMypHPMN1hyoc+KCJ
-            0UTyYX9lK2XVucggEmxMrvyzgIhE6Mgi1Is54jMxF1t54xHgfjUqXw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBySEZtOFRYMmt4c1F2Ym1i
+            akhyR0lyS29zYVlDa0ZIT1NNdUVrOFBpQ3lRClgwdlpxVzZGVTY3MENGM05vYmwx
+            NHZCVjVyQVk1b0ZoVVlDYXdsTklRMzQKLS0tIHB1NzdLZWdsUHNGaWZCRXBka3Ft
+            SjVPZm42bWRTVGh0aThFK29qaFZwd3cK35iOnHydE5VRnUuGQeS9Gx4RPFbTOdvV
+            tvya8TY7NoFEw8vogwN8C+nEeawUqbAbQ6sR1J6MURfayoSgJfAqfg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-16T13:14:21Z"
-    mac: ENC[AES256_GCM,data:PhOqGC6Y2jEIY3ORBFu6QBtVH5fO7byU2pPyz0FE7eoKIjFw0MIDBopE4avz4L0I2kDuT8VlFoIr6LyKtBZU3mJJ+Ssqk0R2ngOx+TvTPEooMYyIED1ZoRDhUxJKmb8WLyqYDynLJZTx4spPxcvEEjebO5U3nTGyDuIy4j5Usxk=,iv:9xkNwrlVnTGslOoYWtq3CiB0XN5IbF06ixTPHnMLUiA=,tag:I5wx1SxVXSACLh71sMybFw==,type:str]
+    lastmodified: "2026-10-17T04:48:25Z"
+    mac: ENC[AES256_GCM,data:vZ0oSGea5MvikibXeRgBawe+1UWJPWhBz4IDnYyezksHp73FowRASgArR88bAqEJxaFo+N8elA9Nnl2Enbtnq7LqvdrwNCQHnoABbem2kUbCF+sEoaEfd+Nqa7BteA8JrwELH9dSGmhajUiTfcEP9MoQDOLhcYNw1b+igZ469EA=,iv:PBGFRq5TvC2UcAlrAv49TU06WV2Jve8vmPkbfoDFlro=,tag:hbigXdAwlUh9GLMGejy1AA==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1
@@ -46,7 +46,8 @@ spec:
             weekly: 4
             monthly: 2
             yearly: 1
-        copyMethod: Direct
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
         moverSecurityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -60,14 +61,100 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHVTdBd1BoR3RHdm9xK1ZE
-            ZVBuYWtzT3lqSWtRd2VGWldxNzBQVXdJZWhVCi9RbE80SzVSV2hPbldjTkd2Q1B3
-            RTZrNkpLVmFGd1VEZ0lxM2NvN2ZtZHcKLS0tIDhoeXZLQU1nZC9uOTFwTEc3aXZj
-            S0pUOGhSUTNnanZkRFpRNWtsdzlIZlkK1m/brpWzmQTYpvmJMypHPMN1hyoc+KCJ
-            0UTyYX9lK2XVucggEmxMrvyzgIhE6Mgi1Is54jMxF1t54xHgfjUqXw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBySEZtOFRYMmt4c1F2Ym1i
+            akhyR0lyS29zYVlDa0ZIT1NNdUVrOFBpQ3lRClgwdlpxVzZGVTY3MENGM05vYmwx
+            NHZCVjVyQVk1b0ZoVVlDYXdsTklRMzQKLS0tIHB1NzdLZWdsUHNGaWZCRXBka3Ft
+            SjVPZm42bWRTVGh0aThFK29qaFZwd3cK35iOnHydE5VRnUuGQeS9Gx4RPFbTOdvV
+            tvya8TY7NoFEw8vogwN8C+nEeawUqbAbQ6sR1J6MURfayoSgJfAqfg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-10-16T13:14:21Z"
-    mac: ENC[AES256_GCM,data:PhOqGC6Y2jEIY3ORBFu6QBtVH5fO7byU2pPyz0FE7eoKIjFw0MIDBopE4avz4L0I2kDuT8VlFoIr6LyKtBZU3mJJ+Ssqk0R2ngOx+TvTPEooMYyIED1ZoRDhUxJKmb8WLyqYDynLJZTx4spPxcvEEjebO5U3nTGyDuIy4j5Usxk=,iv:9xkNwrlVnTGslOoYWtq3CiB0XN5IbF06ixTPHnMLUiA=,tag:I5wx1SxVXSACLh71sMybFw==,type:str]
+    lastmodified: "2026-10-17T04:48:25Z"
+    mac: ENC[AES256_GCM,data:vZ0oSGea5MvikibXeRgBawe+1UWJPWhBz4IDnYyezksHp73FowRASgArR88bAqEJxaFo+N8elA9Nnl2Enbtnq7LqvdrwNCQHnoABbem2kUbCF+sEoaEfd+Nqa7BteA8JrwELH9dSGmhajUiTfcEP9MoQDOLhcYNw1b+igZ469EA=,iv:PBGFRq5TvC2UcAlrAv49TU06WV2Jve8vmPkbfoDFlro=,tag:hbigXdAwlUh9GLMGejy1AA==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: pms-config-plex-plex-media-server-0
+    namespace: plex
+    annotations:
+        # The StatefulSet adopts this PVC. Never let Flux delete it.
+        kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 10Gi
+    dataSourceRef:
+        apiGroup: volsync.backube
+        kind: ReplicationDestination
+        name: plex-config
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBySEZtOFRYMmt4c1F2Ym1i
+            akhyR0lyS29zYVlDa0ZIT1NNdUVrOFBpQ3lRClgwdlpxVzZGVTY3MENGM05vYmwx
+            NHZCVjVyQVk1b0ZoVVlDYXdsTklRMzQKLS0tIHB1NzdLZWdsUHNGaWZCRXBka3Ft
+            SjVPZm42bWRTVGh0aThFK29qaFZwd3cK35iOnHydE5VRnUuGQeS9Gx4RPFbTOdvV
+            tvya8TY7NoFEw8vogwN8C+nEeawUqbAbQ6sR1J6MURfayoSgJfAqfg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-17T04:48:25Z"
+    mac: ENC[AES256_GCM,data:vZ0oSGea5MvikibXeRgBawe+1UWJPWhBz4IDnYyezksHp73FowRASgArR88bAqEJxaFo+N8elA9Nnl2Enbtnq7LqvdrwNCQHnoABbem2kUbCF+sEoaEfd+Nqa7BteA8JrwELH9dSGmhajUiTfcEP9MoQDOLhcYNw1b+igZ469EA=,iv:PBGFRq5TvC2UcAlrAv49TU06WV2Jve8vmPkbfoDFlro=,tag:hbigXdAwlUh9GLMGejy1AA==,type:str]
+    pgp: []
+    encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
+    version: 3.9.1
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+    name: plex-config
+    namespace: plex
+    labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+    trigger:
+        manual: restore-once
+    restic:
+        repository: restic-config-plex-config
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
+        storageClassName: rawfile-localpv
+        accessModes:
+            - ReadWriteOnce
+        capacity: 10Gi
+        cleanupCachePVC: true
+        cleanupTempPVC: true
+        moverSecurityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsUser: 1000
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBySEZtOFRYMmt4c1F2Ym1i
+            akhyR0lyS29zYVlDa0ZIT1NNdUVrOFBpQ3lRClgwdlpxVzZGVTY3MENGM05vYmwx
+            NHZCVjVyQVk1b0ZoVVlDYXdsTklRMzQKLS0tIHB1NzdLZWdsUHNGaWZCRXBka3Ft
+            SjVPZm42bWRTVGh0aThFK29qaFZwd3cK35iOnHydE5VRnUuGQeS9Gx4RPFbTOdvV
+            tvya8TY7NoFEw8vogwN8C+nEeawUqbAbQ6sR1J6MURfayoSgJfAqfg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-10-17T04:48:25Z"
+    mac: ENC[AES256_GCM,data:vZ0oSGea5MvikibXeRgBawe+1UWJPWhBz4IDnYyezksHp73FowRASgArR88bAqEJxaFo+N8elA9Nnl2Enbtnq7LqvdrwNCQHnoABbem2kUbCF+sEoaEfd+Nqa7BteA8JrwELH9dSGmhajUiTfcEP9MoQDOLhcYNw1b+igZ469EA=,iv:PBGFRq5TvC2UcAlrAv49TU06WV2Jve8vmPkbfoDFlro=,tag:hbigXdAwlUh9GLMGejy1AA==,type:str]
     pgp: []
     encrypted_regex: ^(RESTIC_REPOSITORY|RESTIC_PASSWORD|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY)$
     version: 3.9.1

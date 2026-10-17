@@ -6,6 +6,10 @@ metadata:
     app: tracktor-1
   name: tracktor-1
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: tracktor-1
   accessModes:
     - ReadWriteOnce
   resources:

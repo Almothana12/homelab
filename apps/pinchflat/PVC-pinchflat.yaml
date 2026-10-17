@@ -6,6 +6,10 @@ metadata:
     app: pinchflat
   name: pinchflat
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: pinchflat
   accessModes:
     - ReadWriteOnce
   resources:

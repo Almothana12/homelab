@@ -5,6 +5,10 @@ metadata:
     app: romm
   name: romm-mysql
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: romm-mysql
   accessModes:
     - ReadWriteOnce
   resources:

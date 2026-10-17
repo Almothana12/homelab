@@ -6,6 +6,10 @@ metadata:
     app: bulwark
   name: bulwark
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: bulwark
   accessModes:
     - ReadWriteOnce
   resources:

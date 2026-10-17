@@ -106,42 +106,42 @@ spec:
       authapp:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
       idm:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
       nats:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
       ocm:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
       search:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
       storagesystem:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
@@ -152,12 +152,12 @@ spec:
       # thumbnails:
       #   persistence:
       #     enabled: true
-      #     storageClassName: openebs-hostpath
+      #     storageClassName: rawfile-localpv
       #     size: 1Gi
       web:
         persistence:
           enabled: true
-          storageClassName: openebs-hostpath
+          storageClassName: rawfile-localpv
           accessModes:
             - ReadWriteOnce
           size: 1Gi
@@ -182,3 +182,48 @@ spec:
             - "'self'"
             - "blob:"
             - "https://sso.almothana.sa"
+  # VolSync volume populator (restore in volsync.yaml): the PVC stays Pending until its restore
+  # finished, so neither the app nor its backup runs on an empty volume.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: PersistentVolumeClaim
+              name: nats-data
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: nats-data
+          - target:
+              kind: PersistentVolumeClaim
+              name: search-data
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: search-data
+          - target:
+              kind: PersistentVolumeClaim
+              name: storagesystem-data
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: storagesystem-data
+          - target:
+              kind: PersistentVolumeClaim
+              name: web-data
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: web-data

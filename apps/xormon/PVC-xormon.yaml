@@ -5,6 +5,10 @@ metadata:
     app: xormon
   name: xormon
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: xormon
   accessModes:
     - ReadWriteOnce
   resources:

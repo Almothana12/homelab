@@ -4,7 +4,7 @@ metadata:
     name: restic-config-jellyfin
 type: Opaque
 stringData:
-    RESTIC_REPOSITORY: ENC[AES256_GCM,data:EiBttVcoJihJZwPBVtJCDUwSx8lZsZUFevIXllUkycjz7CMyYxaZW5MNIFs=,iv:x5WljDrko01e3rWqdLjpzdA7hYRpqeP/yVIQePld0EQ=,tag:ApoBykMFluzQeqY5kGXmkg==,type:str]
+    RESTIC_REPOSITORY: ENC[AES256_GCM,data:Wv5VqSA9WjkwhCKnSvuzWdi5U9evBZ4gIRZt6pIaV4HjL46EehaS2A/Hifo=,iv:79KQnfHt36U5o9i8sHdSXtlC82E0HBx4yz5J9h0jZhU=,tag:WN6ToK4XC6R93Qu2BurBQw==,type:str]
     RESTIC_PASSWORD: a^Phufdsa53=VY64G$
     AWS_ACCESS_KEY_ID: restic
     AWS_SECRET_ACCESS_KEY: a^Phu=VY64G$
@@ -17,14 +17,14 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXSlRNL3U5ZUJDYWwvSUNI
-            QzBsK2JmQUV4YTh5ZnFaSytIdTJmRC9lRWxJCm16MHljdE40dDFTcnp5TXZ5VFNa
-            a2M5R0FIMUNBNkI3VU9iUTNXUURGTXMKLS0tIFVGaVB2QkV0SXhJei9nSWM0ODBB
-            RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
-            jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFdlF0QzEydCt6ejN6NFBC
+            Sld2ZVJ4UGNXV3F6SDJqTUVsczY5c05ZdmxjCjlicUw1emhZRmdBYUZ1dzRJSnBj
+            dm1RUEdRbExCNXZnSDZEOW1ZdE1KdjQKLS0tIG1TZ2ViSnMxeUYrTUdxazc4azFr
+            MDJUUHdpcUYvYUQ5N2dJVWFvQ3o4dHMKzvi2nIl4eOcBiisDYdL0yP7mxmJb1hNW
+            DrpojQeqp2qx+NCYCRiUem/iO69rPZAAtX+aeuxVEh+znCeOe95TUQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-09T10:09:12Z"
-    mac: ENC[AES256_GCM,data:OS9KS/1y2YRzsvI4x86MAr8zrKH6kn8wgwAznu+zJpRyTf9EhfwLpoWunr9VqaKpf+24ywGquoxOkA8IdKkkJ3r8sN5Sar0yOtTVL5YB//ElPKk2n+eYlACseIv0nmI0BnaDXxRNTGAJjZCXUzovotf5gj2Ran31Vu8TZ78vOe4=,iv:qo0AUG9/dJod5JPbYr332kmfR8AeBoyfvcl098RTCVY=,tag:8a9xY8XDxi592T+RibkDxw==,type:str]
+    lastmodified: "2026-10-17T04:48:23Z"
+    mac: ENC[AES256_GCM,data:uB4f5Me9PiicC3o4EprihmjR+1hBf8L9XgKnTaZcHkuoeBj9cgvyb/fgjJaNPiezWcA7S2FNJE/Iy4llWmP8q5V3FkEz88X3wbiZ4TTJybPjUIUAu/fikeq8eYvFXo5QzHTYebN0f2rfQCD1dWyytFBiD2BVHxu7lq7p0VjLHUE=,iv:BYFkPYV63C1kh/kMHv5WhFxm0UCe0Ntv+ZU1msazogA=,tag:CM/WWGTX9mHPRFaOysMkWg==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1
@@ -46,7 +46,8 @@ spec:
             weekly: 4
             monthly: 2
             yearly: 1
-        copyMethod: Direct
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
 sops:
     kms: []
     gcp_kms: []
@@ -56,29 +57,38 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXSlRNL3U5ZUJDYWwvSUNI
-            QzBsK2JmQUV4YTh5ZnFaSytIdTJmRC9lRWxJCm16MHljdE40dDFTcnp5TXZ5VFNa
-            a2M5R0FIMUNBNkI3VU9iUTNXUURGTXMKLS0tIFVGaVB2QkV0SXhJei9nSWM0ODBB
-            RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
-            jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFdlF0QzEydCt6ejN6NFBC
+            Sld2ZVJ4UGNXV3F6SDJqTUVsczY5c05ZdmxjCjlicUw1emhZRmdBYUZ1dzRJSnBj
+            dm1RUEdRbExCNXZnSDZEOW1ZdE1KdjQKLS0tIG1TZ2ViSnMxeUYrTUdxazc4azFr
+            MDJUUHdpcUYvYUQ5N2dJVWFvQ3o4dHMKzvi2nIl4eOcBiisDYdL0yP7mxmJb1hNW
+            DrpojQeqp2qx+NCYCRiUem/iO69rPZAAtX+aeuxVEh+znCeOe95TUQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-09T10:09:12Z"
-    mac: ENC[AES256_GCM,data:OS9KS/1y2YRzsvI4x86MAr8zrKH6kn8wgwAznu+zJpRyTf9EhfwLpoWunr9VqaKpf+24ywGquoxOkA8IdKkkJ3r8sN5Sar0yOtTVL5YB//ElPKk2n+eYlACseIv0nmI0BnaDXxRNTGAJjZCXUzovotf5gj2Ran31Vu8TZ78vOe4=,iv:qo0AUG9/dJod5JPbYr332kmfR8AeBoyfvcl098RTCVY=,tag:8a9xY8XDxi592T+RibkDxw==,type:str]
+    lastmodified: "2026-10-17T04:48:23Z"
+    mac: ENC[AES256_GCM,data:uB4f5Me9PiicC3o4EprihmjR+1hBf8L9XgKnTaZcHkuoeBj9cgvyb/fgjJaNPiezWcA7S2FNJE/Iy4llWmP8q5V3FkEz88X3wbiZ4TTJybPjUIUAu/fikeq8eYvFXo5QzHTYebN0f2rfQCD1dWyytFBiD2BVHxu7lq7p0VjLHUE=,iv:BYFkPYV63C1kh/kMHv5WhFxm0UCe0Ntv+ZU1msazogA=,tag:CM/WWGTX9mHPRFaOysMkWg==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1
 ---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
     name: jellyfin
+    namespace: plex
+    labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
     trigger:
         manual: restore-once
     restic:
         repository: restic-config-jellyfin
-        destinationPVC: jellyfin
-        copyMethod: Direct
+        copyMethod: Snapshot
+        volumeSnapshotClassName: rawfile-localpv
+        storageClassName: rawfile-localpv
+        accessModes:
+            - ReadWriteOnce
+        capacity: 5Gi
         cleanupCachePVC: true
         cleanupTempPVC: true
         moverSecurityContext:
@@ -95,14 +105,14 @@ sops:
         - recipient: age14cy4q3ul8qdg4sezqcv3kv8l6z2s20m4zthhux0l2pccmett2ecqnlz5g6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXSlRNL3U5ZUJDYWwvSUNI
-            QzBsK2JmQUV4YTh5ZnFaSytIdTJmRC9lRWxJCm16MHljdE40dDFTcnp5TXZ5VFNa
-            a2M5R0FIMUNBNkI3VU9iUTNXUURGTXMKLS0tIFVGaVB2QkV0SXhJei9nSWM0ODBB
-            RDVpT04rTnVKKytuQU82cUFEVzAwUTQK36DJPX14CCfovK8ByW6UPWswiPTT6kIc
-            jyG0LjxhMs5QBRsecZYMnOP8T1Cc7SyO2cOMu6YGvPt6o1+uayzAiQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFdlF0QzEydCt6ejN6NFBC
+            Sld2ZVJ4UGNXV3F6SDJqTUVsczY5c05ZdmxjCjlicUw1emhZRmdBYUZ1dzRJSnBj
+            dm1RUEdRbExCNXZnSDZEOW1ZdE1KdjQKLS0tIG1TZ2ViSnMxeUYrTUdxazc4azFr
+            MDJUUHdpcUYvYUQ5N2dJVWFvQ3o4dHMKzvi2nIl4eOcBiisDYdL0yP7mxmJb1hNW
+            DrpojQeqp2qx+NCYCRiUem/iO69rPZAAtX+aeuxVEh+znCeOe95TUQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-09T10:09:12Z"
-    mac: ENC[AES256_GCM,data:OS9KS/1y2YRzsvI4x86MAr8zrKH6kn8wgwAznu+zJpRyTf9EhfwLpoWunr9VqaKpf+24ywGquoxOkA8IdKkkJ3r8sN5Sar0yOtTVL5YB//ElPKk2n+eYlACseIv0nmI0BnaDXxRNTGAJjZCXUzovotf5gj2Ran31Vu8TZ78vOe4=,iv:qo0AUG9/dJod5JPbYr332kmfR8AeBoyfvcl098RTCVY=,tag:8a9xY8XDxi592T+RibkDxw==,type:str]
+    lastmodified: "2026-10-17T04:48:23Z"
+    mac: ENC[AES256_GCM,data:uB4f5Me9PiicC3o4EprihmjR+1hBf8L9XgKnTaZcHkuoeBj9cgvyb/fgjJaNPiezWcA7S2FNJE/Iy4llWmP8q5V3FkEz88X3wbiZ4TTJybPjUIUAu/fikeq8eYvFXo5QzHTYebN0f2rfQCD1dWyytFBiD2BVHxu7lq7p0VjLHUE=,iv:BYFkPYV63C1kh/kMHv5WhFxm0UCe0Ntv+ZU1msazogA=,tag:CM/WWGTX9mHPRFaOysMkWg==,type:str]
     pgp: []
     encrypted_regex: RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY|RESTIC_REPOSITORY
     version: 3.9.1

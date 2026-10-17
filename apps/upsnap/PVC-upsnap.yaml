@@ -6,6 +6,10 @@ metadata:
     app: upsnap
   name: upsnap
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: upsnap
   accessModes:
     - ReadWriteOnce
   resources:

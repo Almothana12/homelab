@@ -6,6 +6,10 @@ metadata:
   name: bazarr
   namespace: plex
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: bazarr
   accessModes:
     - ReadWriteOnce
   resources:

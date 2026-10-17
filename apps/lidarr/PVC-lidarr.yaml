@@ -5,6 +5,10 @@ metadata:
     app: lidarr
   name: lidarr
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: lidarr
   accessModes:
     - ReadWriteOnce
   resources:

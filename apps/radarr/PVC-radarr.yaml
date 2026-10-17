@@ -6,6 +6,10 @@ metadata:
     app: radarr
   name: radarr
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: radarr
   accessModes:
     - ReadWriteOnce
   resources:

@@ -5,6 +5,10 @@ metadata:
     app: audiobookshelf
   name: audiobookshelf-config
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: audiobookshelf-config
   accessModes:
     - ReadWriteOnce
   resources:
@@ -18,6 +22,10 @@ metadata:
     app: audiobookshelf
   name: audiobookshelf-metadata
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: audiobookshelf-metadata
   accessModes:
     - ReadWriteOnce
   resources:

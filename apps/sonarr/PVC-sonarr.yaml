@@ -5,6 +5,10 @@ metadata:
     app: sonarr
   name: sonarr
 spec:
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: sonarr
   accessModes:
     - ReadWriteOnce
   resources:

@@ -51,3 +51,18 @@ spec:
         - secretName: almothana-xyz-tls
           hosts:
             - seerr.almothana.xyz
+  # VolSync volume populator (restore in volsync.yaml): the PVC stays Pending until its restore
+  # finished, so neither the app nor its backup runs on an empty volume.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: PersistentVolumeClaim
+              name: seerr
+            patch: |
+              - op: add
+                path: /spec/dataSourceRef
+                value:
+                  apiGroup: volsync.backube
+                  kind: ReplicationDestination
+                  name: seerr
