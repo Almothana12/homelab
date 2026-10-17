@@ -1,0 +1,9 @@
+# Dedicated etcd partition: a full EPHEMERAL (images, logs) can't run etcd out of space.
+# Directory vs partition is fixed when the node is installed.
+# https://docs.siderolabs.com/talos/v1.14/getting-started/what's-new-in-talos#dedicated-system-volumes
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: ETCD
+provisioning:
+  minSize: 4GB
+  maxSize: 8GB

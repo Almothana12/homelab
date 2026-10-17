@@ -1,0 +1,7 @@
+# Kubelet requests a CA-signed serving certificate, so metrics-server can verify it.
+# kubelet-serving-cert-approver approves the CSRs.
+# https://docs.siderolabs.com/kubernetes-guides/monitoring-and-observability/deploy-metrics-server
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  serverTLSBootstrap: true

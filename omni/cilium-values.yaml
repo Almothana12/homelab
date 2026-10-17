@@ -1,0 +1,71 @@
+# Cilium bootstrap values. Omni applies the rendered manifest once (mode: one-time).
+# Render from the omni/ directory with:
+#   helm template cilium cilium --repo https://helm.cilium.io --version 1.19.9 \
+#     --namespace kube-system -f cilium-values.yaml > manifests/cilium.yaml
+# https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium
+ipam:
+  mode: kubernetes
+kubeProxyReplacement: true
+# KubePrism: a local API load balancer on every node, so Cilium doesn't depend on the VIP.
+k8sServiceHost: localhost
+k8sServicePort: 7445
+securityContext:  
+  capabilities:
+    ciliumAgent: [CHOWN, KILL, NET_ADMIN, NET_RAW, IPC_LOCK, SYS_ADMIN, SYS_RESOURCE, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    cleanCiliumState: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+routingMode: tunnel
+tunnelProtocol: vxlan
+ipv6:
+  enabled: true
+enableIPv6Masquerade: true
+k8s:
+  requireIPv6PodCIDR: true # wait for Kubernetes to provide the PodCIDR before ready
+ingressController:
+  enabled: true
+  default: true
+  loadbalancerMode: shared
+l2announcements:
+  enabled: true
+externalIPs:
+  enabled: true
+operator:
+  replicas: 1
+  prometheus:
+    enabled: true
+prometheus:
+  enabled: true
+# ServiceMonitors are off: the prometheus-operator CRDs don't exist when Omni applies this.
+hubble:
+  tls:
+    auto:
+      # Generate the Hubble certificates in the cluster, so no private keys end up in the
+      # rendered manifest.
+      method: cronJob
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+  export:
+    dynamic:
+      enabled: true
+      config:
+        content:
+          - name: blocked-events
+            filePath: /var/run/cilium/hubble/events-system.log
+            includeFilters:
+              - verdict:
+                  - DROPPED
+                  - ERROR
+  metrics:
+    enabled:
+      - dns
+      - drop:sourceContext=namespace|ip|reserved-identity;destinationContext=namespace|ip|reserved-identity;labelsContext=source_namespace,source_workload,destination_namespace,destination_workload,traffic_direction
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction

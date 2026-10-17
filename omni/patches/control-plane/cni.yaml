@@ -1,0 +1,10 @@
+# No Flannel and no kube-proxy: Cilium (kubeProxyReplacement) is deployed from the
+# Omni cluster template instead.
+# https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false

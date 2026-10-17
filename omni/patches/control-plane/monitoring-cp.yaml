@@ -1,0 +1,11 @@
+# Bind to 0.0.0.0 instead of 127.0.0.1 to allow Prometheus to scrape metrics from the controller manager and scheduler pods
+# https://github.com/siderolabs/talos/issues/3765
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+extraArgs:
+  bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+extraArgs:
+  bind-address: 0.0.0.0

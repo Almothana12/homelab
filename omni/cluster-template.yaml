@@ -1,0 +1,100 @@
+# Omni cluster template. Run omnictl from this directory (file paths are relative to it):
+#   omnictl cluster template validate -f cluster-template.yaml
+#   omnictl cluster template sync -f cluster-template.yaml
+#   omnictl cluster template status -f cluster-template.yaml
+# https://docs.siderolabs.com/omni/reference/cluster-templates
+kind: Cluster
+name: homelab
+talos:
+  version: v1.14.3
+kubernetes:
+  version: v1.37.1
+  manifests:
+    # Applied once; Cilium is upgraded outside Omni afterwards.
+    - name: cilium
+      mode: one-time
+      file: manifests/cilium.yaml
+    # Approves the kubelet serving CSRs (patches/kubelet-serving-certs.yaml).
+    - name: kubelet-serving-cert-approver
+      mode: full
+      file: manifests/kubelet-serving-cert-approver.yaml
+    - name: metrics-server
+      mode: full
+      file: manifests/metrics-server.yaml
+features:
+  backupConfiguration:
+    interval: 6h
+patches:
+  - file: patches/dual-stack.yaml
+  - file: patches/dns.yaml
+  - file: patches/kubelet-serving-certs.yaml
+  - file: patches/spegel.yaml
+  - file: patches/storage.yaml
+---
+kind: ControlPlane
+machines:
+  - a5e46adb-b4ed-4911-9fad-aa6a270b346a # master-1
+  - 267cfa02-ec04-4b6c-851d-70b78e19f9c4 # master-2
+  - 2b6d23c9-83fc-4fdc-9208-66d62a652aeb # master-3
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/iscsi-tools
+  - siderolabs/mei
+  - siderolabs/util-linux-tools
+patches:
+  - file: patches/control-plane/cni.yaml
+  - file: patches/control-plane/schedule-cp.yaml
+  - file: patches/control-plane/monitoring-cp.yaml
+  - file: patches/control-plane/vip.yaml
+  - file: patches/control-plane/etcd-volume.yaml
+---
+kind: Workers
+name: gpu
+machines:
+  - d077e8f0-bfdf-11d3-9f8a-30c599bfde64 # gpu-1
+  - 12556404-bfe1-11d3-bc1f-30c599be6c34 # gpu-2
+systemExtensions:
+  - siderolabs/nonfree-kmod-nvidia-production
+  - siderolabs/nvidia-container-toolkit-production
+kernelArgs:
+  - arm64.nobti
+patches:
+  - file: patches/gpu/nvidia.yaml
+  - file: patches/gpu/kubelet.yaml
+---
+# The master nodes all report the same SMBIOS UUID, so each master gets a unique one
+# through the UUIDOverride META key (0x0f) before it registers with Omni.
+kind: Machine
+name: a5e46adb-b4ed-4911-9fad-aa6a270b346a
+install:
+  disk: /dev/sda
+patches:
+  - file: patches/machines/master-1.yaml
+---
+kind: Machine
+name: 267cfa02-ec04-4b6c-851d-70b78e19f9c4
+install:
+  disk: /dev/sda
+patches:
+  - file: patches/machines/master-2.yaml
+---
+kind: Machine
+name: 2b6d23c9-83fc-4fdc-9208-66d62a652aeb
+install:
+  disk: /dev/sda
+patches:
+  - file: patches/machines/master-3.yaml
+---
+kind: Machine
+name: d077e8f0-bfdf-11d3-9f8a-30c599bfde64
+install:
+  disk: /dev/nvme0n1
+patches:
+  - file: patches/machines/gpu-1.yaml
+---
+kind: Machine
+name: 12556404-bfe1-11d3-bc1f-30c599be6c34
+install:
+  disk: /dev/nvme0n1
+patches:
+  - file: patches/machines/gpu-2.yaml

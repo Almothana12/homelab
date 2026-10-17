@@ -1,0 +1,12 @@
+apiVersion: v1alpha1
+kind: HostnameConfig
+auto: "off"
+hostname: master-1
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: enp1s0
+addresses:
+  - address: 192.168.0.61/24
+routes:
+  - gateway: 192.168.0.1

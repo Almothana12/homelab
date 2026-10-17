@@ -1,0 +1,25 @@
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  # NodeRestriction stops a worker from tainting itself after it joins (KubeNodeConfig
+  # taints), but the kubelet may register with taints.
+  registerWithTaints:
+    - key: nvidia.com/gpu
+      value: present
+      effect: NoSchedule
+  systemReserved:
+    memory: 3Gi
+    cpu: 500m
+  kubeReserved:
+    memory: 1Gi
+    cpu: 500m
+  # Evict before the node becomes unresponsive.
+  evictionHard:
+    memory.available: 4Gi
+    nodefs.available: 10%
+  evictionSoft:
+    memory.available: 6Gi
+  evictionSoftGracePeriod:
+    memory.available: 1m30s
+  # Give a terminating pod time to release GPU memory cleanly.
+  evictionMaxPodGracePeriod: 60

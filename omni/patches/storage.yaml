@@ -1,0 +1,28 @@
+# Every node has a single disk. Cap EPHEMERAL (images, logs, emptyDirs) so the rest of
+# the disk becomes a dedicated volume for openebs-hostpath PVs. A full PV can no longer
+# fill EPHEMERAL and take the node down with it.
+# https://docs.siderolabs.com/talos/v1.14/configure-your-talos-cluster/storage-and-disk-management/disk-management/user
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  maxSize: 30%
+---
+# Mounted at /var/mnt/local-storage and propagated into the kubelet; no extraMounts needed.
+# openebs basePath: /var/mnt/local-storage
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-storage
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 100GB
+  grow: true
+filesystem:
+  type: xfs
+  # Lets openebs enforce PVC sizes (StorageClass xfsQuota).
+  projectQuotaSupport: true
+mount:
+  # The default adds noexec. Apps keep executables in their PVs (plugins, venvs), as they
+  # could on EPHEMERAL.
+  secure: false

@@ -1,0 +1,12 @@
+# Shared API server IP for kubectl on the LAN without Omni.
+# In-cluster clients use KubePrism (localhost:7445).
+# https://docs.siderolabs.com/talos/v1.14/reference/configuration/network/layer2vipconfig
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: 192.168.0.60
+link: enp1s0
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+certExtraSANs:
+  - 192.168.0.60
