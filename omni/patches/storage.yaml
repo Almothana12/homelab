@@ -6,7 +6,7 @@ apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
 provisioning:
-  maxSize: 30%
+  maxSize: 150GB
 ---
 # Mounted at /var/mnt/local-storage and propagated into the kubelet; no extraMounts needed.
 # openebs basePath: /var/mnt/local-storage
