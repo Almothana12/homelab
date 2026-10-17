@@ -52,6 +52,27 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: cilium-controller
+  namespace: flux-system
+spec:
+  # Takes over the Cilium that Omni installs at bootstrap (omni/manifests/cilium.yaml).
+  # The ServiceMonitor CRDs come from kube-prometheus-stack.
+  dependsOn:
+  - name: kube-prometheus-stack
+  force: false
+  interval: 5m0s
+  path: ./infrastructure/cilium/controller
+  # Pruning the HelmRelease would uninstall the CNI.
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: kube-system
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: gateway-api-crds
   namespace: flux-system
 spec:

@@ -1,0 +1,115 @@
+# Takes over the Cilium that Omni applies once from omni/manifests/cilium.yaml.
+# Keep the values equal to omni/cilium-values.yaml, plus the ServiceMonitors, so the
+# takeover doesn't change the agent DaemonSet. Helm takes ownership of the existing
+# objects on install, since the one-time manifest leaves no Helm release secret.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+  annotations:
+    # Deleting this HelmRelease uninstalls the CNI. Never let Flux prune it.
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  releaseName: cilium
+  interval: 24h
+  timeout: 10m
+  chart:
+    spec:
+      chart: cilium
+      version: '1.19.9'
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+        namespace: kube-system
+      interval: 24h
+  # Retry instead of remediating: install remediation is an uninstall, and upgrade
+  # remediation is a rollback. Neither is something to do to the CNI unattended.
+  install:
+    strategy:
+      name: RetryOnFailure
+  upgrade:
+    strategy:
+      name: RetryOnFailure
+  values:
+    ipam:
+      mode: kubernetes
+    kubeProxyReplacement: true
+    # KubePrism: a local API load balancer on every node, so Cilium doesn't depend on the VIP.
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    securityContext:
+      capabilities:
+        ciliumAgent: [CHOWN, KILL, NET_ADMIN, NET_RAW, IPC_LOCK, SYS_ADMIN, SYS_RESOURCE, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+        cleanCiliumState: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
+    cgroup:
+      autoMount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    routingMode: tunnel
+    tunnelProtocol: vxlan
+    ipv6:
+      enabled: true
+    enableIPv6Masquerade: true
+    k8s:
+      requireIPv6PodCIDR: true # wait for Kubernetes to provide the PodCIDR before ready
+    ingressController:
+      enabled: true
+      default: true
+      loadbalancerMode: shared
+    l2announcements:
+      enabled: true
+    externalIPs:
+      enabled: true
+    operator:
+      replicas: 1
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      # The chart drops these annotations once the ServiceMonitor is on. Keeping them leaves
+      # the pod template as Omni applied it, so the takeover doesn't restart anything.
+      podAnnotations:
+        prometheus.io/port: "9963"
+        prometheus.io/scrape: "true"
+    prometheus:
+      enabled: true
+      # The chart refuses to render these until the monitoring.coreos.com/v1 CRDs exist,
+      # so an early reconcile fails without touching anything and is retried.
+      serviceMonitor:
+        enabled: true
+    # Same as operator.podAnnotations, for the agent DaemonSet.
+    podAnnotations:
+      prometheus.io/port: "9962"
+      prometheus.io/scrape: "true"
+    hubble:
+      tls:
+        auto:
+          # Generate the Hubble certificates in the cluster, so no private keys end up in the
+          # rendered manifest.
+          method: cronJob
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+      export:
+        dynamic:
+          enabled: true
+          config:
+            content:
+              - name: blocked-events
+                filePath: /var/run/cilium/hubble/events-system.log
+                includeFilters:
+                  - verdict:
+                      - DROPPED
+                      - ERROR
+      metrics:
+        serviceMonitor:
+          enabled: true
+        enabled:
+          - dns
+          - drop:sourceContext=namespace|ip|reserved-identity;destinationContext=namespace|ip|reserved-identity;labelsContext=source_namespace,source_workload,destination_namespace,destination_workload,traffic_direction
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
