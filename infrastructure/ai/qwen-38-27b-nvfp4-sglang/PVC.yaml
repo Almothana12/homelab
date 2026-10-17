@@ -6,6 +6,7 @@ metadata:
     app: qwen-38-27b-nvfp4-sglang
   name: qwen-38-27b-nvfp4-sglang
 spec:
+  storageClassName: openebs-hostpath
   accessModes:
     - ReadWriteOnce
   resources:

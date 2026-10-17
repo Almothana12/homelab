@@ -67,6 +67,7 @@ spec:
         requestMemory: "16Gi"
         requestGPU: 1
         pvcStorage: "50Gi"
+        storageClass: openebs-hostpath
         enableTool: true
         toolCallParser: "qwen3_coder"
         vllmConfig:
