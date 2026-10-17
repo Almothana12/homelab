@@ -1,8 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: tremolo
-  namespace: openunison
-spec:
-  interval: 1h
-  url: https://nexus.tremolo.io/repository/helm/
