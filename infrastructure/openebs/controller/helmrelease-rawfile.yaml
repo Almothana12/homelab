@@ -56,6 +56,12 @@ spec:
         # Not xfs: a restored or cloned volume keeps the filesystem UUID, and XFS refuses to
         # mount a duplicate UUID on the same node.
         fsType: ext4
+        # mkfs.ext4 picks 1 KiB blocks for volumes under 512 MB. After a CoW snapshot reflinks
+        # disk.img, the direct-I/O loop device comes up with 4 KiB sectors and can't mount a
+        # 1 KiB-block filesystem ("bad block size 1024"). Always use 4 KiB blocks.
+        formatOptions:
+          - "-b"
+          - "4096"
         # The chart renders the empty default as "<nil>", which the driver reads as off.
         copyOnWrite: "true"
         # Flush and freeze the filesystem during a snapshot; otherwise data still in page
