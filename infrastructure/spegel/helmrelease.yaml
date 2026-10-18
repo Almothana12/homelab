@@ -22,8 +22,3 @@ spec:
     # Enabled monitoring
     serviceMonitor:
       enabled: true
-    grafanaDashboard:
-      enabled: true
-      mode: Sidecar
-      labels:
-        grafana_dashboard: "1"

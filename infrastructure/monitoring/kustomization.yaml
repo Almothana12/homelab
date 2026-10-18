@@ -4,6 +4,7 @@ resources:
   - ConfigMap-grafana-dashboard-cilium-drops.yaml
   - ConfigMap-grafana-dashboard-gpu-nodes.yaml
   - ConfigMap-grafana-dashboard-llamacpp.yaml
+  - ConfigMap-grafana-dashboard-spegel.yaml
   - ConfigMap-grafana-dashboard-vllm.yaml
   - PodMonitor-flux-system.yaml
   - PrometheusRule-standard-cluster-monitoring.yaml
