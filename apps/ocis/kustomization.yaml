@@ -7,6 +7,8 @@ resources:
   - PVC-storageusers-nfs.yaml
   - secret-onlyoffice-wopi-secret.yaml
   - secret-ocis-ldap-bind-password.yaml
+  - secret-ocis-storage-system.yaml
+  - configmap-ocis-storage-users.yaml
   - gitrepo.yaml
   - helmrelease.yaml
   - volsync.yaml

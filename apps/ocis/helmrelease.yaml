@@ -31,6 +31,10 @@ spec:
       # -- Reference to an existing collaboration service WOPI secret (see ref:Secrets#secrets). Not used if `features.appsIntegration.enabled` equals `false`.
       collaborationWopiSecret: onlyoffice-wopi-secret
       ldapSecretRef: ocis-ldap-bind-password
+      # IDs baked into the restored data; must survive a reinstall (see the referenced files)
+      storagesystemSecretRef: ocis-storage-system
+    configRefs:
+      storageusersConfigRef: ocis-storage-users
     features:
       externalUserManagement:
         enabled: true

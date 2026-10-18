@@ -1,0 +1,9 @@
+# Pinned storage-users mount ID. It is the first part of every space/resource ID
+# (<mount-id>$<space-id>), so shares in the restored share-manager metadata and the
+# desktop clients' sync folders break if a fresh install generates a new one.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocis-storage-users
+data:
+  storage-uuid: b286067d-822d-49a4-8c48-d5a709b54323
