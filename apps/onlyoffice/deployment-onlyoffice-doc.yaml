@@ -39,6 +39,10 @@ spec:
                   key: JWT_SECRET
             - name: WOPI_ENABLED
               value: "true"
+            # Since 10.0 every WOPI host must be named by an explicit ipfilter rule ("*" no longer
+            # counts). Rules match in order; "allow all" keeps the previous default for everything else.
+            - name: IP_FILTER_RULES
+              value: "allow collaboration-onlyoffice.ocis.svc.cluster.local; allow all"
           resources:
             requests:
               cpu: '1'
