@@ -7,3 +7,4 @@ spec:
   url: https://github.com/owncloud/ocis-charts
   ref:
     branch: main
+    commit: 36a4490a94c033c610fcda0de7a62d25206bff02
