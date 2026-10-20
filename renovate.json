@@ -19,6 +19,27 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/ggml-org/llama.cpp"],
       "versioning": "regex:^(?<compatibility>.*)b(?<major>\\d+)$"
+    },
+    {
+      "description": "cloudnative-vectorchord tags are <pg major>.<pg minor>-<vchord x.y.z>; docker versioning would treat the vchord part as a suffix and never bump it",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<patch>\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)$"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "CNPG cluster chart takes the Postgres image as a single 'imageName: repo:tag' string, which the flux/helm-values extractor does not read",
+      "customType": "regex",
+      "managerFilePatterns": ["/apps/.+\\.yaml$/", "/infrastructure/.+\\.yaml$/"],
+      "matchStrings": ["\\n\\s*imageName:\\s*\"?(?<depName>[^:\\s\"]+):(?<currentValue>[^\\s\"@]+)"],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "description": "Bare image tags the flux/helm-values extractor skips (no sibling 'repository'); opt in with a '# renovate: datasource=... depName=...' comment on the line above",
+      "customType": "regex",
+      "managerFilePatterns": ["/k8s/.+\\.yaml$/", "/apps/.+\\.yaml$/", "/infrastructure/.+\\.yaml$/"],
+      "matchStrings": ["#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+versioning=(?<versioning>\\S+))?\\s*\\n\\s*tag:\\s*\"?(?<currentValue>[^\\s\"@]+)"]
     }
   ],
   "flux": {
