@@ -36,6 +36,22 @@ spec:
         - key: nvidia.com/gpu
           operator: Exists
           effect: NoSchedule
+      # No requests/limits by default puts these pods in the BestEffort QoS class, so the
+      # kubelet's eviction manager kills them first when a node runs short of memory. The
+      # agent on master-3 was SIGKILLed (exit 137, all 4 containers) at 03:00, in the middle
+      # of the CreateVolume that restores VolSync's snapshot copy for plex-config, and the
+      # driver's in-memory "volume in create" lock for that name never cleared: every
+      # provisioning retry since returns "rpc error: code = DeadlineExceeded desc = Volume
+      # Still Creating...". Requests make the plugin Burstable so it is no longer the first
+      # eviction candidate. The limit is deliberately generous so e2fsck/resize2fs on the
+      # largest volumes (10Gi) are never OOM-killed by us.
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: "1"
+          memory: 1Gi
       metadataDirPath: /var/mnt/local-storage/rawfile/meta
       defaultPool: local-storage
       storagePools:
