@@ -3,5 +3,6 @@ kind: HelmRepository
 metadata:
   name: immich
 spec:
-  interval: 5m
-  url: https://immich-app.github.io/immich-charts
+  type: oci
+  interval: 24h
+  url: oci://ghcr.io/immich-app/immich-charts
