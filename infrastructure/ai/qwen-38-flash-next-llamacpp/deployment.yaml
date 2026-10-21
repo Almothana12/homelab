@@ -51,7 +51,7 @@ spec:
             - --alias
             - ukisai/Swift-1.5-Qwen3.8-Flash-Next-GGUF:IQ4_XS
             - --ctx-size
-            - "131072"
+            - "262144"
             # GB10's integrated GPU makes auto keep the large PLE tables resident.
             - --lazy-mode
             - "on"
