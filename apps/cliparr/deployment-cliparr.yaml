@@ -22,7 +22,7 @@ spec:
         fsGroup: 65532
         fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/techsquidtv/cliparr:3.0
+        - image: ghcr.io/techsquidtv/cliparr:3.0.1
           name: cliparr
           resources:
             requests:
