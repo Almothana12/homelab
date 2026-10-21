@@ -16,7 +16,7 @@ spec:
       value: "0"
   provider:
     name: github
-    endpoint: ""  # optional, defaults to https://api.github.com
+    endpoint: "https://api.github.com"
   resources:
     requests:
       cpu: 250m
