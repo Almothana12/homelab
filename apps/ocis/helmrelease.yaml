@@ -13,7 +13,7 @@ spec:
   values:
     image:
       repository: owncloud/ocis
-      tag: 8.2.1
+      tag: 8.2.2
     externalDomain: ocis.almothana.sa
     ingress:
       enabled: true
