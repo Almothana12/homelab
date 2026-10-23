@@ -20,6 +20,10 @@ spec:
       containers:
         - name: pangolin-cli
           image: docker.io/fosrl/pangolin-cli:0.19.0
+          args:
+            - --mtu=1200
+            # Keep the pod's normal DNS; we only dial the alias IP.
+            - --override-dns=false
           env:
             - name: PANGOLIN_ENDPOINT
               value: https://pangolin.almothana.sa
