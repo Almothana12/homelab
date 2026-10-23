@@ -11,7 +11,7 @@ spec:
     - name: LOG_LEVEL
       value: debug
     - name: RENOVATE_PR_HOURLY_LIMIT
-      value: "0"
+      value: "3"
     - name: RENOVATE_PR_CONCURRENT_LIMIT
       value: "0"
   provider:
@@ -24,7 +24,8 @@ spec:
     limits:
       cpu: "1"
       memory: 1Gi
-  schedule: "0 3 * * *"
+  # Every 6h
+  schedule: "40 0,6,12,18 * * *"
   githubAppReference:
     secretName: github-app-credentials
     appIdSecretKey: APP_ID
