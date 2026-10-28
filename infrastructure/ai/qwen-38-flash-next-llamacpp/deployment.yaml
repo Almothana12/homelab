@@ -33,7 +33,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: llama-server
-          image: ghcr.io/ggml-org/llama.cpp:server-cuda13-b11804
+          image: ghcr.io/ggml-org/llama.cpp:server-cuda13-b11960
           imagePullPolicy: IfNotPresent
           # env:
           #   # Cache Hub downloads through Olah
