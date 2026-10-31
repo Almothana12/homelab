@@ -17,7 +17,7 @@ spec:
         app: bulwark
     spec:
       containers:
-        - image: ghcr.io/bulwarkmail/webmail:1.17.1
+        - image: ghcr.io/bulwarkmail/webmail:1.19.1
           name: bulwark
           resources:
             requests:
