@@ -84,6 +84,16 @@ spec:
         - ports:
             - port: "80"
               protocol: TCP
+    # To Jellyfin (Pangolin target: jellyfin.plex.svc.cluster.local:8096).
+    # Cilium matches the pod port after DNAT; here Service port == containerPort.
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: plex
+            k8s:app: jellyfin
+      toPorts:
+        - ports:
+            - port: "8096"
+              protocol: TCP
     # To oCIS
     - toEndpoints:
         - matchLabels:
