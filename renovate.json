@@ -25,6 +25,12 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<patch>\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)$"
+    },
+    {
+      "description": "linuxserver/jellyfin publishes 12.x only as <ver>ubu<base>-ls<build> (no plain '12.4' tag), so docker versioning found no candidates. The ubu part is deliberately NOT a compatibility group: base bumps (ubu2404 -> ubu2604) must not stall updates again",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["linuxserver/jellyfin"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?ubu\\d+-ls(?<build>\\d+)$"
     }
   ],
   "customManagers": [

@@ -17,7 +17,8 @@ spec:
         app: jellyfin
     spec:
       containers:
-        - image: linuxserver/jellyfin:10.11.11
+        # 12.x is only tagged <ver>ubu<base>-ls<build>; see the linuxserver/jellyfin rule in renovate.json
+        - image: linuxserver/jellyfin:12.4ubu2604-ls57
           name: jellyfin
           resources:
             requests:
