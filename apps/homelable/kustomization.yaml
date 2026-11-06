@@ -4,9 +4,12 @@ resources:
   - namespace.yaml
   - configmap-homelable.yaml
   - secret-homelable.yaml
+  - secret-mcp-homelable.yaml
   - PVC-homelable.yaml
   - deployment-backend.yaml
   - deployment-frontend.yaml
+  - deployment-mcp.yaml
   - service-backend.yaml
   - service-frontend.yaml
+  - service-mcp.yaml
   - ingress-homelable.yaml
