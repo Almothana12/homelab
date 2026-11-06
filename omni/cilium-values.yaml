@@ -17,6 +17,11 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+# Pin the pod MTU. Auto-detection takes the smallest device MTU, which is Omni's
+# siderolink WireGuard iface (1280), so pods got 1280 (route MTU 1230). Every tunnel pod
+# (Tailscale Connector, Newt) then fragments its WireGuard UDP and drops oversized
+# forwarded packets. All node NICs are 1500. Existing pods keep the old MTU until recreated.
+MTU: 1500
 routingMode: tunnel
 tunnelProtocol: vxlan
 ipv6:
