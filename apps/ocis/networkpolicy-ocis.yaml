@@ -14,6 +14,14 @@ spec:
     # From Ingress
     - fromEntities:
         - ingress
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: newt
+            app.kubernetes.io/component: newt
+      toPorts:
+        - ports:
+            - port: "9200"
+              protocol: TCP
     # From Cloudflared namespace
     - fromEndpoints:
         - matchLabels:
