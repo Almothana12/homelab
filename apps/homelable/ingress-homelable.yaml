@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homelable
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: homelable.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homelable
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - homelable.almothana.xyz
+      secretName: almothana-xyz-tls

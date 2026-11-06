@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homelable
+data:
+  SQLITE_PATH: /app/data/homelab.db
+  CORS_ORIGINS: '["https://homelable.almothana.xyz"]'
+  AUTH_MODE: oidc
+  AUTH_USERNAME: admin
+  SCANNER_RANGES: '["192.168.0.0/24"]'
+  SCANNER_HTTP_RANGES: '[]'
+  SCANNER_HTTP_PROBE_ENABLED: "false"
+  SCANNER_HTTP_VERIFY_TLS: "false"
+  STATUS_CHECKER_INTERVAL: "60"
