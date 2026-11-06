@@ -23,7 +23,9 @@ spec:
             requests:
               cpu: 10m
               memory: 600Mi
-            limits: {}
+            limits:
+              # iGPU for transcoding
+              gpu.intel.com/i915: "1"
           env:
             - name: TZ
               value: Asia/Riyadh
