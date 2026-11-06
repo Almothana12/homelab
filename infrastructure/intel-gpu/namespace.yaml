@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: intel-gpu
+  labels:
+    # the plugin needs hostPath mounts (/dev/dri, kubelet device-plugin socket), which baseline rejects
+    pod-security.kubernetes.io/enforce: privileged

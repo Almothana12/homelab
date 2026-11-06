@@ -1,0 +1,83 @@
+# https://github.com/intel/intel-device-plugins-for-kubernetes/blob/v0.37.1/deployments/gpu_plugin/base/intel-gpu-plugin.yaml
+# Advertises the master nodes' Alder Lake-N iGPU (Talos i915 extension) as gpu.intel.com/i915
+# so Jellyfin can transcode with Quick Sync instead of libx264 on the control-plane CPUs.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: intel-gpu-plugin
+  labels:
+    app: intel-gpu-plugin
+spec:
+  selector:
+    matchLabels:
+      app: intel-gpu-plugin
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: intel-gpu-plugin
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: intel-gpu-plugin
+          image: intel/intel-gpu-plugin:0.37.1
+          imagePullPolicy: IfNotPresent
+          args:
+            # one iGPU shared by Jellyfin and maybe Plex in the future
+            - -shared-dev-num=2
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              memory: 45Mi
+              cpu: 40m
+            limits:
+              memory: 115Mi
+              cpu: 100m
+          volumeMounts:
+            - name: devfs
+              mountPath: /dev/dri
+              readOnly: true
+            - name: sysfsdrm
+              mountPath: /sys/class/drm
+              readOnly: true
+            - name: kubeletsockets
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: cdipath
+              mountPath: /var/run/cdi
+      volumes:
+        - name: devfs
+          hostPath:
+            path: /dev/dri
+        - name: sysfsdrm
+          hostPath:
+            path: /sys/class/drm
+        - name: kubeletsockets
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: cdipath
+          hostPath:
+            path: /var/run/cdi
+            type: DirectoryOrCreate
+      # arm64 have NVIDIA GPUs
+      nodeSelector:
+        kubernetes.io/arch: amd64
