@@ -13,3 +13,4 @@ resources:
   - service-frontend.yaml
   - service-mcp.yaml
   - ingress-homelable.yaml
+  - ingress-mcp-homelable.yaml

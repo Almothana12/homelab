@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homelable-mcp
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: homelable-mcp.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp
+                port:
+                  number: 8001
+  tls:
+    - hosts:
+        - homelable-mcp.almothana.xyz
+      secretName: almothana-xyz-tls
