@@ -1,0 +1,24 @@
+
+default_config:
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  # Cilium ingress (Envoy) sits in front and sets X-Forwarded-For.
+  # Without trusting it, HA answers proxied requests with 400 Bad Request.
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.0.61/32
+    - 192.168.0.62/32
+    - 192.168.0.63/32
+    - 192.168.0.64/32
+    - 192.168.0.65/32
+    - 10.244.0.0/16      # pod CIDR (IPv4)
+    - fd00:10:244::/48   # pod CIDR (IPv6)
+    - 127.0.0.1
+    - ::1

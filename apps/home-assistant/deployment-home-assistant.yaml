@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  labels:
+    app: home-assistant
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      automountServiceAccountToken: false
+      # Host network so mDNS/SSDP/DHCP discovery can see LAN devices (Shelly etc.).
+      # HA also listens on <node-ip>:8123 directly.
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        # configuration.yaml includes these files; HA refuses to start if they
+        # are missing. Create them once, never overwrite UI-made content.
+        - name: init-config
+          image: ghcr.io/home-assistant/home-assistant:2026.11.0
+          command:
+            - sh
+            - -c
+            - |
+              cd /config
+              [ -f automations.yaml ] || echo '[]' > automations.yaml
+              [ -f scripts.yaml ] || touch scripts.yaml
+              [ -f scenes.yaml ] || touch scenes.yaml
+              mkdir -p themes
+          volumeMounts:
+            - name: data
+              mountPath: /config
+      containers:
+        - name: home-assistant
+          image: ghcr.io/home-assistant/home-assistant:2026.11.0
+          env:
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - name: http
+              containerPort: 8123
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: config
+              mountPath: /config/configuration.yaml
+              subPath: configuration.yaml
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: home-assistant
+        - name: config
+          configMap:
+            name: home-assistant-config
