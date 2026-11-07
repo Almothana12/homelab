@@ -56,6 +56,9 @@ spec:
               value: /run/secrets/technitium/admin-password
             - name: DNS_SERVER_LOG_USING_LOCAL_TIME
               value: "true"
+            # Keeps the logs from filling the 2Gi volume (first start only).
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: "30"
             - name: TZ
               value: Asia/Riyadh
           ports:
@@ -111,6 +114,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/dns
+            # Keep the logs on the PVC. otherwise /var/log/technitium is is read-only and the container fails to start
+            - name: config
+              mountPath: /var/log/technitium
+              subPath: logs
             - name: admin-password
               mountPath: /run/secrets/technitium
               readOnly: true
