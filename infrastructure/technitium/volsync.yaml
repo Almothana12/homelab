@@ -1,0 +1,269 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: technitium-0
+spec:
+  sourcePVC: config-technitium-0
+  trigger:
+    schedule: 0 4 * * *
+  restic:
+    pruneIntervalDays: 7
+    repository: restic-config-technitium-0
+    retain:
+      hourly: 1
+      daily: 7
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+    # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+    moverAffinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                instance: technitium-0
+            topologyKey: kubernetes.io/hostname
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: technitium-1
+spec:
+  sourcePVC: config-technitium-1
+  trigger:
+    schedule: 10 4 * * *
+  restic:
+    pruneIntervalDays: 7
+    repository: restic-config-technitium-1
+    retain:
+      hourly: 1
+      daily: 7
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+    # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+    moverAffinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                instance: technitium-1
+            topologyKey: kubernetes.io/hostname
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: technitium-2
+spec:
+  sourcePVC: config-technitium-2
+  trigger:
+    schedule: 20 4 * * *
+  restic:
+    pruneIntervalDays: 7
+    repository: restic-config-technitium-2
+    retain:
+      hourly: 1
+      daily: 7
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+    # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+    moverAffinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                instance: technitium-2
+            topologyKey: kubernetes.io/hostname
+---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent), so the PVCs that
+# already exist are left alone; the Deployment mounts it by name.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-technitium-0
+  labels:
+    app: technitium
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    # Never let Flux delete the data volume.
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: rawfile-localpv
+  resources:
+    requests:
+      storage: 2Gi
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: technitium-0
+---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent), so the PVCs that
+# already exist are left alone; the Deployment mounts it by name.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-technitium-1
+  labels:
+    app: technitium
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    # Never let Flux delete the data volume.
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: rawfile-localpv
+  resources:
+    requests:
+      storage: 2Gi
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: technitium-1
+---
+# Restore through the VolSync volume populator: the PVC (dataSourceRef) stays Pending until
+# this restore finished. Flux creates it once (ssa: IfNotPresent), so the PVCs that
+# already exist are left alone; the Deployment mounts it by name.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-technitium-2
+  labels:
+    app: technitium
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    # Never let Flux delete the data volume.
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: rawfile-localpv
+  resources:
+    requests:
+      storage: 2Gi
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: technitium-2
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: technitium-0
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: restic-config-technitium-0
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Restore on the instance's node: the rawfile snapshot (and so the restored
+    # PVC) stays where the mover ran, and the Deployment is pinned to this node.
+    moverAffinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - master-1
+    storageClassName: rawfile-localpv
+    accessModes:
+      - ReadWriteOnce
+    capacity: 2Gi
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      fsGroupChangePolicy: OnRootMismatch
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: technitium-1
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: restic-config-technitium-1
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Restore on the instance's node: the rawfile snapshot (and so the restored
+    # PVC) stays where the mover ran, and the Deployment is pinned to this node.
+    moverAffinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - master-2
+    storageClassName: rawfile-localpv
+    accessModes:
+      - ReadWriteOnce
+    capacity: 2Gi
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      fsGroupChangePolicy: OnRootMismatch
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: technitium-2
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: restic-config-technitium-2
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Restore on the instance's node: the rawfile snapshot (and so the restored
+    # PVC) stays where the mover ran, and the Deployment is pinned to this node.
+    moverAffinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - master-3
+    storageClassName: rawfile-localpv
+    accessModes:
+      - ReadWriteOnce
+    capacity: 2Gi
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      fsGroupChangePolicy: OnRootMismatch

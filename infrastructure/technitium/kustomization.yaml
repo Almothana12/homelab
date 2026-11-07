@@ -9,3 +9,5 @@ resources:
   - service-technitium-dns.yaml
   - ingress-technitium.yaml
   - pdb-technitium.yaml
+  - secret-restic-technitium.yaml
+  - volsync.yaml
