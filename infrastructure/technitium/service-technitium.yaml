@@ -8,9 +8,9 @@ spec:
     app: technitium
     instance: technitium-0
   ports:
-    - name: web
-      port: 5380
-      targetPort: web
+    - name: web-https
+      port: 53443
+      targetPort: web-https
       protocol: TCP
 ---
 # DNS on the cluster PRIMARY only, for external-dns (RFC 2136 updates and

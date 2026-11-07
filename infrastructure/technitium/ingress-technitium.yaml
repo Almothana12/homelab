@@ -1,10 +1,15 @@
 # for managment interface only
+# NGINX (F5) instead of Cilium: Cilium Ingress cannot talk HTTPS to a backend.
+# The backend is Technitium's HTTPS port (53443, its self-signed cert) so that
+# "HTTP to HTTPS redirect" can be enabled and nothing on the LAN is plain HTTP.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: technitium
+  annotations:
+    nginx.org/ssl-services: technitium-web
 spec:
-  ingressClassName: cilium
+  ingressClassName: nginx
   rules:
     - host: dns.almothana.xyz
       http:
@@ -15,7 +20,7 @@ spec:
               service:
                 name: technitium-web
                 port:
-                  number: 5380
+                  number: 53443
   tls:
     - hosts:
         - dns.almothana.xyz
