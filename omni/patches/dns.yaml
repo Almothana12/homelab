@@ -1,4 +1,6 @@
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
-  - address: 192.168.0.2
+  - address: 192.168.0.250
+  - address: 192.168.0.109
+  - address: 1.1.1.1
