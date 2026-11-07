@@ -1,6 +1,6 @@
 # Cilium bootstrap values. Omni applies the rendered manifest once (mode: one-time).
 # Render from the omni/ directory with:
-#   helm template cilium cilium --repo https://helm.cilium.io --version 1.19.9 \
+#   helm template cilium cilium --repo https://helm.cilium.io --version 1.20.4 \
 #     --namespace kube-system -f cilium-values.yaml > manifests/cilium.yaml
 # https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium
 ipam:
