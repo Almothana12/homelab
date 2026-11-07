@@ -1,0 +1,402 @@
+# One single-replica Deployment per Technitium instance, each pinned to its
+# node. A StatefulSet cannot pin ordinal N to node N, and the instance config
+# (DNS Server Local End Points, cluster node IP) is tied to the node IP, so a
+# restored volume must come back on the same node. See volsync.yaml.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: technitium-0
+spec:
+  replicas: 1
+  # RWO volume and hostNetwork port 53: the old pod must stop first.
+  strategy:
+    type: Recreate
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: technitium
+      instance: technitium-0
+  template:
+    metadata:
+      labels:
+        app: technitium
+        instance: technitium-0
+    spec:
+      # Why hostNetwork: Technitium clustering registers each node by a static
+      # IP and builds the cluster zone's transfer ACL and NOTIFY list from those
+      # IPs. Pod IPs change on every restart, and traffic between pods keeps the
+      # pod IP as source, so a LoadBalancer IP per pod would be rejected by the
+      # ACL. With hostNetwork each node is its Talos node IP, which is stable
+      # because each instance is pinned to its node (nodeSelector). Clients
+      # (DHCP) also see real client IPs for logs and per-client blocking.
+      #
+      # Talos hostDNS already listens on 127.0.0.53:53 and 169.254.116.108:53
+      # in the host namespace, so Technitium's default 0.0.0.0:53 bind fails on
+      # first boot (logged, not fatal). After first start set
+      # Settings > General > "DNS Server Local End Points" to <node-ip>:53 on
+      # each node. It is node-specific and persists on the PVC.
+      hostNetwork: true
+      dnsPolicy: Default
+      nodeSelector:
+        kubernetes.io/hostname: master-1
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: technitium
+          image: docker.io/technitium/dns-server:15.6.2
+          env:
+            # Read only on first start (when /etc/dns has no config yet).
+            # Joining the cluster later renames the server into the cluster
+            # domain and replaces users with the primary's.
+            - name: DNS_SERVER_DOMAIN
+              value: technitium-0
+            - name: DNS_SERVER_ADMIN_PASSWORD_FILE
+              value: /run/secrets/technitium/admin-password
+            - name: DNS_SERVER_LOG_USING_LOCAL_TIME
+              value: "true"
+            # Keeps the logs from filling the 2Gi volume (first start only).
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: "30"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: web
+              containerPort: 5380
+              protocol: TCP
+            - name: web-https
+              containerPort: 53443
+              protocol: TCP
+          # The image runs as root and has no file capabilities; a non-root
+          # user cannot bind port 53 even with NET_BIND_SERVICE added.
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+          # The health-check API is unauthenticated only from loopback and
+          # reports failure in the JSON body with HTTP 200, so an httpGet probe
+          # from kubelet would always pass. Same check as upstream compose.
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 5
+            timeoutSeconds: 6
+            failureThreshold: 60
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 15
+            timeoutSeconds: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              # Large blocklists are held in memory.
+              memory: 1Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dns
+            # Keep the logs on the PVC. otherwise /var/log/technitium is is read-only and the container fails to start
+            - name: config
+              mountPath: /var/log/technitium
+              subPath: logs
+            - name: admin-password
+              mountPath: /run/secrets/technitium
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: admin-password
+          secret:
+            secretName: technitium-admin
+            items:
+              - key: password
+                path: admin-password
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-technitium-0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: technitium-1
+spec:
+  replicas: 1
+  # RWO volume and hostNetwork port 53: the old pod must stop first.
+  strategy:
+    type: Recreate
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: technitium
+      instance: technitium-1
+  template:
+    metadata:
+      labels:
+        app: technitium
+        instance: technitium-1
+    spec:
+      # Why hostNetwork: Technitium clustering registers each node by a static
+      # IP and builds the cluster zone's transfer ACL and NOTIFY list from those
+      # IPs. Pod IPs change on every restart, and traffic between pods keeps the
+      # pod IP as source, so a LoadBalancer IP per pod would be rejected by the
+      # ACL. With hostNetwork each node is its Talos node IP, which is stable
+      # because each instance is pinned to its node (nodeSelector). Clients
+      # (DHCP) also see real client IPs for logs and per-client blocking.
+      #
+      # Talos hostDNS already listens on 127.0.0.53:53 and 169.254.116.108:53
+      # in the host namespace, so Technitium's default 0.0.0.0:53 bind fails on
+      # first boot (logged, not fatal). After first start set
+      # Settings > General > "DNS Server Local End Points" to <node-ip>:53 on
+      # each node. It is node-specific and persists on the PVC.
+      hostNetwork: true
+      dnsPolicy: Default
+      nodeSelector:
+        kubernetes.io/hostname: master-2
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: technitium
+          image: docker.io/technitium/dns-server:15.6.2
+          env:
+            # Read only on first start (when /etc/dns has no config yet).
+            # Joining the cluster later renames the server into the cluster
+            # domain and replaces users with the primary's.
+            - name: DNS_SERVER_DOMAIN
+              value: technitium-1
+            - name: DNS_SERVER_ADMIN_PASSWORD_FILE
+              value: /run/secrets/technitium/admin-password
+            - name: DNS_SERVER_LOG_USING_LOCAL_TIME
+              value: "true"
+            # Keeps the logs from filling the 2Gi volume (first start only).
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: "30"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: web
+              containerPort: 5380
+              protocol: TCP
+            - name: web-https
+              containerPort: 53443
+              protocol: TCP
+          # The image runs as root and has no file capabilities; a non-root
+          # user cannot bind port 53 even with NET_BIND_SERVICE added.
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+          # The health-check API is unauthenticated only from loopback and
+          # reports failure in the JSON body with HTTP 200, so an httpGet probe
+          # from kubelet would always pass. Same check as upstream compose.
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 5
+            timeoutSeconds: 6
+            failureThreshold: 60
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 15
+            timeoutSeconds: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              # Large blocklists are held in memory.
+              memory: 1Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dns
+            # Keep the logs on the PVC. otherwise /var/log/technitium is is read-only and the container fails to start
+            - name: config
+              mountPath: /var/log/technitium
+              subPath: logs
+            - name: admin-password
+              mountPath: /run/secrets/technitium
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: admin-password
+          secret:
+            secretName: technitium-admin
+            items:
+              - key: password
+                path: admin-password
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-technitium-1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: technitium-2
+spec:
+  replicas: 1
+  # RWO volume and hostNetwork port 53: the old pod must stop first.
+  strategy:
+    type: Recreate
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: technitium
+      instance: technitium-2
+  template:
+    metadata:
+      labels:
+        app: technitium
+        instance: technitium-2
+    spec:
+      # Why hostNetwork: Technitium clustering registers each node by a static
+      # IP and builds the cluster zone's transfer ACL and NOTIFY list from those
+      # IPs. Pod IPs change on every restart, and traffic between pods keeps the
+      # pod IP as source, so a LoadBalancer IP per pod would be rejected by the
+      # ACL. With hostNetwork each node is its Talos node IP, which is stable
+      # because each instance is pinned to its node (nodeSelector). Clients
+      # (DHCP) also see real client IPs for logs and per-client blocking.
+      #
+      # Talos hostDNS already listens on 127.0.0.53:53 and 169.254.116.108:53
+      # in the host namespace, so Technitium's default 0.0.0.0:53 bind fails on
+      # first boot (logged, not fatal). After first start set
+      # Settings > General > "DNS Server Local End Points" to <node-ip>:53 on
+      # each node. It is node-specific and persists on the PVC.
+      hostNetwork: true
+      dnsPolicy: Default
+      nodeSelector:
+        kubernetes.io/hostname: master-3
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: technitium
+          image: docker.io/technitium/dns-server:15.6.2
+          env:
+            # Read only on first start (when /etc/dns has no config yet).
+            # Joining the cluster later renames the server into the cluster
+            # domain and replaces users with the primary's.
+            - name: DNS_SERVER_DOMAIN
+              value: technitium-2
+            - name: DNS_SERVER_ADMIN_PASSWORD_FILE
+              value: /run/secrets/technitium/admin-password
+            - name: DNS_SERVER_LOG_USING_LOCAL_TIME
+              value: "true"
+            # Keeps the logs from filling the 2Gi volume (first start only).
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: "30"
+            - name: TZ
+              value: Asia/Riyadh
+          ports:
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: web
+              containerPort: 5380
+              protocol: TCP
+            - name: web-https
+              containerPort: 53443
+              protocol: TCP
+          # The image runs as root and has no file capabilities; a non-root
+          # user cannot bind port 53 even with NET_BIND_SERVICE added.
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+          # The health-check API is unauthenticated only from loopback and
+          # reports failure in the JSON body with HTTP 200, so an httpGet probe
+          # from kubelet would always pass. Same check as upstream compose.
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 5
+            timeoutSeconds: 6
+            failureThreshold: 60
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS --max-time 5 http://127.0.0.1:5380/api/dnsClient/healthCheck | grep -q '"status":"ok"'
+            periodSeconds: 15
+            timeoutSeconds: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              # Large blocklists are held in memory.
+              memory: 1Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dns
+            # Keep the logs on the PVC. otherwise /var/log/technitium is is read-only and the container fails to start
+            - name: config
+              mountPath: /var/log/technitium
+              subPath: logs
+            - name: admin-password
+              mountPath: /run/secrets/technitium
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: admin-password
+          secret:
+            secretName: technitium-admin
+            items:
+              - key: password
+                path: admin-password
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-technitium-2

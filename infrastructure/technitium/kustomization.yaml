@@ -4,7 +4,7 @@ namespace: technitium
 resources:
   - namespace.yaml
   - secret-technitium-admin.yaml
-  - statefulset-technitium.yaml
+  - deployment-technitium.yaml
   - service-technitium.yaml
   - service-technitium-dns.yaml
   - ingress-technitium.yaml
