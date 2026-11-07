@@ -6,5 +6,6 @@ resources:
   - secret-technitium-admin.yaml
   - statefulset-technitium.yaml
   - service-technitium.yaml
+  - service-technitium-dns.yaml
   - ingress-technitium.yaml
   - pdb-technitium.yaml
