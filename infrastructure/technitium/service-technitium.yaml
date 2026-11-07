@@ -12,3 +12,24 @@ spec:
       port: 5380
       targetPort: web
       protocol: TCP
+---
+# DNS on the cluster PRIMARY only, for external-dns (RFC 2136 updates and
+# AXFR). Dynamic updates and zone transfers are only served by the primary's
+# zones. Change the instance label if another node is promoted to primary.
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-primary-dns
+spec:
+  selector:
+    app: technitium
+    instance: technitium-0
+  ports:
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP

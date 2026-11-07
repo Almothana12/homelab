@@ -14,45 +14,35 @@ spec:
       interval: 5m
   values:
     policy: sync
-    # use the adguard provider
-    # https://github.com/muhlba91/external-dns-provider-adguard#kubernetes-deployment
-    provider: 
-      name: webhook
-      webhook:
-        image:
-          repository: ghcr.io/muhlba91/external-dns-provider-adguard
-          tag: latest
-        service:
-          port: 8888
-        livenessProbe: 
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-        readinessProbe: 
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-        env:
-          - name: ADGUARD_URL
-            valueFrom:
-              secretKeyRef:
-                name: adguard-configuration
-                key: url
-          - name: ADGUARD_USER
-            valueFrom:
-              secretKeyRef:
-                name: adguard-configuration
-                key: user
-          - name: ADGUARD_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: adguard-configuration
-                key: password
-          - name: LOG_LEVEL
-            value: info
-          - name: DRY_RUN
-            value: "false"
+    registry: txt
+    txtOwnerId: homelab
+    sources:
+      - service
+      - ingress
+    domainFilters:
+      - almothana.xyz
+      - almothana.sa
+    # Technitium via RFC 2136 dynamic updates, signed with a TSIG key.
+    # Both zones are Technitium "Conditional Forwarder" zones: names that
+    # external-dns writes are answered locally, every other name in the zone
+    # (public records on the VPS, MX, ...) is forwarded upstream.
+    provider:
+      name: rfc2136
+    extraArgs:
+      # Only the cluster PRIMARY accepts zone transfers (AXFR, used to list
+      # records). Secondaries hold read-only copies.
+      rfc2136-host: technitium-primary-dns.technitium.svc.cluster.local
+      rfc2136-port: 53
+      rfc2136-zone:
+        - almothana.xyz
+        - almothana.sa
+      rfc2136-tsig-keyname: external-dns
+      rfc2136-tsig-secret-alg: hmac-sha256
+      rfc2136-axfr: true
+    env:
+      # Same as --rfc2136-tsig-secret (every flag maps to EXTERNAL_DNS_<FLAG>).
+      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: technitium-tsig
+            key: secret
