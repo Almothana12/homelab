@@ -1,0 +1,22 @@
+# for managment interface only
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: technitium
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: dns.almothana.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: technitium-web
+                port:
+                  number: 5380
+  tls:
+    - hosts:
+        - dns.almothana.xyz
+      secretName: almothana-xyz-tls

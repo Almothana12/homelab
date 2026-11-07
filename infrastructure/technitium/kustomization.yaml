@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: technitium
+resources:
+  - namespace.yaml
+  - secret-technitium-admin.yaml
+  - statefulset-technitium.yaml
+  - service-technitium.yaml
+  - ingress-technitium.yaml
+  - pdb-technitium.yaml

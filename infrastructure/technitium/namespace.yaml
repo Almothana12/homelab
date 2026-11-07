@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: technitium
+  labels:
+    # to use hostNetwork
+    pod-security.kubernetes.io/enforce: privileged

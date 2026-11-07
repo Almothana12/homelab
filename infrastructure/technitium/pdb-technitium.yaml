@@ -1,0 +1,10 @@
+# Keep one DNS server up during node drains
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: technitium
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: technitium
