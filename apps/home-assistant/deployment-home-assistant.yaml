@@ -24,23 +24,6 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        # configuration.yaml includes these files; HA refuses to start if they
-        # are missing. Create them once, never overwrite UI-made content.
-        - name: init-config
-          image: ghcr.io/home-assistant/home-assistant:2026.11.0
-          command:
-            - sh
-            - -c
-            - |
-              cd /config
-              [ -f automations.yaml ] || echo '[]' > automations.yaml
-              [ -f scripts.yaml ] || touch scripts.yaml
-              [ -f scenes.yaml ] || touch scenes.yaml
-              mkdir -p themes
-          volumeMounts:
-            - name: data
-              mountPath: /config
       containers:
         - name: home-assistant
           image: ghcr.io/home-assistant/home-assistant:2026.11.0
