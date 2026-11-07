@@ -33,7 +33,7 @@ spec:
               - matchPattern: "*"
 
     - toCIDR:
-        - 195.20.235.239/32
+        - 82.165.58.187/32
         - 2001:ba0:250:2b00::1/128
       toPorts:
         - ports:
