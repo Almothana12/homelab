@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: ghcr.io/seriousm4x/upsnap:5.7.2
+        - image: ghcr.io/seriousm4x/upsnap:5.7.3
           name: upsnap
           resources:
             requests:
