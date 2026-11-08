@@ -4,6 +4,12 @@ metadata:
   name: home-assistant
   labels:
     app: home-assistant
+    # PVC spec is immutable: Flux creates it once and never patches the existing,
+    # already-bound volume (which has no dataSourceRef).
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    # Never let Flux delete the data volume.
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   storageClassName: rawfile-localpv
   accessModes:
@@ -11,3 +17,9 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  # On a fresh cluster the PVC stays Pending until the ReplicationDestination in
+  # volsync.yaml has restored the latest restic snapshot into it.
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: home-assistant

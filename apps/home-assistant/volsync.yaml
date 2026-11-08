@@ -1,0 +1,63 @@
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: home-assistant
+spec:
+  sourcePVC: home-assistant
+  trigger:
+    schedule: 30 23 * * *
+  restic:
+    pruneIntervalDays: 7
+    repository: restic-config-home-assistant
+    customCA:
+      configMapName: rustfs-ca
+      key: ca.crt
+    retain:
+      hourly: 1
+      daily: 7
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    # Snapshot, not Direct: home-assistant_v2.db is a live SQLite DB (WAL mode); a
+    # point-in-time snapshot keeps the db and its -wal file consistent with each other.
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    # Rawfile snapshots stay on the node of the source PVC. Run the mover next to the
+    # app pod so the snapshot-backed PVC it mounts is provisioned on that same node.
+    moverAffinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: home-assistant
+            topologyKey: kubernetes.io/hostname
+---
+# Restore through the VolSync volume populator: PVC-home-assistant.yaml points its
+# dataSourceRef here. Flux creates it once (ssa: IfNotPresent); its trigger runs once.
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: home-assistant
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: restic-config-home-assistant
+    customCA:
+      configMapName: rustfs-ca
+      key: ca.crt
+    copyMethod: Snapshot
+    volumeSnapshotClassName: rawfile-localpv
+    storageClassName: rawfile-localpv
+    accessModes:
+      - ReadWriteOnce
+    capacity: 5Gi
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      fsGroupChangePolicy: OnRootMismatch
