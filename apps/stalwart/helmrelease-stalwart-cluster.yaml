@@ -61,20 +61,20 @@ spec:
         podAntiAffinityType: required
         topologyKey: kubernetes.io/hostname
       # hard-code service names to avoid it changing for different versions
-      # services:
-      #   additional:
-      #     - selectorType: rw
-      #       serviceTemplate:
-      #         metadata:
-      #           name: "stalwart-cluster-rw"
-      #     - selectorType: ro
-      #       serviceTemplate:
-      #         metadata:
-      #           name: "stalwart-cluster-ro"
-      #     - selectorType: r
-      #       serviceTemplate:
-      #         metadata:
-      #           name: "stalwart-cluster-r"
+      services:
+        additional:
+          - selectorType: rw
+            serviceTemplate:
+              metadata:
+                name: "stalwart-cluster-rw"
+          - selectorType: ro
+            serviceTemplate:
+              metadata:
+                name: "stalwart-cluster-ro"
+          - selectorType: r
+            serviceTemplate:
+              metadata:
+                name: "stalwart-cluster-r"
     backups:
       enabled: true
       provider: s3

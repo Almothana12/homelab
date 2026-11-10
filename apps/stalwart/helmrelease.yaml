@@ -56,12 +56,7 @@ spec:
 
     # Extra environment variables injected into the container, for
     # store credentials that live in plain text.
-    # One start with this set adds the permissions introduced after v1.0.0 (passkeys
-    # in 1.1.0; stalwart-migrate 1.0.7 seeds roles only up to 1.0.3) to the default
-    # roles. Remove it after that start: while set, every start re-adds permissions
-    # an admin removed from a default role on purpose.
-    extraEnv:
-      STALWART_UPDATE_ROLE_PERMISSIONS: "true"
+    extraEnv: {}
 
     # Extra environment variables injected from the managed Secret.
     # Use this for anything sensitive (database passwords, S3 keys, etc.).
@@ -73,7 +68,7 @@ spec:
     # See /docs/configuration/overview and /docs/ref/object/data-store.
     config:
       "@type": "PostgreSql"
-      host: "stalwart-cluster-v02-rw"
+      host: "stalwart-cluster-rw"
       port: 5432
       database: "app"
       authUsername: "app"
