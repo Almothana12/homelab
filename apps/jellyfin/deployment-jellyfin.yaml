@@ -16,10 +16,19 @@ spec:
       labels:
         app: jellyfin
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 911
+        runAsGroup: 911
+        seccompProfile:
+          type: RuntimeDefault
       containers:
-        # 12.x is only tagged <ver>ubu<base>-ls<build>; see the linuxserver/jellyfin rule in renovate.json
-        - image: linuxserver/jellyfin:12.4ubu2604-ls57
+        - image: jellyfin/jellyfin:12.4
           name: jellyfin
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
           resources:
             requests:
               cpu: 10m
@@ -30,13 +39,46 @@ spec:
           env:
             - name: TZ
               value: Asia/Riyadh
+            # Keep the linuxserver /config layout already on the PVC.
+            - name: JELLYFIN_DATA_DIR
+              value: /config/data
+            - name: JELLYFIN_CONFIG_DIR
+              value: /config
+            - name: JELLYFIN_CACHE_DIR
+              value: /config/cache
+            - name: JELLYFIN_LOG_DIR
+              value: /config/log
+            - name: XDG_CACHE_HOME
+              value: /config/cache
+            - name: HOME
+              value: /config
           ports:
             - containerPort: 8096
+              name: http
               protocol: TCP
             - containerPort: 7359
               protocol: UDP
             - containerPort: 1900
               protocol: UDP
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
           volumeMounts:
             - mountPath: /config
               name: jellyfin
