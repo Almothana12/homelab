@@ -12,7 +12,10 @@ scene: !include scenes.yaml
 prometheus:
   requires_auth: false
   filter:
-    include_entity_globs:
-      - sensor.*power*
-      - sensor.*energy*
-      - sensor.ups_*
+    include_entities:
+      - sensor.bedroom_shelly_gpu_1_gpu_1_power
+      - sensor.bedroom_shelly_gpu_1_gpu_1_energy
+      - sensor.homelab_shelly_gpu_2_power
+      - sensor.homelab_shelly_gpu_2_energy
+      - sensor.bedroom_shelly_homelab_shelly_homelab_power
+      - sensor.bedroom_shelly_homelab_shelly_homelab_energy
