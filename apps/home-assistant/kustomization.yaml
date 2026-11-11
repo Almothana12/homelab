@@ -8,6 +8,7 @@ resources:
   - ingress-home-assistant.yaml
   - secret-restic-home-assistant.yaml
   - volsync.yaml
+  - servicemonitor.yaml
 
 configMapGenerator:
   - name: home-assistant-config

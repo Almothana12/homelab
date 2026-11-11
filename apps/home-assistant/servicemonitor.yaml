@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: home-assistant
+spec:
+  selector:
+    matchLabels:
+      app: home-assistant
+  endpoints:
+    # Service port "http" -> hostNetwork pod on <node-ip>:8123.
+    - port: http
+      path: /api/prometheus
+      interval: 15s
+      scrapeTimeout: 10s

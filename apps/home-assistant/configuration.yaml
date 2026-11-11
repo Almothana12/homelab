@@ -7,3 +7,12 @@ frontend:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+
+# power metrics for the cluster Prometheus
+prometheus:
+  requires_auth: false
+  filter:
+    include_entity_globs:
+      - sensor.*power*
+      - sensor.*energy*
+      - sensor.ups_*
