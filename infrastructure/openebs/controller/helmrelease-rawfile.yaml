@@ -67,6 +67,24 @@ spec:
         # Flush and freeze the filesystem during a snapshot; otherwise data still in page
         # cache is missing from the snapshot.
         freezeFs: "true"
+      # Thin provisioning PVC
+      - name: rawfile-localpv-thin
+        enabled: true
+        isDefault: false
+        volumeBindingMode: WaitForFirstConsumer
+        allowVolumeExpansion: true
+        reclaimPolicy: Delete
+        fsType: ext4
+        formatOptions:
+          - "-b"
+          - "4096"
+        copyOnWrite: "true"
+        freezeFs: "true"
+        thinProvision: "true"
+        # Without discard, ext4 never tells the loop device that deleted blocks are free, so
+        # the sparse file keeps its high-water mark and deleting videos frees nothing on the node.
+        mountOptions:
+          - discard
     snapshotClasses:
       - name: rawfile-localpv
         enabled: true

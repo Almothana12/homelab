@@ -4,10 +4,12 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: metube
-  name: metube
+  name: metube-downloads
 spec:
   accessModes:
     - ReadWriteOnce
+  # Thin PVC
+  storageClassName: rawfile-localpv-thin
   resources:
     requests:
-      storage: 10Gi
+      storage: 150Gi

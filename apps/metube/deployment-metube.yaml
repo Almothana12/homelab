@@ -33,4 +33,4 @@ spec:
       volumes:
         - name: metube
           persistentVolumeClaim:
-            claimName: metube
+            claimName: metube-downloads
