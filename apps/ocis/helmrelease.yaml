@@ -36,6 +36,9 @@ spec:
       storagesystemSecretRef: ocis-storage-system
     configRefs:
       storageusersConfigRef: ocis-storage-users
+    resources:
+      requests:
+        memory: 64Mi
     features:
       externalUserManagement:
         enabled: true
@@ -123,6 +126,9 @@ spec:
             - ReadWriteOnce
           size: 1Gi
       nats:
+        resources:
+          requests:
+            memory: 128Mi
         persistence:
           enabled: true
           storageClassName: rawfile-localpv
@@ -136,6 +142,10 @@ spec:
           accessModes:
             - ReadWriteOnce
           size: 1Gi
+      proxy:
+        resources:
+          requests:
+            memory: 96Mi
       search:
         persistence:
           enabled: true
