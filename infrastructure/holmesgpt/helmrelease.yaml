@@ -18,6 +18,13 @@ spec:
       holmesApiTimeout: 300  # API timeout in seconds
       maxHistoryItems: 10  # History entries per ScheduledHealthCheck
 
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 2048Mi
+
     autoscaling:
       enabled: false
       minReplicas: 1
