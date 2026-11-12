@@ -82,6 +82,10 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: jellyfin
+            # Scratch transcode segments off the PVC: they are not backed up by VolSync,
+            # can't eat the free space Jellyfin requires at startup, and are wiped on restart.
+            - mountPath: /config/cache/transcodes
+              name: transcodes
             - mountPath: /data/Movies
               name: library
               subPath: movies
@@ -114,6 +118,9 @@ spec:
         - name: jellyfin
           persistentVolumeClaim:
             claimName: jellyfin
+        - name: transcodes
+          emptyDir:
+            sizeLimit: 20Gi
         - name: library
           persistentVolumeClaim:
             claimName: plex-library
