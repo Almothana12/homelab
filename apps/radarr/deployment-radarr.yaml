@@ -28,6 +28,9 @@ spec:
           env:
             - name: TZ
               value: Asia/Riyadh
+            # Radarr v6 has no Basic auth; authentik's outpost is the only login.
+            - name: RADARR__AUTH__METHOD
+              value: External
           volumeMounts:
             - mountPath: /config
               name: radarr
