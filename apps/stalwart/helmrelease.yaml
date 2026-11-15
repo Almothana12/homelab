@@ -145,6 +145,10 @@ spec:
         secret:
           secretName: almothana-sa-tls
           defaultMode: 0400
+      - name: relay-auth
+        secret:
+          secretName: relay-auth
+          defaultMode: 0400
 
     # Extra volume mounts added to the stalwart container.
     extraVolumeMounts:
@@ -156,4 +160,7 @@ spec:
         readOnly: true
       - name: almothana-sa-tls
         mountPath: /etc/stalwart/ssl
+        readOnly: true
+      - name: relay-auth
+        mountPath: /etc/stalwart/relay-auth
         readOnly: true
