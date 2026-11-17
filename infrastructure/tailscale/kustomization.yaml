@@ -3,5 +3,3 @@ kind: Kustomization
 namespace: tailscale
 resources:
   - connector-exit-node.yaml
-  - proxygroup-egress-proxies.yaml
-  # - proxygroup-ingress-proxies.yaml
