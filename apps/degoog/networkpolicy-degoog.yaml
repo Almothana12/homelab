@@ -47,7 +47,29 @@ spec:
         - matchName: api.dictionaryapi.dev
         - matchName: api.open-meteo.com
         - matchName: geocoding-api.open-meteo.com
+        # Google favicons: www.google.com/s2/favicons redirects to t0-t3.gstatic.com
+        - matchPattern: "t*.gstatic.com"
+        # Store repo avatar
+        - matchName: avatars.githubusercontent.com
+        # Engines: reddit, hacker-news, yandex-visual
+        - matchName: www.reddit.com
+        - matchName: hn.algolia.com
+        - matchName: yandex.com
+        # Plugins: github-slot (+ Degoog's own update check), tmdb-slot, spell-check
+        - matchName: api.github.com
+        - matchName: api.themoviedb.org
+        - matchName: image.tmdb.org
+        - matchName: speller.yandex.net
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
+    # Built-in IP Lookup (!ip): the server queries http://ip-api.com/json/<ip>.
+    # Plain HTTP because ip-api's free tier has no HTTPS. (api.ipify.org, for
+    # "my IP", is fetched by the browser, not the pod.)
+    - toFQDNs:
+        - matchName: ip-api.com
+      toPorts:
+        - ports:
+            - port: "80"
               protocol: TCP
