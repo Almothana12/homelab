@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: degoog
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: search.almothana.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: degoog
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - search.almothana.xyz
+      secretName: almothana-xyz-tls

@@ -1,0 +1,53 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: degoog
+spec:
+  endpointSelector:
+    matchLabels:
+      app: degoog
+  ingress:
+    # From Ingress (LAN only, no Newt/Pangolin)
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "4444"
+              protocol: TCP
+  egress:
+    # To DNS
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toFQDNs:
+        # Store: official-extensions git clone, core fetches
+        - matchName: github.com
+        - matchName: raw.githubusercontent.com
+        # Engines: google, bing, brave, duckduckgo, startpage, wikipedia
+        - matchName: www.google.com
+        - matchName: www.bing.com
+        - matchName: search.brave.com
+        - matchName: duckduckgo.com
+        - matchName: html.duckduckgo.com
+        - matchName: www.startpage.com
+        - matchPattern: "*.wikipedia.org"
+        # Autocomplete + favicons
+        - matchName: api.duckduckgo.com
+        - matchName: icons.duckduckgo.com
+        # Plugins: math-slot, define, weather/time
+        - matchName: api.mathjs.org
+        - matchName: api.dictionaryapi.dev
+        - matchName: api.open-meteo.com
+        - matchName: geocoding-api.open-meteo.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
