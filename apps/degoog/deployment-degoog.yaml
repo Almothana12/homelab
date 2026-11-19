@@ -36,7 +36,7 @@ spec:
           workingDir: /app
           env:
             - name: DEGOOG_BASE_URL
-              value: https://degoog.almothana.xyz
+              value: https://search.almothana.xyz
             # Keep every settings/store action behind the password even on the LAN:
             # store extensions run code on the server.
             - name: DEGOOG_PUBLIC_INSTANCE
