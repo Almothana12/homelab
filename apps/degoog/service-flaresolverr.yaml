@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: flaresolverr
+  name: flaresolverr
+spec:
+  ports:
+    - name: http
+      port: 8191
+      targetPort: http
+  selector:
+    app: flaresolverr

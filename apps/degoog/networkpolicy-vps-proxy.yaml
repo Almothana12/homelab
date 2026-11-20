@@ -1,0 +1,27 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: vps-proxy
+spec:
+  endpointSelector:
+    matchLabels:
+      app: vps-proxy
+  # The SOCKS port has no auth: only Degoog and FlareSolverr may use it
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: degoog
+        - matchLabels:
+            app: flaresolverr
+      toPorts:
+        - ports:
+            - port: "1080"
+              protocol: TCP
+  # SSH to the VPS only (IP literal, so no DNS needed)
+  egress:
+    - toCIDR:
+        - 195.20.235.239/32
+      toPorts:
+        - ports:
+            - port: "22"
+              protocol: TCP

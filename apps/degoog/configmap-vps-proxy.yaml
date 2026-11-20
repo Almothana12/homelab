@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: vps-proxy
+  name: vps-proxy
+data:
+  # VPS host key (public). Fingerprint SHA256:adBerRzL4+4e+qvdQqXCu53tSfeZJLivsSdvNRQUZoQ
+  known_hosts: |
+    195.20.235.239 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF2yt5oojrZuNphr9plm6Qn1dQ0YHxludSj3p9zhfWRi

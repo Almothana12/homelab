@@ -1,0 +1,56 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flaresolverr
+spec:
+  endpointSelector:
+    matchLabels:
+      app: flaresolverr
+  # API has no auth: Degoog only
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: degoog
+      toPorts:
+        - ports:
+            - port: "8191"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # Through the VPS when the engine has a proxy set
+    - toEndpoints:
+        - matchLabels:
+            app: vps-proxy
+      toPorts:
+        - ports:
+            - port: "1080"
+              protocol: TCP
+    # Direct otherwise: internet, minus the LAN (same ranges as Degoog)
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+            - 100.64.0.0/10
+            - 169.254.0.0/16
+        - cidr: ::/0
+          except:
+            - fc00::/7
+            - fe80::/10
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "80"
+              protocol: TCP
