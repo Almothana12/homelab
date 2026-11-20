@@ -35,6 +35,7 @@ spec:
         - matchName: www.google.com
         - matchName: www.bing.com
         - matchName: search.brave.com
+        - matchName: api.search.brave.com
         - matchName: duckduckgo.com
         - matchName: html.duckduckgo.com
         - matchName: www.startpage.com
