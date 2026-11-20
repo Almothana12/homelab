@@ -6,6 +6,11 @@
 # so "GPU memory" alerts are driven from the shared LPDDR5X pool that
 # node-exporter reports. DCGM series are labelled with a lowercase `hostname`;
 # node-exporter series are joined to a node name through node_uname_info.
+#
+# dcgm-exporter 4.9 (gpu-operator v26.7.3) renamed the DCGM fields
+# (DCGM_FI_DEV_GPU_TEMP -> _GPU_TEMP_CELSIUS, _PCIE_REPLAY_COUNTER -> _TOTAL,
+# _XID_ERRORS -> _XID_ERROR, ...). Rules match `old or new`, so a rollback or a
+# mixed rollout keeps working; GpuUtilisationMetricMissing catches the next one.
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -28,8 +33,27 @@ spec:
               temperature and power panels on the DGX Spark dashboard are blind
               until this recovers.
 
+        - alert: GpuUtilisationMetricMissing
+          # The exporter scrapes fine but GPU utilisation is absent under both
+          # the pre- and post-4.9 names: a metric rename silently empties every
+          # GPU rule and panel, as dcgm-exporter 4.9 did.
+          expr: >-
+            up{job="nvidia-dcgm-exporter"} == 1
+            unless on (instance)
+            (DCGM_FI_DEV_GPU_UTIL or DCGM_FI_DEV_GPU_UTIL_RATIO)
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DCGM exporter {{ $labels.pod }} reports no GPU utilisation metric"
+            description: >-
+              {{ $labels.instance }} is up but exports neither
+              DCGM_FI_DEV_GPU_UTIL nor DCGM_FI_DEV_GPU_UTIL_RATIO. dcgm-exporter
+              has probably renamed its metrics again; GPU alerts and dashboards
+              are blind until the queries are updated.
+
         - alert: GpuTemperatureHigh
-          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP) > 83
+          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP or DCGM_FI_DEV_GPU_TEMP_CELSIUS) > 83
           for: 10m
           labels:
             severity: warning
@@ -41,7 +65,7 @@ spec:
               airflow.
 
         - alert: GpuTemperatureCritical
-          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP) > 88
+          expr: max by (hostname) (DCGM_FI_DEV_GPU_TEMP or DCGM_FI_DEV_GPU_TEMP_CELSIUS) > 88
           for: 5m
           labels:
             severity: critical
@@ -116,7 +140,9 @@ spec:
 
         # --- Hardware health --------------------------------------------------
         - alert: GpuPcieReplayErrors
-          expr: sum by (hostname) (increase(DCGM_FI_DEV_PCIE_REPLAY_COUNTER[1h])) > 0
+          expr: >-
+            sum by (hostname) (increase(DCGM_FI_DEV_PCIE_REPLAY_COUNTER[1h])) > 0
+            or sum by (hostname) (increase(DCGM_FI_DEV_PCIE_REPLAY_TOTAL[1h])) > 0
           for: 5m
           labels:
             severity: warning
@@ -129,7 +155,9 @@ spec:
         - alert: GpuXidErrors
           # Not currently emitted by DCGM on GB10; harmless until a future
           # driver adds the field, at which point this begins working.
-          expr: sum by (hostname) (increase(DCGM_FI_DEV_XID_ERRORS[1h])) > 0
+          expr: >-
+            sum by (hostname) (increase(DCGM_FI_DEV_XID_ERRORS[1h])) > 0
+            or sum by (hostname) (increase(DCGM_FI_DEV_XID_ERROR[1h])) > 0
           for: 1m
           labels:
             severity: critical
