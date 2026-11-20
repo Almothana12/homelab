@@ -60,6 +60,10 @@ spec:
         - matchName: api.themoviedb.org
         - matchName: image.tmdb.org
         - matchName: speller.yandex.net
+        # Wikipedia knowledge-panel images
+        - matchName: upload.wikimedia.org
+        # Third-party engine overstylefr/degoog-git-search: Docker Hub
+        - matchName: hub.docker.com
       toPorts:
         - ports:
             - port: "443"
