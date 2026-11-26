@@ -24,7 +24,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: intel-gpu-plugin
-          image: intel/intel-gpu-plugin:0.37.1
+          image: intel/intel-gpu-plugin:0.37.2
           imagePullPolicy: IfNotPresent
           args:
             # one iGPU shared by Jellyfin and maybe Plex in the future
