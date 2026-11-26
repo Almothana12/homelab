@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app: xormon
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
   name: xormon
 spec:
   dataSourceRef:

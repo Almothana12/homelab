@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: degoog
+  name: degoog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: degoog
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: degoog
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        # uid/gid 1000 = the "bun" user of oven/bun:alpine, which upstream's
+        # entrypoint su-execs to by default (PUID/PGID 1000).
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: degoog
+          image: ghcr.io/degoog-org/degoog:1.2.0
+          # Skip /entrypoint.sh: it chowns /app/data and su-execs from root,
+          # which fails as non-root. fsGroup handles the ownership instead.
+          command: ["bun", "run", "src/server/index.ts"]
+          workingDir: /app
+          env:
+            - name: DEGOOG_BASE_URL
+              value: https://search.almothana.xyz
+            # Keep every settings/store action behind the password even on the LAN:
+            # store extensions run code on the server.
+            - name: DEGOOG_PUBLIC_INSTANCE
+              value: "true"
+            # Restart detection only looks for /.dockerenv; without this the
+            # in-app "restart" forks a second server inside the pod instead of exiting.
+            - name: DEGOOG_DOCKER
+              value: "true"
+            - name: HOME
+              value: /tmp
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: TZ
+              value: Asia/Riyadh
+          envFrom:
+            - secretRef:
+                name: degoog
+          ports:
+            - name: http
+              containerPort: 4444
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          startupProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: degoog
+        - name: tmp
+          emptyDir: {}

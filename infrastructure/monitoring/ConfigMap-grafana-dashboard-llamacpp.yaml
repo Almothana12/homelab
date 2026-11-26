@@ -5,6 +5,11 @@
 # request finishes, and the llamacpp:*_tokens_seconds gauges are reset by every
 # /metrics scrape, so all speeds here are counter ratios over a window.
 # This llama.cpp build (b11515) exports no KV-cache metric.
+#
+# GPU panels query `old or new` DCGM names: dcgm-exporter 4.9 (gpu-operator
+# v26.7.3) renamed them (e.g. DCGM_FI_DEV_GPU_UTIL % -> _GPU_UTIL_RATIO 0-1).
+# `group by` makes the llama-server join a pure filter (value 1); multiplying
+# by requests_processing zeroed every GPU panel while the server was idle.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1482,7 +1487,7 @@ data:
           "id": 25,
           "type": "timeseries",
           "title": "GPU utilisation",
-          "description": "DCGM_FI_DEV_GPU_UTIL of the GPU allocated to the pod. Decode on GB10 is memory-bandwidth bound, so high utilisation with low tok/s points at bandwidth, not compute.",
+          "description": "DCGM_FI_DEV_GPU_UTIL (DCGM_FI_DEV_GPU_UTIL_RATIO × 100 on dcgm-exporter 4.9+) of the GPU allocated to the pod. Decode on GB10 is memory-bandwidth bound, so high utilisation with low tok/s points at bandwidth, not compute.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -1540,7 +1545,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "max by (job) (DCGM_FI_DEV_GPU_UTIL * on (exported_pod) group_left (job) label_replace(max by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
+              "expr": "max by (job) ((DCGM_FI_DEV_GPU_UTIL or DCGM_FI_DEV_GPU_UTIL_RATIO * 100) * on (exported_pod) group_left (job) label_replace(group by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
               "legendFormat": "{{job}}",
               "refId": "A",
               "range": true
@@ -1551,7 +1556,7 @@ data:
           "id": 26,
           "type": "timeseries",
           "title": "GPU power",
-          "description": "DCGM_FI_DEV_POWER_USAGE of the pod's GPU.",
+          "description": "DCGM_FI_DEV_POWER_USAGE (DCGM_FI_DEV_BOARD_POWER_WATTS on dcgm-exporter 4.9+) of the pod's GPU.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -1608,7 +1613,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "max by (job) (DCGM_FI_DEV_POWER_USAGE * on (exported_pod) group_left (job) label_replace(max by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
+              "expr": "max by (job) ((DCGM_FI_DEV_POWER_USAGE or DCGM_FI_DEV_BOARD_POWER_WATTS) * on (exported_pod) group_left (job) label_replace(group by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
               "legendFormat": "{{job}}",
               "refId": "A",
               "range": true
@@ -1619,7 +1624,7 @@ data:
           "id": 27,
           "type": "timeseries",
           "title": "GPU temperature",
-          "description": "DCGM_FI_DEV_GPU_TEMP of the pod's GPU. Node memory (unified on GB10), disk and host thermals are on the DGX Spark dashboard.",
+          "description": "DCGM_FI_DEV_GPU_TEMP (DCGM_FI_DEV_GPU_TEMP_CELSIUS on dcgm-exporter 4.9+) of the pod's GPU. Node memory (unified on GB10), disk and host thermals are on the DGX Spark dashboard.",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -1676,7 +1681,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "max by (job) (DCGM_FI_DEV_GPU_TEMP * on (exported_pod) group_left (job) label_replace(max by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
+              "expr": "max by (job) ((DCGM_FI_DEV_GPU_TEMP or DCGM_FI_DEV_GPU_TEMP_CELSIUS) * on (exported_pod) group_left (job) label_replace(group by (pod, job) (llamacpp:requests_processing{job=~\"$job\"}), \"exported_pod\", \"$1\", \"pod\", \"(.*)\"))",
               "legendFormat": "{{job}}",
               "refId": "A",
               "range": true

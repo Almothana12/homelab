@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: newt
-      version: '1.5.0'
+      version: '1.6.0'
       sourceRef:
         kind: HelmRepository
         name: fossorial
@@ -17,7 +17,7 @@ spec:
       image:
         registry: docker.io
         repository: fosrl/newt
-        tag: "1.20.0"
+        tag: "1.20.1"
     newtInstances:
       - name: main-tunnel
         enabled: true
