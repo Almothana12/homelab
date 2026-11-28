@@ -1,0 +1,26 @@
+# One local cache per rank: 199 GB EXL3 weights + 203 GB Engram shards (~374 GiB) + kernel caches.
+# Each binds on the node its pod first lands on (openebs-hostpath, WaitForFirstConsumer) and
+# cannot grow. Free in /var/mnt/local-storage on 2026-11-28: gpu-1 447 GB, gpu-2 582 GB.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deepseek-v41-flash-leader-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 400Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deepseek-v41-flash-worker-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 400Gi

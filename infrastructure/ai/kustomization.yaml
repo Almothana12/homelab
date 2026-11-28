@@ -10,3 +10,4 @@ resources:
   - qwen-38-27b-nvfp4-sglang
   - qwen-38-27b-nvfp4-tp2
   - qwen-38-27b-unc-nvfp4-tp2
+  - deepseek-v41-flash-1017

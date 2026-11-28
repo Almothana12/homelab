@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ai
+resources:
+  - leaderworkerset.yaml
+  - service.yaml
+  - PVC.yaml
+  - servicemonitor.yaml
+configMapGenerator:
+  - name: deepseek-v41-flash-bootstrap
+    files:
+      - bootstrap.py
+      # DSpark Markov bias token list (patch 0011), from
+      # github.com/sudoingX/dgx-spark-deepseek-v41 cc59c36 data/dspark/ (Apache-2.0). Read-only.
+      - markov_top_tokens.json
+    options:
+      immutable: true
+  - name: deepseek-v41-flash-engine-env
+    envs:
+      - engine.env
+    options:
+      immutable: true
+configurations:
+  - kustomizeconfig.yaml

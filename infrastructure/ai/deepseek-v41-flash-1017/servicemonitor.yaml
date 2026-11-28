@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: deepseek-v41-flash
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deepseek-v41-flash
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 5s
+      scrapeTimeout: 4s

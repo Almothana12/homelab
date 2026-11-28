@@ -1,0 +1,111 @@
+"""Discover host-network addresses, then replace this process with vLLM."""
+import fcntl
+import ipaddress
+import os
+import socket
+import struct
+import sys
+import time
+import urllib.request
+
+def interface_ipv4(interface):
+    name = interface.encode("ascii")
+    if not name or len(name) > 15:
+        raise ValueError("Expected a Linux interface name of 1-15 bytes")
+    # SIOCGIFADDR is a read-only ioctl; no ip utility or NET_ADMIN is needed.
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        result = fcntl.ioctl(sock.fileno(), 0x8915, struct.pack("256s", name))
+    address = socket.inet_ntoa(result[20:24])
+    ip = ipaddress.IPv4Address(address)
+    if ip.is_loopback or ip.is_unspecified or ip.is_link_local or ip.is_multicast:
+        raise ValueError(f"Interface {interface} has unsuitable IPv4 {address}")
+    return address
+
+def roce_v2_gid_index(hca, address, port=1):
+    # The EXL3 RDMA ring takes a fixed GID index (default 3, from the recipe's Ubuntu Sparks).
+    # Find the RoCE v2 GID that carries this rail's IPv4 instead of assuming one.
+    base = f"/sys/class/infiniband/{hca}/ports/{port}"
+    octets = [int(o) for o in address.split(".")]
+    want = "0000:0000:0000:0000:0000:ffff:%02x%02x:%02x%02x" % tuple(octets)
+    for name in sorted(os.listdir(f"{base}/gids"), key=int):
+        try:
+            with open(f"{base}/gid_attrs/types/{name}") as f:
+                kind = f.read().strip()
+            with open(f"{base}/gids/{name}") as f:
+                gid = f.read().strip()
+        except OSError:
+            continue
+        if "v2" in kind and gid == want:
+            return int(name)
+    raise RuntimeError(f"No RoCE v2 GID for {address} on {hca} port {port}")
+
+def drop_page_cache(directory):
+    # GB10 shares one memory pool between CPU and GPU, and a fresh download leaves
+    # ~400 GB of these files in page cache. The recipe runs drop_caches as root on the
+    # host; POSIX_FADV_DONTNEED evicts just these files without any privilege.
+    for root, _, files in os.walk(directory):
+        for name in files:
+            fd = os.open(os.path.join(root, name), os.O_RDONLY)
+            try:
+                os.fdatasync(fd)
+                os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_DONTNEED)
+            finally:
+                os.close(fd)
+
+def leader_ipv4(host, expected=None, timeout=300):
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            addresses = sorted({item[4][0] for item in socket.getaddrinfo(
+                host, None, socket.AF_INET, socket.SOCK_STREAM)})
+            if len(addresses) == 1 and (expected is None or addresses[0] == expected):
+                return addresses[0]
+            reason = f"expected one leader IPv4 ({expected or 'any'}), got {addresses}"
+        except socket.gaierror as exc:
+            reason = str(exc)
+        if time.monotonic() >= deadline:
+            raise RuntimeError(f"Leader discovery failed for {host}: {reason}")
+        print(f"Waiting for leader DNS {host}: {reason}", flush=True)
+        time.sleep(2)
+
+def check_leader_health():
+    # Direct per-group DNS, not the load-balanced API Service. No dependency
+    # on Ready endpoints: the LWS discovery Service publishes unready pods.
+    host = os.environ["LWS_LEADER_ADDRESS"]
+    port = int(os.environ.get("API_PORT", "8000"))
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    with opener.open(f"http://{host}:{port}/health", timeout=3) as response:
+        if response.status != 200:
+            raise RuntimeError(f"Leader health returned {response.status}")
+
+def launch(args):
+    if "--master-addr" in args:
+        raise ValueError("master-addr is managed by discovery, not model args")
+    rank = int(os.environ["LWS_WORKER_INDEX"])
+    pod_ip = str(ipaddress.IPv4Address(os.environ["POD_IP"]))
+    interface = os.environ["INFERENCE_INTERFACE"]
+    transport_ip = interface_ipv4(interface)
+    leader = leader_ipv4(os.environ["LWS_LEADER_ADDRESS"],
+                         expected=pod_ip if rank == 0 else None)
+    env = dict(os.environ)
+    env["VLLM_HOST_IP"] = transport_ip
+    env["NCCL_SOCKET_IFNAME"] = "=" + interface
+    env["GLOO_SOCKET_IFNAME"] = interface
+    env["TP_SOCKET_IFNAME"] = interface
+    hca = os.environ["RDMA_HCA"]
+    env["EXL3_RDMA_DEVICES"] = hca
+    env["EXL3_RDMA_GID"] = str(roce_v2_gid_index(hca, transport_ip))
+    print(f"LWS rank={rank} pod_ip={pod_ip} leader={leader} "
+          f"transport={interface}/{transport_ip} rdma={hca} gid={env['EXL3_RDMA_GID']}",
+          flush=True)
+    # Rendezvous uses leader management IPv4; NCCL/Gloo and vLLM advertised
+    # endpoints use the selected direct-link interface. Never guess a peer IP.
+    os.execvpe("vllm", ["vllm", "serve", *args, "--master-addr", leader], env)
+
+if __name__ == "__main__":
+    if sys.argv[1:] == ["--check-leader-health"]:
+        check_leader_health()
+    elif sys.argv[1:2] == ["--drop-page-cache"]:
+        drop_page_cache(sys.argv[2])
+    else:
+        launch(sys.argv[1:])

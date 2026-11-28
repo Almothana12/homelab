@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: qwen38-flash-next-llamacpp
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:

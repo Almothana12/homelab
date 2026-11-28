@@ -1,0 +1,385 @@
+# DeepSeek-V4.1-Flash-1017, EXL3 2.75 bpw (HeNryous), vLLM TP2 across gpu-1 and gpu-2.
+# Recipe: github.com/HeNryous/deepseek-v41-1017-dgx-spark (image v24, the published build of
+# serve/serve_example.sh). Their numbers on 2x Spark at 2000 MHz: ~57 tok/s 1 stream, ~91 at 3;
+# KLD 0.0201 / top-1 95.96 % against the native 1017 (their panel, not measured here).
+# The whole node: ~98 GiB weights per rank, so nothing else GPU-heavy may run on either Spark.
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: deepseek-v41-flash
+spec:
+  replicas: 1
+  # LeaderReady would deadlock: the leader needs its worker to initialize TP.
+  startupPolicy: LeaderCreated
+  rolloutStrategy:
+    type: RollingUpdate
+    rollingUpdateConfiguration:
+      maxSurge: 0
+      maxUnavailable: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: deepseek-v41-flash
+          app.kubernetes.io/component: leader
+      spec:
+        nodeSelector:
+          kubernetes.io/arch: arm64
+          nvidia.com/gpu.product: NVIDIA-GB10-SHARED
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
+          seccompProfile:
+            type: RuntimeDefault
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        # Keep leader and worker of this group on separate nodes.
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: deepseek-v41-flash
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        initContainers: &init
+          # 1. Weights into one folder on this node's disk. vLLM cannot fetch this itself: the
+          #    Engram tables live in a second repo. hf skips finished files on a restart.
+          - name: download
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            imagePullPolicy: IfNotPresent
+            command: [bash, -ceu]
+            args:
+              - |
+                D=/data/model
+                hf download HeNryous/DeepSeek-V4.1-Flash-1017-EXL3-2.75bpw-DGX-Spark \
+                  --revision f53132cb17e18a5a9ddd7f213965912a575f0dd5 --local-dir "$D"
+                # The 1017 Engram shards. The older V4.1 repo has files with the same names and
+                # sizes but other content.
+                hf download deepseek-ai/DeepSeek-V4.1-Flash-1017 \
+                  model-00047-of-00048.safetensors model-00048-of-00048.safetensors \
+                  --revision 08c8657f02291e11b6f6b63e0e16014f8e748518 --local-dir "$D"
+                test "$(stat -c %s "$D/model-00047-of-00048.safetensors")" = 101535150936
+                test "$(stat -c %s "$D/model-00048-of-00048.safetensors")" = 101537926640
+                python3 /opt/dsv41/bootstrap.py --drop-page-cache "$D"
+            env:
+              - name: HF_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hf-token
+                    key: token
+              - name: HF_ENDPOINT
+                value: http://olah.olah.svc.cluster.local
+              - name: HF_HOME
+                value: /data/huggingface
+            resources:
+              requests:
+                cpu: "2"
+                memory: 2Gi
+              limits:
+                memory: 8Gi
+            securityContext: &restricted
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+            volumeMounts: &mounts
+              - name: bootstrap
+                mountPath: /opt/dsv41
+                readOnly: true
+              - name: cache
+                mountPath: /data
+              - name: shm
+                mountPath: /dev/shm
+          # 2. The plugin's JIT kernels, before the weights load: building them next to the loaded
+          #    model can run the node out of memory (recipe, serve_example.sh). Cached in the PVC,
+          #    so later starts only load them.
+          - name: jit
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            imagePullPolicy: IfNotPresent
+            command:
+              - python3
+              - -c
+              - >-
+                from vllm_exl3_moe import tf_experts as t, mrow, rdma, mhc, router, smoe, l2pf;
+                t._ext(); mrow.ext(); rdma.ext(); mhc.ext(); router.ext(); smoe.ext(); l2pf.ext()
+            envFrom:
+              - configMapRef:
+                  name: deepseek-v41-flash-engine-env
+            env:
+              - name: MAX_JOBS
+                value: "4"
+            resources:
+              requests:
+                cpu: "4"
+                memory: 16Gi
+                nvidia.com/gpu: "1"
+              limits:
+                memory: 48Gi
+                nvidia.com/gpu: "1"
+            securityContext: *restricted
+            volumeMounts: *mounts
+        containers:
+          - name: vllm
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/dsv41/bootstrap.py]
+            args:
+              - /data/model
+              - --served-model-name
+              - DeepSeek-V4.1-Flash-1017-EXL3
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 0
+              - --master-port
+              - "29504"
+              - --host
+              - $(POD_IP)
+              - --port
+              - "8100"
+              - --gpu-memory-utilization
+              - "0.86" # Boot precondition gate only; KV is sized explicitly below.
+              - --kv-cache-memory-bytes
+              - 3584M # Per rank (recipe: 3.5 GiB). The EXL3 weights leave little else.
+              - --max-model-len
+              - "262144" # The recipe runs 1M, but only with its KV offload, left out here.
+              - --max-num-seqs
+              - "4"
+              - --max-num-batched-tokens
+              - "4096"
+              # Keep threshold x (max-num-seqs - 1) < max-num-batched-tokens (recipe, patch 0031c).
+              - --long-prefill-token-threshold
+              - "1024"
+              # Engram tables read from this node's disk instead of held in (unified) memory.
+              - --engram-config
+              - '{"cpu_offload":true,"dp_shared_memory":false,"disk_offload":true,"disk_threads":256}'
+              - --compilation-config
+              - '{"cudagraph_mode":"FULL_DECODE_ONLY"}'
+              # Autotune grows driver-side memory with every new kernel shape on GB10.
+              - --kernel-config
+              - '{"enable_flashinfer_autotune":false}'
+              - --speculative-config
+              - '{"method":"dspark","num_speculative_tokens":5,"num_speculative_tokens_per_batch_size":[[1,4,5]]}'
+              - --limit-mm-per-prompt
+              - '{"image":4}'
+              - --mm-processor-cache-gb
+              - "0"
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - deepseek_v41
+              - --reasoning-parser
+              - deepseek_v41
+            envFrom: &envfrom
+              - configMapRef:
+                  name: deepseek-v41-flash-engine-env
+            env: &env
+              - name: HF_HUB_OFFLINE
+                value: "1"
+              - name: HF_HOME
+                value: /data/huggingface
+              - name: VLLM_CACHE_ROOT
+                value: /data/vllm-cache
+              - name: CUDA_CACHE_PATH
+                value: /data/nv-compute-cache
+              - name: FLASHINFER_WORKSPACE_BASE
+                value: /data
+              - name: MAX_JOBS
+                value: "2"
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: INFERENCE_INTERFACE
+                value: enP2p1s0f0np0
+              # The HCA behind INFERENCE_INTERFACE (rdma/direct_rail). One PCIe function only;
+              # the recipe also uses the port's twin (+3 % prefill), which the plugin does not expose.
+              - name: RDMA_HCA
+                value: mlx5_2
+              - name: API_PORT
+                value: "8100"
+            ports:
+              - name: http
+                containerPort: 8100
+                protocol: TCP
+            # No CPU limit: the recipe pins its threads to 11 cores (EXL3_CPU_PIN, EXL3_RDMA_CPU)
+            # and CFS throttling would stall decode rounds. memory cannot cap the CUDA side on GB10;
+            # it reserves the node so nothing else is scheduled beside the model.
+            resources: &resources
+              requests:
+                cpu: "12"
+                memory: 100Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+              limits:
+                memory: 100Gi
+                nvidia.com/gpu: "1"
+                rdma/direct_rail: "1"
+            securityContext: &rdma
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+                # RDMA memory registration must not be capped by the default
+                # locked-memory limit. The container stays unprivileged.
+                add: [IPC_LOCK]
+            volumeMounts: *mounts
+            # First start after the download: ~6 min (weights, CUDA graphs). The download itself
+            # runs in the init container, before this probe counts.
+            startupProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 270
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: http
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 6
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: deepseek-v41-flash-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: deepseek-v41-flash-leader-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
+    workerTemplate:
+      metadata:
+        labels:
+          app.kubernetes.io/name: deepseek-v41-flash
+          app.kubernetes.io/component: worker
+      spec:
+        nodeSelector:
+          kubernetes.io/arch: arm64
+          nvidia.com/gpu.product: NVIDIA-GB10-SHARED
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
+          seccompProfile:
+            type: RuntimeDefault
+        runtimeClassName: nvidia
+        hostNetwork: true
+        dnsPolicy: ClusterFirstWithHostNet
+        automountServiceAccountToken: false
+        terminationGracePeriodSeconds: 60
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: deepseek-v41-flash
+                matchLabelKeys:
+                  - leaderworkerset.sigs.k8s.io/group-key
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        # Same download + JIT as the leader, into the worker's own disk.
+        initContainers: *init
+        containers:
+          - name: vllm
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            imagePullPolicy: IfNotPresent
+            command: [python3, /opt/dsv41/bootstrap.py]
+            # Must match the leader's model args exactly.
+            args:
+              - /data/model
+              - --served-model-name
+              - DeepSeek-V4.1-Flash-1017-EXL3
+              - --distributed-executor-backend
+              - mp
+              - --tensor-parallel-size
+              - $(LWS_GROUP_SIZE) # 2
+              - --nnodes
+              - $(LWS_GROUP_SIZE) # 2
+              - --node-rank
+              - $(LWS_WORKER_INDEX) # 1
+              - --master-port
+              - "29504"
+              - --headless
+              - --gpu-memory-utilization
+              - "0.86"
+              - --kv-cache-memory-bytes
+              - 3584M
+              - --max-model-len
+              - "262144"
+              - --max-num-seqs
+              - "4"
+              - --max-num-batched-tokens
+              - "4096"
+              - --long-prefill-token-threshold
+              - "1024"
+              - --engram-config
+              - '{"cpu_offload":true,"dp_shared_memory":false,"disk_offload":true,"disk_threads":256}'
+              - --compilation-config
+              - '{"cudagraph_mode":"FULL_DECODE_ONLY"}'
+              - --kernel-config
+              - '{"enable_flashinfer_autotune":false}'
+              - --speculative-config
+              - '{"method":"dspark","num_speculative_tokens":5,"num_speculative_tokens_per_batch_size":[[1,4,5]]}'
+              - --limit-mm-per-prompt
+              - '{"image":4}'
+              - --mm-processor-cache-gb
+              - "0"
+              - --enable-auto-tool-choice
+              - --tool-call-parser
+              - deepseek_v41
+              - --reasoning-parser
+              - deepseek_v41
+            envFrom: *envfrom
+            env: *env
+            resources: *resources
+            securityContext: *rdma
+            volumeMounts: *mounts
+            # Headless workers expose no HTTP API. Gate readiness on the group's
+            # leader health, not a fictitious local port.
+            readinessProbe:
+              exec:
+                command:
+                  - python3
+                  - /opt/dsv41/bootstrap.py
+                  - --check-leader-health
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+        volumes:
+          - name: bootstrap
+            configMap:
+              name: deepseek-v41-flash-bootstrap
+          - name: cache
+            persistentVolumeClaim:
+              claimName: deepseek-v41-flash-worker-cache
+          - name: shm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 8Gi
