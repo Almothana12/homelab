@@ -57,7 +57,7 @@ spec:
           # 1. Weights into one folder on this node's disk. vLLM cannot fetch this itself: the
           #    Engram tables live in a second repo. hf skips finished files on a restart.
           - name: download
-            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v32
             imagePullPolicy: IfNotPresent
             command: [bash, -ceu]
             args:
@@ -105,7 +105,7 @@ spec:
           #    model can run the node out of memory (recipe, serve_example.sh). Cached in the PVC,
           #    so later starts only load them.
           - name: jit
-            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v32
             imagePullPolicy: IfNotPresent
             command:
               - python3
@@ -131,7 +131,7 @@ spec:
             volumeMounts: *mounts
         containers:
           - name: vllm
-            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v32
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/dsv41/bootstrap.py]
             args:
@@ -308,7 +308,7 @@ spec:
         initContainers: *init
         containers:
           - name: vllm
-            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v24
+            image: ghcr.io/henryous/deepseek-v41-1017-dgx-spark:v32
             imagePullPolicy: IfNotPresent
             command: [python3, /opt/dsv41/bootstrap.py]
             # Must match the leader's model args exactly.
